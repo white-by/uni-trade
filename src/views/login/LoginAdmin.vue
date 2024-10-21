@@ -18,9 +18,7 @@
       </el-form-item>
 
       <div class="button-container">
-        <el-button type="primary" class="login-button" @click="handleLogin"
-          >登录</el-button
-        >
+        <el-button type="primary" class="login-button" @click="handleLogin">登录</el-button>
       </div>
     </el-form>
   </div>
@@ -74,7 +72,7 @@ const handleLogin = () => {
       // alert('submit')
       // console.log('submit!')
     } else {
-      console.log('error submit!', fields) // 现在 fields 已经定义了
+      console.log('error submit!', fields)
       return false
     }
   })
@@ -87,67 +85,66 @@ const handleLogin = () => {
   display: flex;
   justify-content: center;
   align-items: center;
-  background-color: rgba(255, 255, 255, 0.8); /* 浅色背景 */
+  background-color: rgba(255, 255, 255, 0.8);
 }
 
 .login-form {
   width: 100%;
-  max-width: 400px; /* 最大宽度 */
+  max-width: 400px;
   padding: 40px;
   border-radius: 8px;
-  backdrop-filter: blur(10px); /* 毛玻璃效果 */
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3); /* 添加阴影 */
-  background-color: rgba(255, 255, 255, 0.2); /* 毛玻璃背景 */
+  backdrop-filter: blur(10px);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+  background-color: rgba(255, 255, 255, 0.2);
 }
 
 .el-form-item {
-  margin-bottom: 20px; /* 增加下边距 */
+  margin-bottom: 20px;
   display: flex;
-  align-items: center; /* 垂直居中图标和输入框 */
+  align-items: center;
 }
 
 .svg-container {
-  margin-right: 10px; /* 图标和输入框之间的间距 */
-  color: #555; /* 图标颜色 */
+  margin-right: 10px;
+  color: #555;
 }
 
 .el-input {
-  flex-grow: 1; /* 输入框占满剩余空间 */
-  height: 40px; /* 增加高度 */
+  flex-grow: 1;
+  height: 40px;
 }
 
 .el-input input {
   background: transparent;
-  border: 1px solid rgba(255, 255, 255, 0.3); /* 添加边框 */
-  border-radius: 5px; /* 添加圆角 */
-  padding: 12px 15px; /* 增加内边距 */
-  color: #333; /* 输入框文字颜色 */
-  height: 100%; /* 使输入框高度与 el-input 相同 */
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  border-radius: 5px;
+  padding: 12px 15px;
+  color: #333;
+  height: 100%;
 }
 
 .login-button {
-  height: 50px; /* 增加按钮高度 */
-  margin-top: 20px; /* 增加上边距 */
-  border-radius: 5px; /* 添加圆角 */
-  background-color: #409eff; /* 按钮颜色 */
-  color: #fff; /* 按钮文字颜色 */
-  width: 100%;
+  height: 50px;
+  margin-top: 20px;
+  border-radius: 5px;
+  background-color: #409eff;
+  color: #fff;
 }
 
 .button-container {
   display: flex;
   justify-content: center;
-  margin-top: 20px; /* 可选，增加按钮与输入框之间的间距 */
+  margin-top: 20px;
 }
 
 .title-container {
-  text-align: center; /* 居中对齐 */
-  margin-bottom: 20px; /* 增加下边距 */
+  text-align: center;
+  margin-bottom: 20px;
 }
 
 .title {
-  font-size: 28px; /* 增加标题字体大小 */
-  color: #333; /* 标题颜色 */
+  font-size: 28px;
+  color: #333;
   font-weight: bold;
 }
 </style>

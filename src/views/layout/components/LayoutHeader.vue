@@ -1,10 +1,14 @@
 <script setup>
 import { getCategoryAPI } from '@/api/goods';
-import { onMounted } from 'vue';
+import { onMounted, ref } from 'vue';
+
+const categoryList = ref([])
 
 const getCategory = async() => {
   const res = await getCategoryAPI()
-  console.log(res);
+  console.log('res Data:', res.data);
+  categoryList.value = res.data
+  console.log('Category Data:', categoryList.value);
 }
 
 onMounted(() => {
@@ -16,11 +20,15 @@ onMounted(() => {
   <header class="app-header">
     <div class="container">
       <ul class="app-header-nav">
-        <!-- 左侧按钮组 -->
         <el-button type="primary" plain round>全部</el-button>
-        <el-button type="primary" plain round>日常用品</el-button>
-        <el-button type="primary" plain round>数码产品</el-button>
-        <el-button type="primary" plain round>二手教材</el-button>
+        <el-button 
+          v-for="category in categoryList.data" :key="category.categoryID"
+          type="primary" 
+          plain 
+          round
+        >
+          {{ category.categoryName }}
+        </el-button>
       </ul>
       <!-- 右侧“发布闲置”按钮 -->
       <div class="release-button">

@@ -1,31 +1,39 @@
 <script setup>
-import { getCategoryAPI } from '@/api/goods';
-import { onMounted, ref } from 'vue';
+import { getCategoryAPI } from '@/api/goods'
+import { onMounted, ref } from 'vue'
+import { useCategoryStore } from '@/store/sortCategory'
 
 const categoryList = ref([])
+const categoryStore = useCategoryStore()
 
-const getCategory = async() => {
+const getCategory = async () => {
   const res = await getCategoryAPI()
-  console.log('res Data:', res.data);
+  // console.log('res Data:', res.data)
   categoryList.value = res.data
-  console.log('Category Data:', categoryList.value);
 }
 
 onMounted(() => {
   getCategory()
 })
+
+const handleCategoryClick = (categoryID) => {
+  categoryStore.setCategoryID(categoryID)
+  console.log('点击了分类：', categoryID)
+}
 </script>
 
 <template>
   <header class="app-header">
     <div class="container">
       <ul class="app-header-nav">
-        <el-button type="primary" plain round>全部</el-button>
-        <el-button 
-          v-for="category in categoryList.data" :key="category.categoryID"
-          type="primary" 
-          plain 
+        <el-button type="primary" plain round @click="handleCategoryClick(0)">全部</el-button>
+        <el-button
+          v-for="category in categoryList.data"
+          :key="category.categoryID"
+          type="primary"
+          plain
           round
+          @click="handleCategoryClick(category.categoryID)"
         >
           {{ category.categoryName }}
         </el-button>

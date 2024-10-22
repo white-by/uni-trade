@@ -5,10 +5,10 @@
         <h3 class="title">LoginAdmin</h3>
       </div>
       <br />
-      <el-form-item prop="username">
+      <el-form-item prop="email">
         <el-icon size="20" class="svg-container"><Edit /></el-icon>
-        <span>请输入用户名</span>
-        <el-input v-model="form.username"> </el-input>
+        <span>请输入邮箱</span>
+        <el-input v-model="form.email"> </el-input>
       </el-form-item>
 
       <el-form-item prop="password">
@@ -27,8 +27,8 @@
 <script setup>
 import { ref } from 'vue'
 import { Edit, Lock } from '@element-plus/icons-vue'
-const form = ref({
-  username: '',
+let form = ref({
+  email: '',
   password: ''
 })
 
@@ -38,15 +38,18 @@ const login = async (formData) => {
 }
 
 const rules = ref({
-  username: [
-    { required: true, message: '请输入用户名', trigger: 'blur' },
-    { min: 3, max: 8, message: '长度应为 3 到 8 位', trigger: 'blur' }
+  email: [
+    { required: true, message: '请输入邮箱', trigger: 'blur' },
+    { type: 'email', message: '请输入有效的邮箱地址', trigger: ['blur', 'change'] },
+    { min: 5, max: 20, message: '长度应为 5 到 20 位', trigger: 'blur' }
   ],
+
   password: [
     { required: true, message: '请输入密码', trigger: 'blur' },
     {
-      min: 6,
-      message: '密码至少 6 位',
+      min: 5,
+      max: 20,
+      message: '长度应为 5 到 20 位',
       trigger: 'blur'
     },
     {

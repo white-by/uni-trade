@@ -1,89 +1,87 @@
 <script setup>
 import { ArrowDown, Search } from '@element-plus/icons-vue'
-import { ref } from 'vue';
-// const input = ref('')
+import { ref } from 'vue'
+
+let input = ref('')
 </script>
 
 <template>
-    <nav class="app-topnav">
-        <div class="container">
-            <ul>
-              <h1 class="logo">
-                <RouterLink to="/">校园二手交易站</RouterLink>
-              </h1>
-              <div class="site-name">
-                校园二手交易站
-              </div>
-              <div class="search"> 
-                <el-input
-                  v-model="input"
-                  style="width: 440px"
-                  placeholder="请输入商品名称"
-                  :prefix-icon="Search"
-                />
-              </div>
-              <template v-if="true">
-                <li><a href="javascript:;"><i class="iconfont icon-announcement"></i></a></li>
-                <li><a href="javascript:;"><i class="iconfont icon-shop"></i></a></li>
-                <li><a href="javascript:;"><i class="iconfont icon-message"></i></a></li>
-                <el-divider direction="vertical" />
-                <li>
-                  <el-dropdown placement="bottom" size="large">
-                    <span class="el-dropdown-link">
-                      <i class="iconfont icon-user"></i> 北风
-                      <el-icon class="el-icon--right">
-                        <arrow-down />
-                      </el-icon>
-                    </span>
-                    <template #dropdown>
-                      <el-dropdown-menu>
-                        <el-dropdown-item>个人中心</el-dropdown-item>
-                        <el-dropdown-item>我的订单</el-dropdown-item>
-                        <el-dropdown-item>我的商品</el-dropdown-item>
-                        <el-dropdown-item>我的地址</el-dropdown-item>
-                        <el-dropdown-item>我的收藏</el-dropdown-item>
-                        <el-dropdown-item divided>
-                          <el-popconfirm title="确认退出吗？" confirm-button-text="确认" cancel-button-text="取消">
-                            <template #reference>
-                              <span>退出登录</span>
-                            </template>
-                          </el-popconfirm>
-                        </el-dropdown-item>
-                      </el-dropdown-menu>
-                    </template>
-                  </el-dropdown>
-                </li>
-              </template>
-              
-                <template v-else>
-                    <li><a href="javascript:;">请先登录</a></li>
-                    <li><a href="javascript:;">帮助中心</a></li>
-                    <li><a href="javascript:;">关于我们</a></li>
-                </template>
-            </ul>
+  <nav class="app-topnav">
+    <div class="container">
+      <ul>
+        <h1 class="logo">
+          <RouterLink to="/">校园二手交易站</RouterLink>
+        </h1>
+        <div class="site-name">校园二手交易站</div>
+        <div class="search">
+          <el-input v-model="input" style="width: 440px" placeholder="请输入商品名称" :prefix-icon="Search" />
         </div>
-    </nav>
-    
+        <template v-if="true">
+          <li>
+            <a href="javascript:;"><i class="iconfont icon-announcement"></i></a>
+          </li>
+          <li>
+            <a href="javascript:;"><i class="iconfont icon-shop"></i></a>
+          </li>
+          <li>
+            <a href="javascript:;"><i class="iconfont icon-message"></i></a>
+          </li>
+          <el-divider direction="vertical" />
+          <li>
+            <el-dropdown placement="bottom" size="large">
+              <span class="el-dropdown-link">
+                <i class="iconfont icon-user"></i> 北风
+                <el-icon class="el-icon--right">
+                  <arrow-down />
+                </el-icon>
+              </span>
+              <template #dropdown>
+                <el-dropdown-menu>
+                  <el-dropdown-item>个人中心</el-dropdown-item>
+                  <el-dropdown-item>我的订单</el-dropdown-item>
+                  <el-dropdown-item>我的商品</el-dropdown-item>
+                  <el-dropdown-item>我的地址</el-dropdown-item>
+                  <el-dropdown-item>我的收藏</el-dropdown-item>
+                  <el-dropdown-item divided>
+                    <el-popconfirm title="确认退出吗？" confirm-button-text="确认" cancel-button-text="取消">
+                      <template #reference>
+                        <span>退出登录</span>
+                      </template>
+                    </el-popconfirm>
+                  </el-dropdown-item>
+                </el-dropdown-menu>
+              </template>
+            </el-dropdown>
+          </li>
+        </template>
+
+        <template v-else>
+          <li><a href="javascript:;">请先登录</a></li>
+          <li><a href="javascript:;">帮助中心</a></li>
+          <li><a href="javascript:;">关于我们</a></li>
+        </template>
+      </ul>
+    </div>
+  </nav>
 </template>
 
 <style scoped lang="scss">
-.container{
+.container {
   padding: 0 50px;
   width: 100%;
 }
 
-
 .logo {
   width: 120px;
-  position: absolute;  // 设置绝对定位
-  top: -18px;          // 向上移动（根据需要调整值）
-  left: 50px;             // 确保它贴在最左侧
+  position: absolute; // 设置绝对定位
+  top: -18px; // 向上移动（根据需要调整值）
+  left: 50px; // 确保它贴在最左侧
 
   a {
     display: block;
     height: 150px;
     width: 50%;
-    text-indent: -9999px; 
+    text-indent: -9999px;
     background: url('@/assets/images/logo.png') no-repeat center 18px / contain;
   }
 }
@@ -120,12 +118,11 @@ import { ref } from 'vue';
         }
       }
 
-      ~li {
+      ~ li {
         a {
           border-left: 2px solid #666;
         }
       }
-      
     }
   }
 }
@@ -147,7 +144,7 @@ import { ref } from 'vue';
   color: #cdcdcd;
   display: flex;
   align-items: center;
-  font-size: 16px;// 用户名字体大小
+  font-size: 16px; // 用户名字体大小
   outline: none;
 
   i.iconfont {
@@ -160,5 +157,4 @@ import { ref } from 'vue';
     outline: none;
   }
 }
-
 </style>

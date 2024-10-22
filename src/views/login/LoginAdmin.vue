@@ -4,7 +4,7 @@
       <div class="title-container">
         <h3 class="title">LoginAdmin</h3>
       </div>
-
+      <br />
       <el-form-item prop="username">
         <el-icon size="20" class="svg-container"><Edit /></el-icon>
         <span>请输入用户名</span>
@@ -124,7 +124,8 @@ const handleLogin = () => {
 }
 
 .login-button {
-  height: 50px;
+  width: 100%;
+  height: 40px;
   margin-top: 20px;
   border-radius: 5px;
   background-color: #409eff;

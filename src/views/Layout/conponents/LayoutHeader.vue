@@ -1,6 +1,6 @@
 <script setup>
 // import { getCategoryAPI } from '@/apis/layout';
-import { onMounted } from 'vue';
+// import { onMounted } from 'vue';
 
 // const getCategory = async() => {
 //   const res = await getCategoryAPI()
@@ -10,11 +10,10 @@ import { onMounted } from 'vue';
 // onMounted(() => {
 //   getCategory()
 // })
-
 </script>
 
 <template>
-  <header class='app-header'>
+  <header class="app-header">
     <div class="container">
       <ul class="app-header-nav">
         <!-- 左侧按钮组 -->
@@ -31,11 +30,11 @@ import { onMounted } from 'vue';
   </header>
 </template>
 
-<style scoped lang='scss'>
+<style scoped lang="scss">
 .app-header {
   background: rgba(255, 255, 255, 0.8);
   padding-top: 10px; /* 调整整个按钮组与上边界的距离 */
-  height: 60px; 
+  height: 60px;
 
   .container {
     display: flex;

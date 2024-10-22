@@ -8,8 +8,12 @@ export function getCategoryAPI(){
 }
 
 //获取每一页的商品
-export function getGoodsListApi(){
+export function getGoodsListAPI(category, limit){
     return httpInstance({
-        url: '/goods'
+        url: '/goods',
+        params: {
+            category,
+            limit
+        }
     })
 }

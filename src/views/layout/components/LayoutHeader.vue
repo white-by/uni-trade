@@ -1,15 +1,15 @@
 <script setup>
-// import { getCategoryAPI } from '@/apis/layout';
-// import { onMounted } from 'vue';
+import { getCategoryAPI } from '@/api/goods';
+import { onMounted } from 'vue';
 
-// const getCategory = async() => {
-//   const res = await getCategoryAPI()
-//   console.log(res);
-// }
+const getCategory = async() => {
+  const res = await getCategoryAPI()
+  console.log(res);
+}
 
-// onMounted(() => {
-//   getCategory()
-// })
+onMounted(() => {
+  getCategory()
+})
 </script>
 
 <template>

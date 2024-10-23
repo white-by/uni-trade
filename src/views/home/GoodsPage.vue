@@ -26,7 +26,7 @@ onMounted(() => {
 </script>
 
 <template>
-  <div class="product-container">
+  <div class="product-container" v-if="goodsList.data.length > 0">
     <el-row :gutter="20" class="product-row">
       <el-col :span="4" v-for="product in goodsList.data" :key="product.id">
         <el-card shadow="hover" class="product-card">
@@ -39,6 +39,9 @@ onMounted(() => {
         </el-card>
       </el-col>
     </el-row>
+  </div>
+  <div v-else class="no-product-container">
+    <img src="@/assets/images/none/暂无商品.png" alt="暂无商品" class="no-product-image" />
   </div>
 </template>
 
@@ -75,5 +78,17 @@ onMounted(() => {
 .product-price {
   font-size: 18px;
   color: #f56c6c;
+}
+
+.no-product-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 600px;
+}
+
+.no-product-image {
+  max-width: 100%;
+  max-height: 100%;
 }
 </style>

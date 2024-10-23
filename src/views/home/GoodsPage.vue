@@ -26,7 +26,7 @@ onMounted(() => {
 </script>
 
 <template>
-  <div class="product-container" v-if="goodsList.data.length > 0">
+  <div class="product-container" v-if="goodsList.data && goodsList.data.length > 0">
     <el-row :gutter="20" class="product-row">
       <el-col :span="4" v-for="product in goodsList.data" :key="product.id">
         <el-card shadow="hover" class="product-card">

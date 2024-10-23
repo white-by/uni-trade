@@ -1,11 +1,11 @@
 <template>
   <el-container>
     <el-main>
-      <el-row style="height: 75%">
+      <el-row style="height: 90%">
         <el-col :span="12" class="welcome-text">
           <p>欢迎</p>
           <p>广大师生</p>
-          <p>使用<strong>校园交易站</strong></p>
+          <p>使用<strong>校园二手交易站</strong></p>
         </el-col>
         <el-col :span="12" class="login-form">
           <div class="frosted-glass">

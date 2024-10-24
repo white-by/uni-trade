@@ -1,7 +1,7 @@
 <template>
   <el-container>
     <el-main>
-      <el-row style="height: 90%">
+      <el-row style="height: 80%">
         <el-col :span="12" class="welcome-text">
           <p>欢迎</p>
           <p>广大师生</p>
@@ -156,7 +156,7 @@ const handleRegister = () => {
 }
 
 .link {
-  color: #409eff;
+  color: $comColor;
   cursor: pointer;
   font-style: italic;
   font-size: 14px;

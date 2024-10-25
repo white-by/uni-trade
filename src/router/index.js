@@ -4,6 +4,7 @@ import LayoutPage from '@/views/layout/LayoutPage.vue'
 import ProductsPage from '@/views/home/ProductsPage.vue'
 import LoginUser from '@/views/login/LoginUser.vue'
 import TestPage from '@/views/test/TestPage.vue'
+import PersonalPage from '@/views/users/PersonalPage.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -11,6 +12,10 @@ const router = createRouter({
     {
       path: '/test',
       component: TestPage
+    },
+    {
+      path: '/user',
+      component: PersonalPage
     },
     {
       path: '/admin/login',

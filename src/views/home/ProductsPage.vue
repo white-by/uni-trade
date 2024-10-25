@@ -1,9 +1,9 @@
 <script setup>
 import { ref, onMounted, watch } from 'vue'
-import { getGoodsListAPI } from '@/api/goods.js'
+import { getProductsListAPI } from '@/api/products.js'
 import { useCategoryStore } from '@/store/sortCategory'
 
-const goodsList = ref([])
+const productsList = ref([])
 const categoryStore = useCategoryStore()
 const currentPage = ref(1) // 当前页码
 const pageSize = ref(12) // 每页条数
@@ -11,21 +11,21 @@ const isLoading = ref(false) // 控制加载状态
 const hasMoreData = ref(true) // 是否还有更多数据
 
 // 获取商品列表
-const getGoodsList = async () => {
+const getProductsList = async () => {
   if (isLoading.value || !hasMoreData.value) return
 
   isLoading.value = true
   try {
     console.log('发送了请求, cid: ', categoryStore.categoryID, 'page: ', currentPage.value, 'limit: ', pageSize.value)
 
-    const res = await getGoodsListAPI(categoryStore.categoryID, currentPage.value, pageSize.value)
+    const res = await getProductsListAPI(categoryStore.categoryID, currentPage.value, pageSize.value)
     console.log('API响应:', res.data)
     console.log('res.data.data.length: ', res.data.data.length)
 
     if (res.data.data.length < pageSize.value) {
       hasMoreData.value = false // 没有更多数据了
     }
-    goodsList.value.push(...res.data.data) // 追加新数据
+    productsList.value.push(...res.data.data) // 追加新数据
     currentPage.value += 1 // 下一页
   } catch (error) {
     console.error('获取商品列表失败:', error)
@@ -37,28 +37,28 @@ const getGoodsList = async () => {
 watch(
   () => categoryStore.categoryID,
   () => {
-    goodsList.value = []
+    productsList.value = []
     currentPage.value = 1
     hasMoreData.value = true
-    getGoodsList()
+    getProductsList()
   }
 )
 
 onMounted(() => {
-  getGoodsList()
+  getProductsList()
 })
 </script>
 
 <template>
   <div
-    v-infinite-scroll="getGoodsList"
+    v-infinite-scroll="getProductsList"
     infinite-scroll-disabled="false"
     infinite-scroll-distance="20"
     class="product-container"
-    v-if="goodsList.length > 0"
+    v-if="productsList.length > 0"
   >
     <el-row :gutter="20" class="product-row">
-      <el-col :span="4" v-for="product in goodsList" :key="product.id">
+      <el-col :span="4" v-for="product in productsList" :key="product.id">
         <el-card shadow="hover" class="product-card">
           <img :src="product.picture" class="product-image" />
           <div class="product-info">

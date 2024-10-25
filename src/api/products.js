@@ -8,9 +8,9 @@ export function getCategoryAPI(){
 }
 
 //获取每一页的商品
-export function getGoodsListAPI(category, page, limit){
+export function getProductsListAPI(category, page, limit){
     return httpInstance({
-        url: '/goods',
+        url: '/products',
         params: {
             category,
             page,

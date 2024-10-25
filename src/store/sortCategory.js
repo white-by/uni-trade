@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia'
 import { ref } from 'vue'
-import { getCategoryAPI } from '@/api/goods'
+import { getCategoryAPI } from '@/api/products'
 
 export const useCategoryStore = defineStore('category', () => {
   const categoryID = ref(0) // 默认分类 ID 为 0，表示全部

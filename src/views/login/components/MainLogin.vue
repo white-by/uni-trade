@@ -16,7 +16,6 @@
               </el-form-item>
 
               <el-form-item prop="password">
-                <el-icon size="20" class="svg-container"><Lock /></el-icon>
                 <el-input v-model="form.password" :type="addPassFlag ? 'text' : 'password'" placeholder="请输入密码">
                   <template #suffix>
                     <span @click="addPassFlag = !addPassFlag">
@@ -28,13 +27,17 @@
               </el-form-item>
 
               <el-form-item>
-                <el-link class="link forgot-password-link" @click="handleForgotPassword" :underline="false">忘记密码？</el-link>
+                <el-link class="link forgot-password-link" @click="handleForgotPassword" :underline="false"
+                  >忘记密码？</el-link
+                >
               </el-form-item>
               <el-form-item>
                 <el-button type="primary" @click="handleLogin" class="login-button">登录</el-button>
               </el-form-item>
               <el-form-item>
-                <el-link class="link register-link" @click="handleRegister" :underline="false">没有账号？去注册</el-link>
+                <el-link class="link register-link" @click="handleRegister" :underline="false"
+                  >没有账号？去注册</el-link
+                >
               </el-form-item>
             </el-form>
           </div>
@@ -123,13 +126,6 @@ const handleRegister = () => {
   display: flex;
   flex-direction: column;
   justify-content: center; /* 垂直居中 */
-}
-
-.svg-container {
-  padding: 6px 5px 6px 15px;
-  // color: $dark_gray;
-  vertical-align: middle;
-  display: inline-block;
 }
 
 .el-input {

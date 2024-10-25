@@ -10,7 +10,7 @@
             :precision="2"
             :step="1"
             :min="0"
-            :max="99"
+            :max="999"
             style="margin-right: 10px"
           >
             <template #prefix>
@@ -18,7 +18,7 @@
             </template>
           </el-input-number>
           <span style="margin-right: 10px"> ~ </span>
-          <el-input-number v-model="form.priceMax" placeholder="最大值" :precision="2" :step="1" :min="0" :max="99">
+          <el-input-number v-model="form.priceMax" placeholder="最大值" :precision="2" :step="1" :min="0" :max="99999">
             <template #prefix>
               <span>￥</span>
             </template>
@@ -49,13 +49,13 @@
         ></el-col>
       </el-row>
       <el-col :span="12"
-        ><el-form-item label="运费最大值">
+        ><el-form-item label="运费上限">
           <el-input-number
             v-model="form.shippingCost"
             :precision="2"
             :step="1"
             :min="0"
-            :max="99999"
+            :max="99"
             :disabled="isShippingDisabled"
           >
             <template #prefix>
@@ -65,7 +65,7 @@
         </el-form-item></el-col
       >
       <el-form-item label="发货地址">
-        <el-row :gutter="80">
+        <el-row :gutter="75">
           <!-- 省份 -->
           <el-col :span="8">
             <el-select v-model="province" placeholder="选择省份" style="width: 230%">

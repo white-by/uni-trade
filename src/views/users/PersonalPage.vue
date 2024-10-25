@@ -1,9 +1,10 @@
 <template>
   <UserNav />
   <div class="content">
-    <el-form :model="user" label-width="auto" class="form" style="max-width: 600px">
-      <div class="avatar-container">
-        <el-avatar :size="100" :src="user.avatarUrl" />
+    <el-form :model="user" label-width="40px" class="form" style="max-width: 600px">
+      <div class="avatar-container" @click="selectAvatar">
+        <el-avatar :size="130" :src="user.avatarUrl" />
+        <input type="file" ref="fileInput" @change="onFileChange" style="display: none" accept="image/*" />
       </div>
 
       <el-form-item label="ID">
@@ -54,9 +55,10 @@
 
 <script setup>
 import UserNav from '@/components/UserNav.vue'
-import { ref } from 'vue'
+import { ref, onMounted } from 'vue'
 import { View, Hide } from '@element-plus/icons-vue'
 import UserFooter from '@/components/UserFooter.vue'
+import axios from 'axios'
 
 const user = ref({
   avatarUrl: 'https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png',
@@ -70,6 +72,35 @@ const user = ref({
 })
 
 const addPassFlag = ref(false)
+
+async function fetchAvatar() {
+  try {
+    const response = await axios.get('https://dog.ceo/api/breeds/image/random')
+    user.value.avatarUrl = response.data.message // 更新头像 URL
+  } catch (error) {
+    user.value.avatarUrl = 'https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png'
+    console.error('获取头像失败:', error)
+  }
+}
+
+onMounted(() => {
+  fetchAvatar() // 在组件挂载后获取头像
+})
+
+function onFileChange(event) {
+  const file = event.target.files[0]
+  if (file) {
+    const reader = new FileReader()
+    reader.onload = (e) => {
+      user.value.avatarUrl = e.target.result // 更新头像 URL
+    }
+    reader.readAsDataURL(file) // 将文件转换为 Data URL
+  }
+}
+const fileInput = ref(null)
+function selectAvatar() {
+  fileInput.value.click() // 点击文件输入框
+}
 
 function onSubmit() {
   console.log('更改信息')
@@ -88,7 +119,7 @@ function onSubmit() {
 .avatar-container {
   display: flex;
   justify-content: center; /* 水平居中 */
-  margin-bottom: 10%; /* 调整头像和表单之间的间距 */
+  margin-bottom: 5%; /* 调整头像和表单之间的间距 */
 }
 
 .form {

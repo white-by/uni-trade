@@ -1,8 +1,25 @@
 <script setup>
 import { ArrowDown, Search } from '@element-plus/icons-vue'
 import { ref } from 'vue'
+import { ElMessageBox } from 'element-plus'
+import { useRouter } from 'vue-router'
 
 let input = ref('')
+
+const router = useRouter()
+
+const confirmLogout = async () => {
+  try {
+    await ElMessageBox.confirm('确定要退出登录吗？', '提示', {
+      confirmButtonText: '确认',
+      cancelButtonText: '取消',
+      type: 'warning'
+    })
+    router.push('/login')
+  } catch (error) {
+    console.log('取消了登出操作', error)
+  }
+}
 </script>
 
 <template>
@@ -43,11 +60,7 @@ let input = ref('')
                   <el-dropdown-item>我的地址</el-dropdown-item>
                   <el-dropdown-item>我的收藏</el-dropdown-item>
                   <el-dropdown-item divided>
-                    <el-popconfirm title="确认退出吗？" confirm-button-text="确认" cancel-button-text="取消">
-                      <template #reference>
-                        <span>退出登录</span>
-                      </template>
-                    </el-popconfirm>
+                    <span @click="confirmLogout">退出登录</span>
                   </el-dropdown-item>
                 </el-dropdown-menu>
               </template>

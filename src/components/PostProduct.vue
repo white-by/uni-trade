@@ -5,14 +5,14 @@
 
     <!-- 弹出表单对话框 -->
     <el-dialog title="发布闲置" v-model="dialogVisible" width="50%" align-center center>
-      <el-form ref="formRef" :model="form" label-width="120px" class="custom-form">
+      <el-form ref="formRef" :model="form" :rules="rules" label-width="120px" class="custom-form">
         <!-- 物品标题 -->
-        <el-form-item label="物品标题">
+        <el-form-item label="物品标题" prop="title">
           <el-input v-model="form.title" placeholder="输入物品标题" style="width: 90%" class="input"></el-input>
         </el-form-item>
 
         <!-- 物品描述 -->
-        <el-form-item label="物品描述">
+        <el-form-item label="物品描述" prop="description">
           <el-input
             v-model="form.description"
             type="textarea"
@@ -44,7 +44,7 @@
         <el-row>
           <!-- 物品类别 -->
           <el-col :span="8">
-            <el-form-item label="物品类别">
+            <el-form-item label="物品类别" prop="category">
               <el-select v-model="form.category" placeholder="选择物品类别">
                 <el-option label="电子产品" value="电子产品"></el-option>
                 <el-option label="服装" value="服装"></el-option>
@@ -55,7 +55,7 @@
 
           <!-- 配送方式 -->
           <el-col :span="8" :offset="6">
-            <el-form-item label="配送方式">
+            <el-form-item label="配送方式" prop="deliveryMethod">
               <el-select v-model="form.deliveryMethod" placeholder="选择配送方式">
                 <el-option label="邮寄" value="邮寄"></el-option>
                 <el-option label="自提" value="自提"></el-option>
@@ -68,7 +68,7 @@
         <el-row>
           <!-- 售价 -->
           <el-col :span="8">
-            <el-form-item label="售价 ￥">
+            <el-form-item label="售价 ￥" prop="price">
               <el-input-number v-model="form.price" :precision="2" :step="1" :min="0" :max="99">
                 <template #prefix>
                   <span>￥</span>
@@ -199,13 +199,28 @@ watch(
   }
 )
 
+const rules = {
+  title: [{ required: true, message: '请输入物品标题', trigger: 'blur' }],
+  description: [{ required: true, message: '请输入物品描述', trigger: 'blur' }],
+  category: [{ required: true, message: '请选择物品类别', trigger: 'change' }],
+  deliveryMethod: [{ required: true, message: '请选择配送方式', trigger: 'change' }],
+  price: [{ required: true, type: 'number', message: '请输入售价', trigger: 'blur' }]
+}
+
 // 表单引用
 const formRef = ref(null)
 
 // 提交表单
 function submitForm() {
-  console.log('提交的表单数据:', form) // 打印表单数据
-  dialogVisible.value = false // 关闭对话框
+  formRef.value.validate((valid) => {
+    if (valid) {
+      console.log('提交的表单数据:', form)
+      dialogVisible.value = false // 关闭对话框
+    } else {
+      console.log('表单校验失败')
+      return false
+    }
+  })
 }
 </script>
 

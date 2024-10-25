@@ -1,11 +1,14 @@
 <script setup>
 import { useCategoryStore } from '@/store/sortCategory'
+import { ref } from 'vue'
 
 const categoryStore = useCategoryStore()
+const selectedCategoryID = ref(0)
 
 const handleCategoryClick = (categoryID) => {
   categoryStore.setCategoryID(categoryID)
   console.log('点击了分类：', categoryID)
+  selectedCategoryID.value = categoryID
 }
 </script>
 
@@ -13,20 +16,29 @@ const handleCategoryClick = (categoryID) => {
   <header class="app-header">
     <div class="container">
       <ul class="app-header-nav">
-        <el-button type="primary" plain round @click="handleCategoryClick(0)">全部</el-button>
+        <el-button
+          type="primary"
+          plain
+          round
+          :class="{ active: selectedCategoryID === 0 }"
+          @click="handleCategoryClick(0)"
+          >全部</el-button
+        >
         <el-button
           v-for="category in categoryStore.categoryList.data"
           :key="category.categoryID"
           type="primary"
           plain
           round
+          :class="{ active: selectedCategoryID === category.categoryID }"
           @click="handleCategoryClick(category.categoryID)"
         >
           {{ category.categoryName }}
         </el-button>
       </ul>
-      <!-- 右侧“发布闲置”按钮 -->
-      <div class="release-button">
+      <!-- 筛选以及发布闲置 -->
+      <div class="function-button">
+        <el-button size="large" type="primary" plain round @click="select = true">筛选</el-button>
         <el-button size="large" type="primary" round>发布闲置</el-button>
       </div>
     </div>
@@ -54,7 +66,13 @@ const handleCategoryClick = (categoryID) => {
     border-radius: 10px;
   }
 
-  .release-button {
+  .app-header-nav .el-button.active {
+    background-color: $comColor; /* 选中时的背景颜色 */
+    color: white; /* 选中时的文字颜色 */
+    border-color: $comColor;
+  }
+
+  .function-button {
     margin-left: auto; /* 将右侧按钮推到最右边 */
     el-button {
       padding: 10px 30px; /* 发布按钮大小调整 */

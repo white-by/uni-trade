@@ -128,7 +128,7 @@
 
             <!-- 详细地址 -->
             <el-col :span="6">
-              <el-input v-model="detailArea" placeholder="输入详细地址" style="width: 350%"></el-input>
+              <el-input v-model="form.detailArea" placeholder="输入详细地址" style="width: 350%"></el-input>
             </el-col>
           </el-row>
         </el-form-item>
@@ -154,7 +154,9 @@ import areaObj from '../../public/area.json'
 import { UploadFilled } from '@element-plus/icons-vue'
 import { useCategoryStore } from '@/store/sortCategory'
 
+//使用pinia获取分类数据，合并到layout组件下后可优化
 const categoryStore = useCategoryStore()
+onMounted(() => categoryStore.getCategory())
 
 // 表单可见状态
 const dialogVisible = ref(false)
@@ -164,7 +166,11 @@ let form = reactive({
   description: '',
   category: '',
   price: 0,
-  address: '',
+
+  province: '广东省',
+  city: '珠海市',
+  area: '香洲区',
+  detailArea: '',
   deliveryMethod: '',
   shippingCost: 0
 })
@@ -180,6 +186,10 @@ const city = ref(cityArr.value[3])
 // 监听省份变化
 watch(province, (newVal) => {
   city.value = Object.keys(areaObj[newVal])[0]
+  form.province = newVal // 更新表单里的省份
+  form.city = city.value // 同步市
+  area.value = areaObj[province.value][city.value][0]
+  form.area = area.value // 同步区
 })
 // 区
 const areaArr = computed(() => {
@@ -189,10 +199,13 @@ const area = ref(areaArr.value[0])
 // 监听市变化
 watch(city, (newVal) => {
   area.value = areaObj[province.value][newVal][0]
+  form.city = newVal // 更新表单里的城市
+  form.area = area.value // 同步区
 })
-
-// 详细地址
-const detailArea = ref('')
+// 监听区变化
+watch(area, (newVal) => {
+  form.area = newVal // 更新表单里的地区
+})
 
 const isShippingDisabled = ref(false)
 // 监听配送方式的变化
@@ -231,8 +244,6 @@ function submitForm() {
     }
   })
 }
-
-onMounted(() => categoryStore.getCategory())
 </script>
 
 <style scoped lang="scss">

@@ -1,4 +1,6 @@
 <script setup>
+import PostProduct from '@/components/PostProduct.vue'
+import SelectProduct from '@/components/SelectProduct.vue'
 import { useCategoryStore } from '@/store/sortCategory'
 import { ref } from 'vue'
 
@@ -36,10 +38,9 @@ const handleCategoryClick = (categoryID) => {
           {{ category.categoryName }}
         </el-button>
       </ul>
-      <!-- 筛选以及发布闲置 -->
-      <div class="function-button">
-        <el-button size="large" type="primary" plain round @click="select = true">筛选</el-button>
-        <el-button size="large" type="primary" round>发布闲置</el-button>
+      <div class="function-button-container">
+        <SelectProduct />
+        <PostProduct />
       </div>
     </div>
   </header>
@@ -72,12 +73,10 @@ const handleCategoryClick = (categoryID) => {
     border-color: $comColor;
   }
 
-  .function-button {
-    margin-left: auto; /* 将右侧按钮推到最右边 */
-    el-button {
-      padding: 10px 30px; /* 发布按钮大小调整 */
-      font-size: 16px; /* 发布按钮的字体大小 */
-    }
+  .function-button-container {
+    margin-left: auto;
+    display: flex;
+    gap: 10px;
   }
 }
 </style>

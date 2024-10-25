@@ -47,24 +47,23 @@
               <el-option label="无需快递" value="无需快递"></el-option>
             </el-select> </el-form-item
         ></el-col>
-        <el-col :span="12" :offset="3"
-          ><el-form-item label="运费最大值">
-            <el-input-number
-              v-model="form.shippingCost"
-              :precision="2"
-              :step="1"
-              :min="0"
-              :max="99999"
-              :disabled="isShippingDisabled"
-            >
-              <template #prefix>
-                <span>￥</span>
-              </template>
-            </el-input-number>
-          </el-form-item></el-col
-        >
       </el-row>
-
+      <el-col :span="12"
+        ><el-form-item label="运费最大值">
+          <el-input-number
+            v-model="form.shippingCost"
+            :precision="2"
+            :step="1"
+            :min="0"
+            :max="99999"
+            :disabled="isShippingDisabled"
+          >
+            <template #prefix>
+              <span>￥</span>
+            </template>
+          </el-input-number>
+        </el-form-item></el-col
+      >
       <el-form-item label="发货地址">
         <el-row :gutter="80">
           <!-- 省份 -->
@@ -89,12 +88,13 @@
           </el-col>
         </el-row>
       </el-form-item>
-
+    </div>
+    <template #footer>
       <el-row justify="center" style="margin-top: 20px">
         <el-button type="primary" @click="applyFilter">{{ loading ? '提交中 ...' : '应用' }}</el-button>
         <el-button @click="resetFilter">重置</el-button>
-      </el-row>
-    </div>
+      </el-row></template
+    >
   </el-drawer>
 </template>
 
@@ -104,7 +104,8 @@ import 'element-plus/theme-chalk/el-message-box.css'
 import 'element-plus/theme-chalk/el-message.css'
 import { ElMessageBox, ElMessage } from 'element-plus'
 import areaObj from '../../public/area.json'
-import 'dayjs/locale/zh-cn'
+import { getFilteredProductsAPI } from '@/api/products'
+
 const selector = ref(false)
 
 let form = reactive({
@@ -113,7 +114,6 @@ let form = reactive({
   province: '',
   city: '',
   area: '',
-  detailArea: '',
   deliveryMethod: '',
   shippingCost: 0,
   publishDate: []
@@ -195,6 +195,7 @@ const applyFilter = () => {
   //   接口调用
 
   loading.value = true
+  selector.value = false
   setTimeout(() => {
     loading.value = false
     dialog.value = false
@@ -217,11 +218,10 @@ const handleClose = (done) => {
       loading.value = true
       timer = setTimeout(() => {
         done()
-        // 动画关闭需要一定的时间
         setTimeout(() => {
           loading.value = false
         }, 400)
-      }, 2000)
+      }, 1000)
 
       ElMessage({
         type: 'success',

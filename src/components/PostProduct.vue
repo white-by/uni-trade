@@ -1,7 +1,7 @@
 <template>
   <div>
     <!-- 发布物品按钮 -->
-    <el-button type="primary" @click="dialogVisible = true">发布闲置</el-button>
+    <el-button type="primary" @click="dialogVisible = true" round size="large">发布闲置</el-button>
 
     <!-- 弹出表单对话框 -->
     <el-dialog title="发布闲置" v-model="dialogVisible" width="50%" align-center center>

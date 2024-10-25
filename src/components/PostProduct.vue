@@ -158,16 +158,6 @@ const categoryStore = useCategoryStore()
 
 // 表单可见状态
 const dialogVisible = ref(false)
-// 表单数据
-let form = reactive({
-  title: '',
-  description: '',
-  category: '',
-  price: 0,
-  address: '',
-  deliveryMethod: '',
-  shippingCost: 0
-})
 
 // 省
 const provinceArr = Object.keys(areaObj)
@@ -193,6 +183,17 @@ watch(city, (newVal) => {
 
 // 详细地址
 const detailArea = ref('')
+
+// 表单数据
+let form = reactive({
+  title: '',
+  description: '',
+  category: '',
+  price: 0,
+  address: province.value + city.value + area.value + detailArea.value,
+  deliveryMethod: '',
+  shippingCost: 0
+})
 
 const isShippingDisabled = ref(false)
 // 监听配送方式的变化

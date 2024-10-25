@@ -41,8 +41,8 @@ export function getFilteredProductsAPI({
             priceMax: priceMax > 0 ? priceMax : undefined, // 仅在大于0时发送
             priceMin: priceMin > 0 ? priceMin : undefined,
             province: province || undefined,
-            publishDate: publishDate.length() == 2 || undefined,
-            shippingCost: shippingCost >=0 || undefined,
+            publishDate: publishDate || undefined,
+            shippingCost: shippingCost > 0 ? priceMax : undefined,
             page,
             limit
         }

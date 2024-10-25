@@ -190,20 +190,46 @@ let timer
 const dialog = ref(false)
 const loading = ref(false)
 
-const applyFilter = () => {
+const applyFilter = async () => {
   console.log('提交的筛选数据:', form)
-  //   接口调用
 
+  // 设置加载状态
   loading.value = true
-  selector.value = false
-  setTimeout(() => {
+
+  // 调用接口
+  try {
+    // 通过解构传递 form 中的相关参数
+    const response = await getFilteredProductsAPI({
+      area: form.area,
+      city: form.city,
+      deliveryMethod: form.deliveryMethod,
+      priceMax: form.priceMax,
+      priceMin: form.priceMin,
+      province: form.province,
+      publishDate: form.publishDate,
+      shippingCost: form.shippingCost,
+      page: 1, // 如果需要，可以设置当前页码
+      limit: 12 // 如果需要，可以设置每页条目数量
+    })
+    console.log('成功发送请求')
+    // 处理成功响应
+    console.log('接口返回的数据:', response.data)
+    ElMessage({
+      type: 'success',
+      message: '修改成功'
+    })
+  } catch (error) {
+    // 处理错误
+    console.error('接口调用失败:', error)
+    ElMessage({
+      type: 'error',
+      message: '提交失败，请重试'
+    })
+  } finally {
+    // 无论成功与否都关闭加载状态和抽屉
     loading.value = false
-    dialog.value = false
-  }, 400)
-  ElMessage({
-    type: 'success',
-    message: '修改成功'
-  })
+    selector.value = false // 关闭筛选抽屉
+  }
 }
 
 const handleClose = (done) => {

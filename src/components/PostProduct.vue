@@ -46,9 +46,15 @@
           <el-col :span="8">
             <el-form-item label="物品类别" prop="category">
               <el-select v-model="form.category" placeholder="选择物品类别">
-                <el-option label="电子产品" value="电子产品"></el-option>
+                <el-option
+                  v-for="category in categoryStore.categoryList.data"
+                  :key="category.categoryID"
+                  :label="category.categoryName"
+                  :value="category.categoryName"
+                ></el-option>
+                <!-- <el-option label="电子产品" value="电子产品"></el-option>
                 <el-option label="服装" value="服装"></el-option>
-                <el-option label="家具" value="家具"></el-option>
+                <el-option label="家具" value="家具"></el-option> -->
               </el-select>
             </el-form-item>
           </el-col>
@@ -143,9 +149,12 @@
 </template>
 
 <script setup>
-import { ref, reactive, watch, computed } from 'vue'
+import { ref, reactive, watch, computed, onMounted } from 'vue'
 import areaObj from '../../public/area.json'
 import { UploadFilled } from '@element-plus/icons-vue'
+import { useCategoryStore } from '@/store/sortCategory'
+
+const categoryStore = useCategoryStore()
 
 // 表单可见状态
 const dialogVisible = ref(false)
@@ -222,6 +231,8 @@ function submitForm() {
     }
   })
 }
+
+onMounted(() => categoryStore.getCategory())
 </script>
 
 <style scoped lang="scss">

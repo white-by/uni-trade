@@ -1,20 +1,7 @@
 <script setup>
-import { getCategoryAPI } from '@/api/goods'
-import { onMounted, ref } from 'vue'
 import { useCategoryStore } from '@/store/sortCategory'
 
-const categoryList = ref([])
 const categoryStore = useCategoryStore()
-
-const getCategory = async () => {
-  const res = await getCategoryAPI()
-  // console.log('res Data:', res.data)
-  categoryList.value = res.data
-}
-
-onMounted(() => {
-  getCategory()
-})
 
 const handleCategoryClick = (categoryID) => {
   categoryStore.setCategoryID(categoryID)
@@ -28,7 +15,7 @@ const handleCategoryClick = (categoryID) => {
       <ul class="app-header-nav">
         <el-button type="primary" plain round @click="handleCategoryClick(0)">全部</el-button>
         <el-button
-          v-for="category in categoryList.data"
+          v-for="category in categoryStore.categoryList.data"
           :key="category.categoryID"
           type="primary"
           plain

@@ -1,6 +1,7 @@
 <template>
   <UserNav />
   <div class="content">
+    <br /><br />
     <el-form :model="user" label-width="40px" class="form" style="max-width: 600px">
       <div class="avatar-container" @click="selectAvatar">
         <el-avatar :size="130" :src="user.avatarUrl" />
@@ -113,18 +114,18 @@ function onSubmit() {
   display: flex;
   flex-direction: column;
   align-items: center; /* 居中 */
-  margin-top: 2%;
   background-image: url('/src/assets/images/background3.svg');
 }
 
 .avatar-container {
   display: flex;
   justify-content: center; /* 水平居中 */
-  margin-bottom: 5%; /* 调整头像和表单之间的间距 */
+  margin-bottom: 10%; /* 调整头像和表单之间的间距 */
 }
 
 .form {
-  margin-top: 3%;
+  margin-top: 5%;
+  margin-bottom: 2%;
   width: 30%;
 }
 

@@ -1,16 +1,16 @@
 <template>
   <div>
-    <Header></Header>
-    <MainLogin></MainLogin>
+    <HeaderLogin />
+    <MainLogin />
     <span></span>
-    <LayoutFooter></LayoutFooter>
+    <UserFooter />
   </div>
 </template>
 
 <script setup>
-import Header from './components/HeaderLogin.vue'
+import UserFooter from '@/components/UserFooter.vue'
+import HeaderLogin from './components/HeaderLogin.vue'
 import MainLogin from './components/MainLogin.vue'
-import LayoutFooter from '@/views/layout/components/LayoutFooter.vue'
 </script>
 
 <style scoped lang="scss"></style>

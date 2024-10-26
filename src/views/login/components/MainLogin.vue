@@ -119,7 +119,7 @@ const handleRegister = () => {
 .el-container {
   height: 100vh; /* 使容器高度占满整个视口 */
   background-image: url('/src/assets/images/background4.svg');
-  background-size: 100%;
+  background-size: cover;
 }
 
 .welcome-text {
@@ -147,7 +147,7 @@ const handleRegister = () => {
 }
 
 .frosted-glass {
-  background: rgba(255, 255, 255, 0.7);
+  background: rgba(255, 255, 255, 0.5);
   backdrop-filter: blur(10px);
   padding: 40px; /* 增加内边距 */
   border-radius: 10px;

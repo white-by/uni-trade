@@ -149,15 +149,12 @@
 </template>
 
 <script setup>
-import { ref, reactive, watch, computed, onMounted } from 'vue'
+import { ref, reactive, watch, computed } from 'vue'
 import areaObj from '../../public/area.json'
 import { UploadFilled } from '@element-plus/icons-vue'
 import { useCategoryStore } from '@/store/sortCategory'
 
-//使用pinia获取分类数据，合并到layout组件下后可优化
 const categoryStore = useCategoryStore()
-onMounted(() => categoryStore.getCategory())
-
 // 表单可见状态
 const dialogVisible = ref(false)
 // 表单数据

@@ -35,7 +35,7 @@ const confirmLogout = async () => {
             <a href="javascript:;"><i class="iconfont icon-announcement"></i></a>
           </li>
           <li>
-            <a href="javascript:;"><i class="iconfont icon-shop"></i></a>
+            <router-link to="/"><i class="iconfont icon-shop"></i></router-link>
           </li>
           <li>
             <a href="javascript:;"><i class="iconfont icon-message"></i></a>

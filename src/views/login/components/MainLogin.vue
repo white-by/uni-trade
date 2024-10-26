@@ -44,13 +44,15 @@
         </el-col>
       </el-row>
 
-      <div class="announcements">
+      <!-- <div class="announcements">
         <p>请遵守校园交易规则。</p>
         <ol>
-          <li>xxx</li>
-          <li>xxx</li>
+          <li>真实可靠：交易双方应保证发布信息的真实性，禁止发布虚假、夸大或含有误导性的商品信息</li>
+          <li>物品合规：仅允许发布校园内符合使用规定的物品。严禁发布违禁物品、非法物品或校园禁止携带的物品。</li>
+          <li>信守承诺：交易达成后，买卖双方应按约定进行交易，避免无故放弃交易或随意更改交易条款。</li>
+          <li>良好沟通：交易双方应保持良好的沟通，及时沟通商品状态、付款方式和交付细节，确保交易顺利完成。</li>
         </ol>
-      </div>
+      </div> -->
     </el-main>
   </el-container>
 </template>
@@ -116,9 +118,12 @@ const handleRegister = () => {
 <style scoped lang="scss">
 .el-container {
   height: 100vh; /* 使容器高度占满整个视口 */
+  background-image: url('/src/assets/images/background4.svg');
+  background-size: 100%;
 }
 
 .welcome-text {
+  //color: rgb(255, 255, 255);
   text-align: left;
   font-size: 60px;
   margin: 20px 0;
@@ -131,7 +136,6 @@ const handleRegister = () => {
 .el-input {
   flex-grow: 1;
   height: 40px;
-  margin-top: -10px;
 }
 
 .login-form {

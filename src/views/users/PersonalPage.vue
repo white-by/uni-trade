@@ -114,6 +114,7 @@ function onSubmit() {
   flex-direction: column;
   align-items: center; /* 居中 */
   margin-top: 2%;
+  background-image: url('/src/assets/images/background3.svg');
 }
 
 .avatar-container {

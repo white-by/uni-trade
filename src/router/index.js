@@ -6,10 +6,15 @@ import LoginUser from '@/views/login/LoginUser.vue'
 import TestPage from '@/views/test/TestPage.vue'
 import PersonalPage from '@/views/users/PersonalPage.vue'
 import RegisterUser from '@/views/login/RegisterUser.vue'
+import Detail from '@/views/detail/DetailPage.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
+    {
+      path: '/detail/:id',
+      component: Detail
+    },
     {
       path: '/test',
       component: TestPage

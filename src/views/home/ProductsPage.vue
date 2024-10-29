@@ -60,11 +60,13 @@ onMounted(() => {
     <el-row :gutter="20" class="product-row">
       <el-col :span="4" v-for="product in productsList" :key="product.id">
         <el-card shadow="hover" class="product-card">
-          <img :src="product.picture" class="product-image" />
-          <div class="product-info">
-            <h3 class="product-title">{{ product.name }}</h3>
-            <p class="product-price">￥{{ product.price }}</p>
-          </div>
+          <RouterLink :to="`/detail/${product.id}`">
+            <img :src="product.picture" class="product-image" />
+            <div class="product-info">
+              <h3 class="product-title">{{ product.name }}</h3>
+              <p class="product-price">￥{{ product.price }}</p>
+            </div>
+          </RouterLink>
         </el-card>
       </el-col>
     </el-row>

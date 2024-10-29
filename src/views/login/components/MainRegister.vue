@@ -139,7 +139,7 @@ const sendVerificationCode = () => {
   console.log('Sending verification code to:', form.value.email)
   // 启动倒计时
   isCounting.value = true
-  countdown.value = 120
+  countdown.value = 60
   const timer = setInterval(() => {
     countdown.value--
     if (countdown.value <= 0) {

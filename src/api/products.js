@@ -21,6 +21,7 @@ export function getProductsListAPI(category, page, limit){
 
 //根据筛选条件筛选商品
 export function getFilteredProductsAPI({
+    category = 0,
     area = "",
     city = "",
     deliveryMethod = "",
@@ -35,6 +36,7 @@ export function getFilteredProductsAPI({
     return httpInstance({
         url: '/products',
         params: {
+            category: category || undefined,
             area: area || undefined, 
             city: city || undefined,
             deliveryMethod: deliveryMethod || undefined,

@@ -1,7 +1,25 @@
 <template>
   <el-button size="large" type="primary" plain round @click="selector = true">筛选</el-button>
-  <el-drawer v-model="selector" title="筛选条件" :before-close="handleClose">
+  <el-drawer v-model="selector" title="筛选条件" :show-close="false" :before-close="handleClose">
+    <template #title>
+      <div style="display: flex; justify-content: space-between; align-items: center">
+        <span>筛选条件</span>
+        <i @click="cancelForm" class="iconfont icon-cancel"></i>
+      </div>
+    </template>
     <div class="filter-container">
+      <el-col :span="11">
+        <el-form-item label="物品类别" prop="category">
+          <el-select v-model="form.category" placeholder="选择物品类别">
+            <el-option
+              v-for="category in categoryStore.categoryList.data"
+              :key="category.categoryID"
+              :label="category.categoryName"
+              :value="category.categoryName"
+            ></el-option>
+          </el-select>
+        </el-form-item>
+      </el-col>
       <el-col
         ><el-form-item label="价格区间">
           <el-input-number
@@ -105,10 +123,14 @@ import 'element-plus/theme-chalk/el-message.css'
 import { ElMessageBox, ElMessage } from 'element-plus'
 import areaObj from '../../public/area.json'
 import { getFilteredProductsAPI } from '@/api/products'
+import { useCategoryStore } from '@/store/sortCategory'
+
+const categoryStore = useCategoryStore()
 
 const selector = ref(false)
 
 let form = reactive({
+  category: '',
   priceMin: 0,
   priceMax: 0,
   province: '',
@@ -186,7 +208,6 @@ watch(area, (newVal) => {
   form.area = newVal || '' // 更新表单里的地区
 })
 
-let timer
 const dialog = ref(false)
 const loading = ref(false)
 
@@ -198,8 +219,8 @@ const applyFilter = async () => {
 
   // 调用接口
   try {
-    // 通过解构传递 form 中的相关参数
     const response = await getFilteredProductsAPI({
+      category: form.category,
       area: form.area,
       city: form.city,
       deliveryMethod: form.deliveryMethod,
@@ -208,8 +229,8 @@ const applyFilter = async () => {
       province: form.province,
       publishDate: form.publishDate,
       shippingCost: form.shippingCost,
-      page: 1, // 如果需要，可以设置当前页码
-      limit: 12 // 如果需要，可以设置每页条目数量
+      page: 1,
+      limit: 12
     })
     console.log('成功发送请求')
     // 处理成功响应
@@ -228,31 +249,52 @@ const applyFilter = async () => {
   } finally {
     // 无论成功与否都关闭加载状态和抽屉
     loading.value = false
-    selector.value = false // 关闭筛选抽屉
+    selector.value = false
   }
 }
 
-const handleClose = (done) => {
+const handleClose = () => {
   if (loading.value) {
     return
   }
   ElMessageBox.confirm('确认应用并退出吗?')
-    .then(() => {
+    .then(async () => {
       console.log('提交的筛选数据:', form)
-      //   接口调用
-
       loading.value = true
-      timer = setTimeout(() => {
-        done()
-        setTimeout(() => {
-          loading.value = false
-        }, 400)
-      }, 1000)
 
-      ElMessage({
-        type: 'success',
-        message: '修改成功'
-      })
+      // 调用接口
+      try {
+        const response = await getFilteredProductsAPI({
+          category: form.category,
+          area: form.area,
+          city: form.city,
+          deliveryMethod: form.deliveryMethod,
+          priceMax: form.priceMax,
+          priceMin: form.priceMin,
+          province: form.province,
+          publishDate: form.publishDate,
+          shippingCost: form.shippingCost,
+          page: 1,
+          limit: 12
+        })
+        console.log('成功发送请求')
+        console.log('接口返回的数据:', response.data)
+        ElMessage({
+          type: 'success',
+          message: '修改成功'
+        })
+      } catch (error) {
+        // 处理错误
+        console.error('接口调用失败:', error)
+        ElMessage({
+          type: 'error',
+          message: '提交失败，请重试'
+        })
+      } finally {
+        // 无论成功与否都关闭加载状态和抽屉
+        loading.value = false
+        selector.value = false
+      }
     })
     .catch(() => {
       // catch error
@@ -263,8 +305,8 @@ const handleClose = (done) => {
 const resetFilter = () => {
   loading.value = false
   dialog.value = false
-  clearTimeout(timer)
 
+  form.category = null,
   form.priceMin = 0
   form.priceMax = 0
   form.deliveryMethod = ''
@@ -277,6 +319,12 @@ const resetFilter = () => {
   form.province = ''
   form.city = ''
   form.area = ''
+}
+
+const cancelForm = () => {
+  loading.value = false
+  dialog.value = false
+  selector.value = false
 }
 </script>
 

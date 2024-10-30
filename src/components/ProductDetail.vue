@@ -4,7 +4,6 @@
     <div style="width: 50%">
       <img class="product-image" :src="product.image" alt="商品图片" />
     </div>
-
     <!-- 右侧详情表单 -->
     <el-form
       label-width="100px"
@@ -121,6 +120,7 @@ import { onMounted, ref } from 'vue'
 import { useRoute } from 'vue-router'
 import 'element-plus/theme-chalk/el-message.css'
 import { ElMessage } from 'element-plus'
+
 const product = ref({})
 const route = useRoute()
 const getProducts = async () => {
@@ -130,20 +130,31 @@ const getProducts = async () => {
 }
 onMounted(() => getProducts())
 
+// 收藏
 const isStarred = ref(false)
+let isThrottled = false // 用于控制节流状态
+
 const toggleStarred = () => {
+  if (isThrottled) return // 如果正在节流，直接返回
+
+  isThrottled = true
   isStarred.value = !isStarred.value
-  if (isStarred.value == true)
+
+  if (isStarred.value) {
     ElMessage({
       type: 'success',
       message: '已收藏'
     })
-  else {
+  } else {
     ElMessage({
       type: 'success',
       message: '取消收藏'
     })
   }
+
+  setTimeout(() => {
+    isThrottled = false // 一秒后解除节流状态
+  }, 1000)
 }
 </script>
 
@@ -208,8 +219,5 @@ const toggleStarred = () => {
   font-size: 20px;
   width: 560px;
   height: auto;
-}
-
-.bottom-section {
 }
 </style>

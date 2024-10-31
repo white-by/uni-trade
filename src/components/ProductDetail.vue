@@ -209,7 +209,4 @@ const toggleStarred = () => {
   width: 560px;
   height: auto;
 }
-
-.bottom-section {
-}
 </style>

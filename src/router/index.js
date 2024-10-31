@@ -7,10 +7,15 @@ import TestPage from '@/views/test/TestPage.vue'
 import PersonalPage from '@/views/users/PersonalPage.vue'
 import RegisterUser from '@/views/login/RegisterUser.vue'
 import Detail from '@/views/detail/DetailPage.vue'
+import Order from '@/views/users/OrderPage.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
+    {
+      path: '/user/order',
+      component: Order
+    },
     {
       path: '/detail/:id',
       component: Detail

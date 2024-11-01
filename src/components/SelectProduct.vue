@@ -82,30 +82,17 @@
           </el-input-number>
         </el-form-item></el-col
       >
-      <el-form-item label="发货地址">
-        <el-row :gutter="75">
-          <!-- 省份 -->
-          <el-col :span="8">
-            <el-select v-model="province" placeholder="选择省份" style="width: 230%">
-              <el-option v-for="item in provinceArr" :key="item" :label="item" :value="item"></el-option>
-            </el-select>
-          </el-col>
 
-          <!-- 城市 -->
-          <el-col :span="8">
-            <el-select v-model="city" placeholder="选择城市" style="width: 230%">
-              <el-option v-for="item in cityArr" :key="item" :label="item" :value="item"></el-option>
-            </el-select>
-          </el-col>
-
-          <!-- 地区 -->
-          <el-col :span="8">
-            <el-select v-model="area" placeholder="选择地区" style="width: 230%">
-              <el-option v-for="item in areaArr" :key="item" :label="item" :value="item"></el-option>
-            </el-select>
-          </el-col>
-        </el-row>
+      <!-- 发货地址 -->
+      <el-form-item>
+        <AreaComponets
+          ref="areaComponentRef"
+          @updateProvince="form.province = $event"
+          @updateCity="form.city = $event"
+          @updateArea="form.area = $event"
+        />
       </el-form-item>
+
     </div>
     <template #footer>
       <el-row justify="center" style="margin-top: 20px">
@@ -117,17 +104,17 @@
 </template>
 
 <script setup>
-import { ref, reactive, watch, computed } from 'vue'
+import { ref, reactive, watch } from 'vue'
 import 'element-plus/theme-chalk/el-message-box.css'
 import 'element-plus/theme-chalk/el-message.css'
 import { ElMessageBox, ElMessage } from 'element-plus'
-import areaObj from '../../public/area.json'
 import { getFilteredProductsAPI } from '@/api/products'
 import { useCategoryStore } from '@/store/sortCategory'
+import AreaComponets from '@/components/AreaComponets.vue'
 
 const categoryStore = useCategoryStore()
-
 const selector = ref(false)
+const areaComponentRef = ref(null)
 
 let form = reactive({
   category: '',
@@ -175,49 +162,15 @@ watch(
   }
 )
 
-const provinceArr = Object.keys(areaObj)
-const province = ref(null)
-const city = ref(null)
-const area = ref(null)
 
-// 市的计算属性
-const cityArr = computed(() => {
-  return province.value ? Object.keys(areaObj[province.value]) : []
-})
-
-// 区的计算属性
-const areaArr = computed(() => {
-  return province.value && city.value ? areaObj[province.value][city.value] : []
-})
-
-// 监听省份变化
-watch(province, (newVal) => {
-  form.province = newVal || '' // 更新表单里的省份
-  city.value = null // 省份改变时清空城市和地区
-  area.value = null
-})
-
-// 监听城市变化
-watch(city, (newVal) => {
-  form.city = newVal || '' // 更新表单里的城市
-  area.value = null // 城市改变时清空地区
-})
-
-// 监听地区变化
-watch(area, (newVal) => {
-  form.area = newVal || '' // 更新表单里的地区
-})
-
+//处理筛选
 const dialog = ref(false)
 const loading = ref(false)
 
+//提交筛选
 const applyFilter = async () => {
   console.log('提交的筛选数据:', form)
-
-  // 设置加载状态
   loading.value = true
-
-  // 调用接口
   try {
     const response = await getFilteredProductsAPI({
       category: form.category,
@@ -253,6 +206,7 @@ const applyFilter = async () => {
   }
 }
 
+//点击界外时对应用筛选与否的二次确认
 const handleClose = () => {
   if (loading.value) {
     return
@@ -291,7 +245,6 @@ const handleClose = () => {
           message: '提交失败，请重试'
         })
       } finally {
-        // 无论成功与否都关闭加载状态和抽屉
         loading.value = false
         selector.value = false
       }
@@ -301,26 +254,25 @@ const handleClose = () => {
     })
 }
 
-//重置
+//重置筛选
 const resetFilter = () => {
   loading.value = false
   dialog.value = false
-
-  form.category = null,
+  form.category = null
   form.priceMin = 0
   form.priceMax = 0
   form.deliveryMethod = ''
   form.shippingCost = 0
   form.publishDate = []
-  province.value = null
-  city.value = null
-  area.value = null
-
   form.province = ''
   form.city = ''
   form.area = ''
+  if (areaComponentRef.value) {
+    areaComponentRef.value.resetAddress()
+  }
 }
 
+//强制关闭筛选（右上角叉叉
 const cancelForm = () => {
   loading.value = false
   dialog.value = false

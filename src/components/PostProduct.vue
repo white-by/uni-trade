@@ -74,7 +74,7 @@
         <el-row>
           <!-- 售价 -->
           <el-col :span="8">
-            <el-form-item label="售价 ￥" prop="price">
+            <el-form-item label="售价 " prop="price">
               <el-input-number v-model="form.price" :precision="2" :step="1" :min="0" :max="99">
                 <template #prefix>
                   <span>￥</span>
@@ -85,7 +85,7 @@
 
           <!-- 运费 -->
           <el-col :span="8" :offset="6">
-            <el-form-item label="运费 ￥">
+            <el-form-item label="运费 ">
               <el-input-number
                 v-model="form.shippingCost"
                 :precision="2"

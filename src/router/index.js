@@ -8,6 +8,10 @@ import PersonalPage from '@/views/users/PersonalPage.vue'
 import RegisterUser from '@/views/login/RegisterUser.vue'
 import Detail from '@/views/detail/DetailPage.vue'
 import Order from '@/views/users/OrderPage.vue'
+import ProfilesPage from '@/views/users/ProfilesPage.vue'
+import ProfilesComment from '@/views/users/ProfilesComment.vue'
+import ProfilesPublished from '@/views/users/ProfilesPublished.vue'
+import ProfilesFinished from '@/views/users/ProfilesFinished.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -15,6 +19,24 @@ const router = createRouter({
     {
       path: '/user/order',
       component: Order
+    },
+    {
+      path: '/profiles',
+      component: ProfilesPage,
+      children: [
+        {
+          path: 'published',
+          component: ProfilesPublished
+        },
+        {
+          path: 'finished',
+          component: ProfilesFinished
+        },
+        {
+          path: 'comment',
+          component: ProfilesComment
+        }
+      ]
     },
     {
       path: '/detail/:id',

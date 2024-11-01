@@ -2,14 +2,15 @@
   <!--TODO: 
   1. 把省市区下拉框搬过来，放进地址编辑dialog里。也许可以让地址下拉框独立成组件？
   2. 实付栏数据应为商品价格+运费
-  3. 为两个表格添加标题。如何更美观？ 
+
   4. 表格使用分页or无限滚动？倾向于分页。
   5. 接口文档的数据有待更改
   -->
   <UserNav />
   <!--我买到的-->
   <div style="display: flex; justify-content: center; margin: 50px">
-    <el-card
+    <el-card>
+      <el-row style="margin-bottom: 20px; color: dimgray"><h3>我买到的</h3></el-row
       ><el-table :data="purchasedData" stripe border>
         <el-table-column prop="tradeID" label="订单号"></el-table-column>
 
@@ -77,6 +78,14 @@
           </template></el-table-column
         >
       </el-table>
+      <div>
+        <el-pagination
+          size="small"
+          style="justify-content: center; margin-top: 20px"
+          layout="prev, pager, next"
+          :total="50"
+        />
+      </div>
     </el-card>
     <!-- 修改地址对话框，待修改 -->
     <el-dialog title="修改地址" v-model="dialogVisible" width="500px" @close="resetForm">
@@ -94,6 +103,7 @@
   <!--我卖出的-->
   <div style="display: flex; justify-content: center; margin: 50px">
     <el-card
+      ><el-row style="margin-bottom: 20px; color: dimgray"><h3>我卖出的</h3></el-row
       ><el-table :data="selledData" stripe border>
         <el-table-column prop="tradeID" label="订单号"></el-table-column>
 
@@ -161,6 +171,14 @@
           </template></el-table-column
         >
       </el-table>
+      <div>
+        <el-pagination
+          size="small"
+          style="justify-content: center; margin-top: 20px"
+          layout="prev, pager, next"
+          :total="50"
+        />
+      </div>
     </el-card>
     <!-- 修改地址对话框，待修改 -->
     <el-dialog title="修改地址" v-model="dialogVisible" width="500px" @close="resetForm">

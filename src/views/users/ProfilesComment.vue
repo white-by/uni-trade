@@ -67,6 +67,7 @@ const timeAgo = (time) => {
           </div>
           <p class="comment-content">{{ comment.commentContent }}</p>
           <router-link :to="`/detail/${comment.goodsID}`" class="view-product"> 查看商品 </router-link>
+          <!-- <el-divider class="div" /> -->
         </div>
       </div>
     </div>
@@ -138,5 +139,10 @@ const timeAgo = (time) => {
 }
 .view-product:hover {
   color: $helpColor;
+}
+
+.div {
+  width: 100%; /* 设置宽度为100% */
+  margin: 20px 0; /* 可选：设置上下边距 */
 }
 </style>

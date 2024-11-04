@@ -26,7 +26,7 @@ const router = createRouter({
       children: [
         {
           path: '',
-          component: ProfilesPublished
+          redirect: 'profiles/published'
         },
         {
           path: 'published',

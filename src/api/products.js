@@ -1,13 +1,22 @@
 import httpInstance from "@/utils/https";
 
-//获取分类
+/**
+ * 获取分类
+ * @returns 
+ */
 export function getCategoryAPI(){
     return httpInstance({
         url: '/home/category'
     })
 }
 
-//获取每一页的商品
+/**
+ * 获取商品列表
+ * @param {商品的分类号码} category 
+ * @param {当前页数} page 
+ * @param {每页最大商品数 默认为12} limit 
+ * @returns 
+ */
 export function getProductsListAPI(category, page, limit){
     return httpInstance({
         url: '/products',

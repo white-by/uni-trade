@@ -1,7 +1,7 @@
 <!--省市区自动匹配下拉框-->
 
 <template>
-  <el-form-item label="发货地址">
+  <el-form-item>
     <el-row :gutter="75">
       <!-- 省份 -->
       <el-col :span="8">

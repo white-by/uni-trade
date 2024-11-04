@@ -25,6 +25,10 @@ const router = createRouter({
       component: ProfilesPage,
       children: [
         {
+          path: '',
+          component: ProfilesPublished
+        },
+        {
           path: 'published',
           component: ProfilesPublished
         },

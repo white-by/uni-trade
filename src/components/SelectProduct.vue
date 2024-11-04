@@ -84,7 +84,7 @@
       >
 
       <!-- 发货地址 -->
-      <el-form-item>
+      <el-form-item  label="发货地址">
         <AreaComponets
           ref="areaComponentRef"
           @updateProvince="form.province = $event"

@@ -1,7 +1,7 @@
 <script setup>
 import UserNav from '@/components/UserNav.vue'
 import ProfilesTop from './components/ProfilesTop.vue'
-import ProfilesNav from './components/ProfilesNav.vue'
+// import ProfilesNav from './components/ProfilesNav.vue'
 import { RouterView } from 'vue-router'
 import UserFooter from '@/components/UserFooter.vue'
 </script>
@@ -9,7 +9,7 @@ import UserFooter from '@/components/UserFooter.vue'
 <template>
   <UserNav />
   <ProfilesTop />
-  <ProfilesNav />
+  <!-- <ProfilesNav /> -->
   <RouterView />
   <UserFooter />
 </template>

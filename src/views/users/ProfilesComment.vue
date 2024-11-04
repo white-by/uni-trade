@@ -1,5 +1,6 @@
 <script setup>
 import { ref } from 'vue'
+import ProfilesNav from './components/ProfilesNav.vue'
 
 // 示例评论数据
 const comments = ref([
@@ -53,15 +54,20 @@ const timeAgo = (time) => {
 
 <template>
   <div class="profile-container">
-    <div v-for="comment in comments" :key="comment.commentID" class="comment-item">
-      <el-avatar :src="comment.commentatorAvatar" class="avatar" />
-      <div class="comment-details">
-        <div class="comment-header">
-          <span class="commentator-name">{{ comment.commentatorName }}</span>
-          <span class="comment-time">{{ timeAgo(comment.commentTime) }}</span>
+    <div class="nav">
+      <ProfilesNav />
+    </div>
+    <div class="comment-container">
+      <div v-for="comment in comments" :key="comment.commentID" class="comment-item">
+        <el-avatar :src="comment.commentatorAvatar" class="avatar" />
+        <div class="comment-details">
+          <div class="comment-header">
+            <span class="commentator-name">{{ comment.commentatorName }}</span>
+            <span class="comment-time">{{ timeAgo(comment.commentTime) }}</span>
+          </div>
+          <p class="comment-content">{{ comment.commentContent }}</p>
+          <router-link :to="`/detail/${comment.goodsID}`" class="view-product"> 查看商品 </router-link>
         </div>
-        <p class="comment-content">{{ comment.commentContent }}</p>
-        <router-link :to="`/detail/${comment.goodsID}`" class="view-product"> 查看商品 </router-link>
       </div>
     </div>
   </div>
@@ -73,11 +79,13 @@ const timeAgo = (time) => {
   width: 70%;
   min-height: 50vh;
   margin: 0 auto; /* 水平居中 */
-  padding: 20px; /* 内边距 */
   border-radius: 10px; /* 圆角 */
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); /* 阴影效果 */
   margin-top: 1%;
   margin-bottom: 3%;
+}
+.comment-container {
+  padding: 20px; /* 内边距 */
 }
 
 .comment-item {

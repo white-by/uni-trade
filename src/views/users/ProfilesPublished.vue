@@ -1,14 +1,19 @@
 <template>
   <div class="profile-container">
-    <div v-for="(item, index) in publishedItems" :key="item.id" class="published-item">
-      <img :src="item.imageUrl" alt="商品图片" class="item-image" />
-      <div class="item-info">
-        <h3 class="item-title">{{ item.title }}</h3>
-        <p class="item-price">￥{{ item.price }}</p>
-        <span class="item-desc" :title="item.description">{{ item.description }}</span>
+    <div class="nav">
+      <ProfilesNav />
+    </div>
+    <div class="published-container">
+      <div v-for="(item, index) in publishedItems" :key="item.id" class="published-item">
+        <img :src="item.imageUrl" alt="商品图片" class="item-image" />
+        <div class="item-info">
+          <h3 class="item-title">{{ item.title }}</h3>
+          <p class="item-price">￥{{ item.price }}</p>
+          <span class="item-desc" :title="item.description">{{ item.description }}</span>
+        </div>
+        <!-- 使用 v-model:item 绑定数据 -->
+        <EditBtn v-model:item="publishedItems[index]" />
       </div>
-      <!-- 使用 v-model:item 绑定数据 -->
-      <EditBtn v-model:item="publishedItems[index]" />
     </div>
   </div>
 </template>
@@ -16,6 +21,7 @@
 <script setup>
 import { reactive } from 'vue'
 import EditBtn from './components/EditBtn.vue'
+import ProfilesNav from './components/ProfilesNav.vue'
 
 // 示例商品数据
 const publishedItems = reactive([
@@ -50,7 +56,6 @@ const publishedItems = reactive([
   width: 70%;
   min-height: 50vh;
   margin: 0 auto;
-  padding: 30px;
   border-radius: 10px;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
   margin-top: 1%;
@@ -60,11 +65,11 @@ const publishedItems = reactive([
 .published-item {
   display: flex;
   align-items: center;
-  background-color: #fff;
-  padding: 20px;
-  margin-bottom: 20px;
+  // background-color: #fff;
+  padding: 10px;
+  margin-bottom: 15px;
   border-radius: 10px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  // box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }
 
 .item-image {
@@ -97,5 +102,9 @@ const publishedItems = reactive([
     text-overflow: ellipsis;
     max-width: 500px; // 你可以根据实际需要调整宽度
   }
+}
+
+.published-container {
+  padding: 20px; /* 内边距 */
 }
 </style>

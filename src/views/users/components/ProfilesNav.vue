@@ -1,50 +1,29 @@
 <script setup></script>
 
 <template>
-  <div class="profile-container">
-    <router-link to="/profiles/published">
-      <el-button
-        type="primary"
-        round
-        plain
-        class="first-button"
-        :class="{ active: $route.path === '/profiles/published' }"
+  <div class="container">
+    <el-menu :default-active="activeIndex" mode="horizontal" @select="menuSelect">
+      <el-menu-item index="1" :class="{ active: $route.path === '/profiles/published' || $route.path === '/profiles' }">
+        <router-link to="/profiles/published"> 已发布</router-link></el-menu-item
       >
-        已发布
-      </el-button>
-    </router-link>
-    <router-link to="/profiles/finished">
-      <el-button type="primary" round plain :class="{ active: $route.path === '/profiles/finished' }">
-        已完成
-      </el-button>
-    </router-link>
-    <router-link to="/profiles/comment">
-      <el-button type="primary" round plain :class="{ active: $route.path === '/profiles/comment' }">
-        交易评价
-      </el-button>
-    </router-link>
+      <el-menu-item index="2" :class="{ active: $route.path === '/profiles/finished' }"
+        ><router-link to="/profiles/finished">已完成</router-link></el-menu-item
+      >
+      <el-menu-item index="3" :class="{ active: $route.path === '/profiles/comment' }">
+        <router-link to="/profiles/comment">交易评价</router-link></el-menu-item
+      >
+    </el-menu>
   </div>
 </template>
 
 <style scoped lang="scss">
-.profile-container {
-  background-color: #f9f9f9; /* 空白背景 */
-  width: 70%;
-  margin: 0 auto; /* 水平居中 */
-  padding: 20px; /* 内边距 */
-  border-radius: 10px; /* 圆角 */
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); /* 阴影效果 */
-  margin-top: 3%;
+.container {
+  width: auto;
 }
-.el-button {
-  margin-right: 30px;
-}
-.first-button {
-  margin-left: 20px;
-}
+
 .active {
-  background-color: $comColor; /* 选中时的背景颜色 */
-  color: white; /* 选中时的文字颜色 */
+  background-color: white; /* 选中时的背景颜色 */
+  color: $comColor; /* 选中时的文字颜色 */
   border-color: $comColor;
 }
 </style>

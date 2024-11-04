@@ -2,8 +2,6 @@
   <!--TODO: 
   1. 把省市区下拉框搬过来，放进地址编辑dialog里。也许可以让地址下拉框独立成组件？
   2. 实付栏数据应为商品价格+运费
-
-  4. 表格使用分页or无限滚动？倾向于分页。
   5. 接口文档的数据有待更改
   -->
   <UserNav />
@@ -180,13 +178,23 @@
         />
       </div>
     </el-card>
+
     <!-- 修改地址对话框，待修改 -->
     <el-dialog title="修改地址" v-model="dialogVisible" width="500px" @close="resetForm">
-      <el-form>
-        <el-form-item label="地址" label-width="80px">
-          <el-input v-model="editForm.shippingAddress" placeholder="请输入新地址"></el-input>
-        </el-form-item>
-      </el-form>
+      <el-form-item label="新地址">
+        <AreaComponets
+          ref="areaComponentRef"
+          @updateProvince="editForm.province = $event"
+          @updateCity="editForm.city = $event"
+          @updateArea="editForm.area = $event"
+        />
+        <el-input
+          v-model="editForm.detailAddress"
+          placeholder="请输入详细地址"
+          style="margin-top: 10px; width: auto"
+        ></el-input>
+      </el-form-item>
+
       <span class="dialog-footer">
         <el-button type="primary" @click="confirmEdit">确认修改</el-button>
       </span>
@@ -198,12 +206,20 @@
 <script setup>
 import UserNav from '@/components/UserNav.vue'
 import UserFooter from '@/components/UserFooter.vue'
-import { ref } from 'vue'
+import { ref, computed } from 'vue'
+import AreaComponets from '@/components/AreaComponets.vue'
 
 const dialogVisible = ref(false)
 const editForm = ref({
   tradeID: '',
-  shippingAddress: ''
+  province: '',
+  city: '',
+  area: '',
+  detailAddress: ''
+})
+
+const shippingAddress = computed(() => {
+  return `${editForm.value.province}${editForm.value.city}${editForm.value.area}${editForm.value.detailAddr}`
 })
 
 const openEditDialog = (row) => {
@@ -216,8 +232,10 @@ const confirmEdit = () => {
   // 更新订单数据中的地址信息
   const order = purchasedData.value.find((item) => item.tradeID === editForm.value.tradeID)
   if (order) {
-    order.shippingAddress = editForm.value.shippingAddress
+    order.shippingAddress = shippingAddress
   }
+  console.log('更新后的地址信息：')
+
   dialogVisible.value = false
   resetForm()
 }

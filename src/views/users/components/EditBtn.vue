@@ -137,16 +137,12 @@
 </template>
 
 <script setup>
-import { ref, reactive, watch, onMounted, computed } from 'vue'
+import { ref, reactive, watch, computed } from 'vue'
 // import { UploadFilled } from '@element-plus/icons-vue'
 import { useCategoryStore } from '@/store/sortCategory'
 import areaObj from '@/../public/area.json'
 
 const categoryStore = useCategoryStore()
-
-onMounted(() => {
-  categoryStore.getCategory()
-})
 
 const props = defineProps({
   item: Object // 通过 v-model:item 传递的商品数据

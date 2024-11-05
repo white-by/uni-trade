@@ -19,9 +19,15 @@
 </template>
 
 <script setup>
-import { reactive } from 'vue'
+import { reactive, onMounted } from 'vue'
 import EditBtn from './components/EditBtn.vue'
 import ProfilesNav from './components/ProfilesNav.vue'
+import { useCategoryStore } from '@/store/sortCategory'
+
+const categoryStore = useCategoryStore()
+onMounted(() => {
+  categoryStore.getCategory()
+})
 
 // 示例商品数据
 const publishedItems = reactive([

@@ -23,11 +23,8 @@ const router = createRouter({
     {
       path: '/profiles',
       component: ProfilesPage,
+      redirect: '/profiles/published', 
       children: [
-        {
-          path: '',
-          redirect: 'profiles/published'
-        },
         {
           path: 'published',
           component: ProfilesPublished

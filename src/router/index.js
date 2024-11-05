@@ -4,18 +4,28 @@ import LayoutPage from '@/views/layout/LayoutPage.vue'
 import ProductsPage from '@/views/home/ProductsPage.vue'
 import LoginUser from '@/views/login/LoginUser.vue'
 import TestPage from '@/views/test/TestPage.vue'
-import PersonalPage from '@/views/users/PersonalPage.vue'
+import PersonalPage from '@/views/users/infomation/PersonalPage.vue'
 import RegisterUser from '@/views/login/RegisterUser.vue'
 import Detail from '@/views/detail/DetailPage.vue'
-import Order from '@/views/users/OrderPage.vue'
-import ProfilesPage from '@/views/users/ProfilesPage.vue'
-import ProfilesComment from '@/views/users/ProfilesComment.vue'
-import ProfilesPublished from '@/views/users/ProfilesPublished.vue'
-import ProfilesFinished from '@/views/users/ProfilesFinished.vue'
+import Order from '@/views/users/orders/OrderPage.vue'
+import ProfilesPage from '@/views/users/profiles/ProfilesPage.vue'
+import ProfilesComment from '@/views/users/profiles/ProfilesComment.vue'
+import ProfilesPublished from '@/views/users/profiles/ProfilesPublished.vue'
+import ProfilesFinished from '@/views/users/profiles/ProfilesFinished.vue'
+import AddressPage from '@/views/users/address/AddressPage.vue'
+import CollectionsPage from '@/views/users/collections/CollectionsPage.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
+    {
+      path: '/user/collections',
+      component: CollectionsPage
+    },
+    {
+      path: '/user/address',
+      component: AddressPage
+    },
     {
       path: '/user/order',
       component: Order

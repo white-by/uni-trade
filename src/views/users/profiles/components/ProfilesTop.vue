@@ -51,7 +51,7 @@ onMounted(() => {
 .profile-container {
   display: flex; /* 使用 flexbox 布局 */
   align-items: center; /* 头像与右侧信息高度平衡 */
-  background-color: #f9f9f9; /* 空白背景 */
+  background-color: #ffffff; /* 空白背景 */
   width: 70%;
   margin: 0 auto; /* 水平居中 */
   padding: 20px; /* 内边距 */

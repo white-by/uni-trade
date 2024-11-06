@@ -76,7 +76,7 @@ const timeAgo = (time) => {
 
 <style scoped lang="scss">
 .profile-container {
-  background-color: #f9f9f9; /* 空白背景 */
+  background-color: #ffffff; /* 空白背景 */
   width: 70%;
   min-height: 50vh;
   margin: 0 auto; /* 水平居中 */

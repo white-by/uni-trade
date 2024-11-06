@@ -59,7 +59,8 @@
               v-if="scope.row.status == '未发货'"
               :disabled="scope.row.deliveryMethod === '无需快递'"
               size="small"
-              type="plain"
+              type="primary"
+              plain
               @click="openEditDialog(scope.row)"
             >
               修改地址
@@ -68,7 +69,8 @@
             <el-button
               v-if="scope.row.status == '已发货'"
               size="small"
-              type="plain"
+              type="primary"
+              plain
               @click="handleComfirm(scope.$index, scope.row)"
             >
               确认收货
@@ -76,7 +78,8 @@
             <el-button
               v-if="scope.row.status == '交易完成'"
               size="small"
-              type="plain"
+              type="primary"
+              plain
               @click="handleComment(scope.$index, scope.row)"
             >
               去评价
@@ -92,7 +95,8 @@
             <el-button
               v-if="scope.row.status == '退款中'"
               size="small"
-              type="plain"
+              type="primary"
+              plain
               @click="handleCancelRefund(scope.$index, scope.row)"
             >
               取消退款
@@ -124,11 +128,11 @@
         <el-input
           v-model="editForm.detailArea"
           placeholder="请输入详细地址"
-          style="margin-top: 10px; width: auto"
+          style="margin-top: 10px; width: 340px"
         ></el-input>
       </el-form-item>
 
-      <span class="dialog-footer">
+      <span class="dialog-footer" style="display: flex; justify-content: center">
         <el-button type="primary" @click="confirmEdit">确认修改</el-button>
       </span>
     </el-dialog>
@@ -186,7 +190,13 @@
         <!-- 操作栏 -->
         <el-table-column label="操作" width="180">
           <template #default="scope">
-            <el-button v-if="scope.row.status == '未发货'" size="small" type="plain" @click="handleDispatch(scope.row)">
+            <el-button
+              v-if="scope.row.status == '未发货'"
+              size="small"
+              type="primary"
+              plain
+              @click="handleDispatch(scope.row)"
+            >
               去发货
             </el-button>
 
@@ -201,7 +211,8 @@
             <el-button
               v-if="scope.row.status == '交易完成'"
               size="small"
-              type="plain"
+              type="primary"
+              plain
               @click="handleComment(scope.$index, scope.row)"
             >
               去评价
@@ -209,7 +220,8 @@
             <el-button
               v-if="scope.row.status == '退款中'"
               size="small"
-              type="plain"
+              type="primary"
+              plain
               @click="handleCancelRefund(scope.$index, scope.row)"
             >
               同意退款
@@ -247,8 +259,6 @@ import { onMounted, ref } from 'vue'
 import AreaComponets from '@/components/AreaComponets.vue'
 import { getPurchasedDataAPI, getSelledDataAPI } from '@/api/order.js'
 
-const areaComponentRef = ref(null)
-
 // 测试用参数，后续应按需更改
 const userId = 1 //当前登录用户id
 const page = 1 //表格页码
@@ -274,6 +284,8 @@ onMounted(() => {
   getPurchasedData(), getSelledData()
 })
 
+//修改地址组件逻辑
+const areaComponentRef = ref(null)
 const dialogVisible = ref(false)
 const editForm = ref({
   tradeID: '',
@@ -284,7 +296,6 @@ const editForm = ref({
 })
 
 const openEditDialog = (row) => {
-  // 打开对话框并加载当前行的地址数据
   dialogVisible.value = true
   editForm.value = { ...row }
 }

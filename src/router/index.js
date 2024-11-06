@@ -12,6 +12,7 @@ import ProfilesPage from '@/views/users/ProfilesPage.vue'
 import ProfilesComment from '@/views/users/ProfilesComment.vue'
 import ProfilesPublished from '@/views/users/ProfilesPublished.vue'
 import ProfilesFinished from '@/views/users/ProfilesFinished.vue'
+import ResetPswUser from '@/views/login/ResetPswUser.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -23,7 +24,7 @@ const router = createRouter({
     {
       path: '/profiles',
       component: ProfilesPage,
-      redirect: '/profiles/published', 
+      redirect: '/profiles/published',
       children: [
         {
           path: 'published',
@@ -62,6 +63,10 @@ const router = createRouter({
     {
       path: '/register',
       component: RegisterUser
+    },
+    {
+      path: '/reset-psw',
+      component: ResetPswUser
     },
     {
       path: '/',

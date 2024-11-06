@@ -7,7 +7,7 @@
           <p>广大师生</p>
           <p>使用<strong style="font-style: italic">校园二手交易站</strong></p>
         </el-col>
-        <el-col :span="12" class="register-form">
+        <el-col :span="12" class="reset-password-form">
           <div class="frosted-glass">
             <br />
             <el-form :model="form" :rules="rules">
@@ -38,7 +38,7 @@
               </el-form-item>
 
               <el-form-item prop="password">
-                <el-input v-model="form.password" :type="addPassFlag ? 'text' : 'password'" placeholder="请输入密码">
+                <el-input v-model="form.password" :type="addPassFlag ? 'text' : 'password'" placeholder="请输入新密码">
                   <template #suffix>
                     <span @click="addPassFlag = !addPassFlag">
                       <el-icon v-if="addPassFlag"><View /></el-icon>
@@ -52,7 +52,7 @@
                 <el-input
                   v-model="form.confirmPassword"
                   :type="addPassFlag ? 'text' : 'password'"
-                  placeholder="请再次输入密码"
+                  placeholder="请再次输入新密码"
                 >
                   <template #suffix>
                     <span @click="addPassFlag = !addPassFlag">
@@ -64,7 +64,9 @@
               </el-form-item>
 
               <el-form-item>
-                <el-button type="primary" @click="handleRegister" class="register-button">注册</el-button>
+                <el-button type="primary" @click="handleResetPassword" class="reset-password-button"
+                  >重置密码</el-button
+                >
               </el-form-item>
             </el-form>
           </div>
@@ -99,7 +101,7 @@ const rules = ref({
   verificationCode: [{ required: true, message: '请输入验证码', trigger: 'blur' }],
 
   password: [
-    { required: true, message: '请输入密码', trigger: 'blur' },
+    { required: true, message: '请输入新密码', trigger: 'blur' },
     {
       min: 5,
       max: 20,
@@ -120,7 +122,7 @@ const rules = ref({
   ],
 
   confirmPassword: [
-    { required: true, message: '请确认密码', trigger: 'blur' },
+    { required: true, message: '请确认新密码', trigger: 'blur' },
     {
       validator: (rule, value, callback) => {
         if (value !== form.value.password) {
@@ -150,9 +152,9 @@ const sendVerificationCode = () => {
   // 发送验证码的 API 调用
 }
 
-const handleRegister = async (formData) => {
-  // 这里放置你的注册逻辑
-  console.log('Registering with:', formData)
+const handleResetPassword = async (formData) => {
+  // 这里放置你的重置密码逻辑
+  console.log('Resetting password with:', formData)
 }
 </script>
 
@@ -164,7 +166,6 @@ const handleRegister = async (formData) => {
 }
 
 .welcome-text {
-  //color: rgb(255, 255, 255);
   text-align: left;
   font-size: 60px;
   margin: 20px 0;
@@ -179,7 +180,7 @@ const handleRegister = async (formData) => {
   height: 40px;
 }
 
-.register-form {
+.reset-password-form {
   display: flex;
   justify-content: center;
   align-items: center;
@@ -196,44 +197,6 @@ const handleRegister = async (formData) => {
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1); /* 添加阴影 */
 }
 
-.link {
-  color: $comColor;
-  cursor: pointer;
-  font-style: italic;
-  font-size: 14px;
-  margin-top: -10px;
-}
-
-.link:hover {
-  color: coral; /* 悬停时更改颜色 */
-}
-
-.register-button {
-  height: 40px;
-  width: 100%; /* 登录按钮宽度填满 */
-  margin-top: 10px; /* 增加顶部间距 */
-}
-
-.forgot-password-link {
-  margin-left: 78%; /* 左侧间距 */
-}
-.register-link {
-  display: block; /* 使链接占一整行 */
-  text-align: center; /* 居中 */
-  font-size: 14px; /* 调小字体 */
-  // margin-top: 10px; /* 增加间距 */
-}
-
-.announcements {
-  text-align: left;
-  font-size: 20px;
-  margin: 20px 0;
-  padding-left: 12%; /* 确保文本与边缘对齐 */
-  display: flex;
-  flex-direction: column;
-  justify-content: center; /* 垂直居中 */
-}
-
 .verification-code-input {
   width: 200px;
 }
@@ -244,5 +207,11 @@ const handleRegister = async (formData) => {
   align-items: center;
   height: 100%;
   width: 105px;
+}
+
+.reset-password-button {
+  height: 40px;
+  width: 100%; /* 按钮宽度填满 */
+  margin-top: 10px; /* 增加顶部间距 */
 }
 </style>

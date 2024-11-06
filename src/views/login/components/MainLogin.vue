@@ -5,7 +5,7 @@
         <el-col :span="12" class="welcome-text">
           <p>欢迎</p>
           <p>广大师生</p>
-          <p>使用<strong>校园二手交易站</strong></p>
+          <p>使用<strong style="font-style: italic">校园二手交易站</strong></p>
         </el-col>
         <el-col :span="12" class="login-form">
           <div class="frosted-glass">
@@ -27,7 +27,7 @@
               </el-form-item>
 
               <el-form-item>
-                <el-link class="link forgot-password-link" @click="handleForgotPassword" :underline="false"
+                <el-link class="link forgot-password-link" @click="handleResetPassword" :underline="false"
                   >忘记密码？</el-link
                 >
               </el-form-item>
@@ -104,9 +104,9 @@ const handleLogin = async (formData) => {
   console.log('Logging in with:', formData)
 }
 
-const handleForgotPassword = () => {
+const handleResetPassword = () => {
   // 跳转到忘记密码页面
-  router.push('/forgot-password')
+  router.push('/reset-psw')
 }
 
 const handleRegister = () => {

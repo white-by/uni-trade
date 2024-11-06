@@ -1,7 +1,6 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import LoginAdmin from '@/views/login/LoginAdmin.vue'
-import LayoutPage from '@/views/layout/LayoutPage.vue'
-import ProductsPage from '@/views/home/ProductsPage.vue'
+import LayoutPage from '@/views/home/ProductsPage.vue'
 import LoginUser from '@/views/login/LoginUser.vue'
 import TestPage from '@/views/test/TestPage.vue'
 import PersonalPage from '@/views/users/infomation/PersonalPage.vue'
@@ -76,12 +75,6 @@ const router = createRouter({
     {
       path: '/',
       component: LayoutPage,
-      children: [
-        {
-          path: '',
-          component: ProductsPage
-        }
-      ]
     }
   ]
 })

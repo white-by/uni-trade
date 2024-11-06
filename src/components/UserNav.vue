@@ -2,6 +2,9 @@
 import { ArrowDown } from '@element-plus/icons-vue'
 import { ElMessageBox } from 'element-plus'
 import { useRouter } from 'vue-router'
+import { ref } from 'vue'
+
+let input = ref('')
 
 const router = useRouter()
 
@@ -28,7 +31,13 @@ const confirmLogout = async () => {
         </h1>
         <div class="site-name">校园二手交易站</div>
         <div class="search">
-          <!-- 占位置用，不要删除该div！！！ -->
+          <el-input
+            v-if="$route.path === '/'"
+            v-model="input"
+            style="width: 440px"
+            placeholder="请输入商品名称"
+            :prefix-icon="Search"
+          />
         </div>
         <template v-if="true">
           <li>

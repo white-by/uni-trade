@@ -1,6 +1,6 @@
 <script setup>
-import LayoutNav from './components/LayoutNav.vue'
-import LayoutHeader from './components/LayoutHeader.vue'
+import UserNav from '@/components/UserNav.vue'
+import LayoutHeader from './LayoutHeader.vue'
 import UserFooter from '@/components/UserFooter.vue'
 import { useCategoryStore } from '@/store/sortCategory'
 import { onMounted } from 'vue'
@@ -12,7 +12,7 @@ onMounted(() => categoryStore.getCategory())
 
 <template>
   <div>
-    <LayoutNav />
+    <UserNav />
     <LayoutHeader />
     <!--二级路由出口组件---->
     <RouterView />

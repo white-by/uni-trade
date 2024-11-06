@@ -58,7 +58,7 @@ const publishedItems = reactive([
 
 <style scoped lang="scss">
 .profile-container {
-  background-color: #f9f9f9;
+  background-color: #ffffff;
   width: 70%;
   min-height: 50vh;
   margin: 0 auto;
@@ -71,7 +71,6 @@ const publishedItems = reactive([
 .published-item {
   display: flex;
   align-items: center;
-  // background-color: #fff;
   padding: 10px;
   margin-bottom: 15px;
   border-radius: 10px;

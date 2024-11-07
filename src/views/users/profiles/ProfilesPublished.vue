@@ -12,7 +12,7 @@
           <span class="item-desc" :title="item.description">{{ item.description }}</span>
         </div>
         <!-- 使用 v-model:item 绑定数据 -->
-        <EditBtn v-model:item="publishedItems[index]" />
+        <EditBtn v-model:item="publishedItems[index]" label="编辑" />
       </div>
     </div>
   </div>
@@ -33,7 +33,7 @@ onMounted(() => {
 const publishedItems = reactive([
   {
     id: 1,
-    title: '商品标题示例1',
+    title: '商品标题1',
     price: 50.0,
     description:
       '非常好物品，使我的卡牌旋转。\n以下为测试；以下为测试；以下为测试；以下为测试；以下为测试；以下为测试；以下为测试；以下为测试；',
@@ -49,7 +49,7 @@ const publishedItems = reactive([
 
   {
     id: 2,
-    title: '商品标题示例2',
+    title: '商品标题2',
     price: 30.0,
     imageUrl: 'https://via.placeholder.com/400'
   }

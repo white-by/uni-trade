@@ -1,6 +1,6 @@
 <template>
   <UserNav />
-  <div style="display: flex; justify-content: center; margin: 50px">
+  <div style="display: flex; justify-content: center; margin: 50px; min-height: 68vh">
     <el-card>
       <el-row style="margin-bottom: 20px; color: dimgray"><h3>我的地址</h3></el-row>
       <el-table :data="addressData" stripe border>
@@ -32,7 +32,7 @@
           ></template>
         </el-table-column>
       </el-table>
-      <el-button type="primary" plain style="width: 100%; margin-top: 20px" @click="openAddDialog()"
+      <el-button type="primary" plain style="width: 100%; margin-top: 30px" @click="openAddDialog()"
         ><i class="iconfont icon-add" style="padding: 5px"></i> 添加地址</el-button
       >
     </el-card>

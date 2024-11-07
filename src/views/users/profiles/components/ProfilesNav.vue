@@ -38,7 +38,7 @@ function menuSelect(index) {
   <div class="container">
     <el-menu :default-active="activeIndex" mode="horizontal" @select="menuSelect">
       <el-menu-item index="1">
-        <router-link to="/profiles/published">已发布</router-link>
+        <router-link to="/profiles/published">发布中</router-link>
       </el-menu-item>
       <el-menu-item index="2">
         <router-link to="/profiles/finished">已完成</router-link>

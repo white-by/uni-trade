@@ -1,7 +1,7 @@
 <template>
   <el-button size="large" type="primary" plain round @click="selector = true">筛选</el-button>
   <el-drawer v-model="selector" title="筛选条件" :show-close="false" :before-close="handleClose">
-    <template #title>
+    <template #header>
       <div style="display: flex; justify-content: space-between; align-items: center">
         <span>筛选条件</span>
         <i @click="cancelForm" class="iconfont icon-cancel"></i>
@@ -84,7 +84,7 @@
       >
 
       <!-- 发货地址 -->
-      <el-form-item  label="发货地址">
+      <el-form-item label="发货地址">
         <AreaComponets
           ref="areaComponentRef"
           @updateProvince="form.province = $event"
@@ -92,7 +92,6 @@
           @updateArea="form.area = $event"
         />
       </el-form-item>
-
     </div>
     <template #footer>
       <el-row justify="center" style="margin-top: 20px">
@@ -161,7 +160,6 @@ watch(
     }
   }
 )
-
 
 //处理筛选
 const dialog = ref(false)

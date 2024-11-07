@@ -1,10 +1,10 @@
 <template>
   <div>
     <!-- 编辑物品按钮 -->
-    <el-button type="primary" @click="openDialog" round size="large">编辑</el-button>
+    <el-button type="primary" @click="openDialog" round size="large">{{ label }}</el-button>
 
     <!-- 弹出表单对话框 -->
-    <el-dialog title="发布闲置" v-model="dialogVisible" width="50%" align-center center>
+    <el-dialog title="发布闲置" v-model="dialogVisible" width="50%" align-center center @close="resetForm">
       <el-form ref="formRef" :model="form" :rules="rules" label-width="120px" class="custom-form">
         <!-- 物品标题 -->
         <el-form-item label="物品标题" prop="title">
@@ -95,21 +95,21 @@
           <el-row :gutter="30">
             <!-- 省份 -->
             <el-col :span="6">
-              <el-select v-model="province" placeholder="选择省份" style="width: 120%">
+              <el-select v-model="form.province" placeholder="选择省份" style="width: 120%">
                 <el-option v-for="item in provinceArr" :key="item" :label="item" :value="item"></el-option>
               </el-select>
             </el-col>
 
             <!-- 城市 -->
             <el-col :span="6">
-              <el-select v-model="city" placeholder="选择城市" style="width: 120%">
+              <el-select v-model="form.city" placeholder="选择城市" style="width: 120%">
                 <el-option v-for="item in cityArr" :key="item" :label="item" :value="item"></el-option>
               </el-select>
             </el-col>
 
             <!-- 地区 -->
             <el-col :span="6">
-              <el-select v-model="area" placeholder="选择地区" style="width: 120%">
+              <el-select v-model="form.area" placeholder="选择地区" style="width: 120%">
                 <el-option v-for="item in areaArr" :key="item" :label="item" :value="item"></el-option>
               </el-select>
             </el-col>
@@ -124,11 +124,11 @@
         <!-- 提交和取消按钮 -->
         <el-row justify="center" :gutter="50" class="btn">
           <!-- 使用justify="center"使按钮居中，gutter增加间距 -->
-          <el-col :span="3">
+          <el-col :span="3" v-if="label == '编辑'">
             <el-button type="primary" @click="submitForm" style="width: 100%">提交</el-button>
           </el-col>
           <el-col :span="3">
-            <el-button @click="dialogVisible = false" style="width: 100%">取消</el-button>
+            <el-button @click="closeDialog" style="width: 100%">取消</el-button>
           </el-col>
         </el-row>
       </el-form>
@@ -138,14 +138,18 @@
 
 <script setup>
 import { ref, reactive, watch, computed } from 'vue'
-// import { UploadFilled } from '@element-plus/icons-vue'
 import { useCategoryStore } from '@/store/sortCategory'
 import areaObj from '@/../public/area.json'
 
 const categoryStore = useCategoryStore()
 
 const props = defineProps({
-  item: Object // 通过 v-model:item 传递的商品数据
+  item: Object, // 通过 v-model:item 传递的商品数据
+  label: {
+    // 接收按钮文字
+    type: String,
+    default: '编辑'
+  }
 })
 const emit = defineEmits(['update:item']) // 用于触发更新事件
 
@@ -154,12 +158,14 @@ const dialogVisible = ref(false)
 
 // 表单数据
 const form = reactive({ ...props.item })
+const originalData = reactive({ ...props.item }) // 存储原始数据以便取消时恢复
 
 // 监听 item 的变化以更新表单数据
 watch(
   () => props.item,
   (newVal) => {
     Object.assign(form, newVal)
+    Object.assign(originalData, newVal)
   }
 )
 
@@ -177,7 +183,11 @@ function submitForm() {
 // 关闭对话框
 function closeDialog() {
   dialogVisible.value = false
-  // console.log(form)
+}
+
+// 重置表单数据
+function resetForm() {
+  Object.assign(form, originalData) // 恢复到打开对话框前的初始数据
 }
 
 function onFileChange(event) {
@@ -186,9 +196,8 @@ function onFileChange(event) {
     const reader = new FileReader()
     reader.onload = (e) => {
       form.imageUrl = e.target.result
-      // user.value.avatarUrl = e.target.result // 更新头像 URL
     }
-    reader.readAsDataURL(file) // 将文件转换为 Data URL
+    reader.readAsDataURL(file)
   }
 }
 const fileInput = ref(null)
@@ -197,7 +206,6 @@ function selectAvatar() {
 }
 
 const isShippingDisabled = ref(false)
-// 监听配送方式的变化
 watch(
   () => form.deliveryMethod,
   (newValue) => {
@@ -210,36 +218,28 @@ watch(
   }
 )
 
-// 省
+// 地址数据的初始化和监控代码
 const provinceArr = Object.keys(areaObj)
 const province = ref(provinceArr[18])
-// 市
-const cityArr = computed(() => {
-  return Object.keys(areaObj[province.value])
-})
+const cityArr = computed(() => Object.keys(areaObj[province.value]))
 const city = ref(cityArr.value[3])
-// 监听省份变化
+const areaArr = computed(() => areaObj[province.value][city.value])
+const area = ref(areaArr.value[0])
+
 watch(province, (newVal) => {
   city.value = Object.keys(areaObj[newVal])[0]
-  form.province = newVal // 更新表单里的省份
-  form.city = city.value // 同步市
+  form.province = newVal
+  form.city = city.value
   area.value = areaObj[province.value][city.value][0]
-  form.area = area.value // 同步区
+  form.area = area.value
 })
-// 区
-const areaArr = computed(() => {
-  return areaObj[province.value][city.value]
-})
-const area = ref(areaArr.value[0])
-// 监听市变化
 watch(city, (newVal) => {
   area.value = areaObj[province.value][newVal][0]
-  form.city = newVal // 更新表单里的城市
-  form.area = area.value // 同步区
+  form.city = newVal
+  form.area = area.value
 })
-// 监听区变化
 watch(area, (newVal) => {
-  form.area = newVal // 更新表单里的地区
+  form.area = newVal
 })
 
 const rules = {

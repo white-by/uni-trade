@@ -89,6 +89,9 @@ const handleLogin = () => {
   justify-content: center;
   align-items: center;
   background-color: rgba(255, 255, 255, 0.8);
+  height: 100vh; /* 使容器高度占满整个视口 */
+  background-image: url('/src/assets/images/background2.svg');
+  background-size: cover;
 }
 
 .login-form {

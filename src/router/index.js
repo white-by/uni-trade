@@ -14,6 +14,14 @@ import ProfilesFinished from '@/views/users/profiles/ProfilesFinished.vue'
 import AddressPage from '@/views/users/address/AddressPage.vue'
 import CollectionsPage from '@/views/users/collections/CollectionsPage.vue'
 import ResetPswUser from '@/views/login/ResetPswUser.vue'
+import AdminManagement from '@/views/admins/AdminManagement.vue'
+import AdminsInfo from '@/views/admins/accounts/AdminsInfo.vue'
+import UsersInfo from '@/views/admins/accounts/UsersInfo.vue'
+import OrdersInfo from '@/views/admins/sales/OrdersInfo.vue'
+import AfterSale from '@/views/admins/sales/AfterSale.vue'
+import AnnouncementInfo from '@/views/admins/contents/AnnouncementInfo.vue'
+import CategoryInfo from '@/views/admins/contents/CategoryInfo.vue'
+import CommentInfo from '@/views/admins/contents/CommentInfo.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -80,6 +88,41 @@ const router = createRouter({
     {
       path: '/',
       component: LayoutPage
+    },
+    // admin
+    {
+      path: '/admin',
+      component: AdminManagement,
+      children: [
+        {
+          path: 'adminInfo',
+          component: AdminsInfo
+        },
+        {
+          path: 'usersInfo',
+          component: UsersInfo
+        },
+        {
+          path: 'ordersInfo',
+          component: OrdersInfo
+        },
+        {
+          path: 'afterSale',
+          component: AfterSale
+        },
+        {
+          path: 'announcementInfo',
+          component: AnnouncementInfo
+        },
+        {
+          path: 'categoryInfo',
+          component: CategoryInfo
+        },
+        {
+          path: 'commentInfo',
+          component: CommentInfo
+        }
+      ]
     }
   ]
 })

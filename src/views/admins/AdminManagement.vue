@@ -10,7 +10,8 @@ import {
   Memo,
   Notification,
   Box,
-  ChatDotSquare
+  ChatDotSquare,
+  Avatar
 } from '@element-plus/icons-vue'
 import { ElMessageBox } from 'element-plus'
 import { useRouter } from 'vue-router'
@@ -129,6 +130,13 @@ const confirmLogout = async () => {
                   </el-menu-item>
                 </el-menu-item-group>
               </el-sub-menu>
+
+              <!-- 个人账户菜单项 -->
+              <el-menu-item index="4">
+                <router-link to="/admin/profiles">
+                  <el-icon><Avatar /></el-icon>个人信息
+                </router-link>
+              </el-menu-item>
             </el-menu>
           </el-scrollbar>
         </el-aside>
@@ -202,8 +210,5 @@ const confirmLogout = async () => {
 .el-aside {
   min-height: 93vh;
   background: #ffffff;
-}
-.el-main {
-  min-height: 93vh;
 }
 </style>

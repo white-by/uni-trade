@@ -60,6 +60,7 @@ import { ref, onMounted } from 'vue'
 import { View, Hide } from '@element-plus/icons-vue'
 import UserFooter from '@/components/UserFooter.vue'
 import axios from 'axios'
+import { ElMessage } from 'element-plus'
 
 const user = ref({
   avatarUrl: 'https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png',
@@ -105,7 +106,10 @@ function selectAvatar() {
 
 function onSubmit() {
   console.log('更改信息')
-  alert('success')
+  ElMessage({
+    type: 'success',
+    message: '修改成功'
+  })
 }
 </script>
 
@@ -139,5 +143,6 @@ function onSubmit() {
   margin-left: auto;
   margin-right: auto; /* 居中按钮 */
   margin-bottom: 3%;
+  font-weight: 600;
 }
 </style>

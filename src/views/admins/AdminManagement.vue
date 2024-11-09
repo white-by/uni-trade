@@ -14,10 +14,12 @@ import {
   Avatar
 } from '@element-plus/icons-vue'
 import { ElMessageBox } from 'element-plus'
-import { useRouter } from 'vue-router'
-import { RouterView } from 'vue-router'
+import { RouterView, useRoute, useRouter } from 'vue-router'
+import { ref, watch } from 'vue'
 
 const router = useRouter()
+const route = useRoute()
+const activeIndex = ref('')
 
 const confirmLogout = async () => {
   try {
@@ -31,6 +33,31 @@ const confirmLogout = async () => {
     console.log('取消了登出操作', error)
   }
 }
+
+// 根据当前路径设置激活的导航项
+watch(
+  () => route.path,
+  (newPath) => {
+    if (newPath === '/admin/adminInfo') {
+      activeIndex.value = '1-1'
+    } else if (newPath === '/admin/usersInfo') {
+      activeIndex.value = '1-2'
+    } else if (newPath === '/admin/ordersInfo') {
+      activeIndex.value = '2-1'
+    } else if (newPath === '/admin/afterSale') {
+      activeIndex.value = '2-2'
+    } else if (newPath === '/admin/announcementInfo') {
+      activeIndex.value = '3-1'
+    } else if (newPath === '/admin/categoryInfo') {
+      activeIndex.value = '3-2'
+    } else if (newPath === '/admin/commentInfo') {
+      activeIndex.value = '3-3'
+    } else if (newPath === '/admin/profiles') {
+      activeIndex.value = '4'
+    }
+  },
+  { immediate: true }
+)
 </script>
 
 <template>
@@ -56,7 +83,8 @@ const confirmLogout = async () => {
             </span>
             <template #dropdown>
               <el-dropdown-menu>
-                <el-dropdown-item>
+                <router-link to="/admin/profiles"><el-dropdown-item>个人信息</el-dropdown-item></router-link>
+                <el-dropdown-item divided>
                   <span @click="confirmLogout">退出登录</span>
                 </el-dropdown-item>
               </el-dropdown-menu>
@@ -68,23 +96,24 @@ const confirmLogout = async () => {
       <el-container>
         <el-aside width="200px">
           <el-scrollbar>
-            <el-menu :default-openeds="['1', '2', '3']">
+            <el-menu :default-openeds="['1', '2', '3']" :default-active="activeIndex" @select="menuSelect">
               <!-- 账户管理 -->
               <el-sub-menu index="1">
                 <template #title>
                   <el-icon><UserFilled /></el-icon>账户管理
                 </template>
                 <el-menu-item-group>
-                  <el-menu-item index="1-1">
-                    <router-link to="/admin/adminInfo">
+                  <router-link to="/admin/adminInfo">
+                    <el-menu-item index="1-1">
                       <el-icon><User /></el-icon>管理员管理
-                    </router-link>
-                  </el-menu-item>
-                  <el-menu-item index="1-2">
-                    <router-link to="/admin/usersInfo">
+                    </el-menu-item>
+                  </router-link>
+
+                  <router-link to="/admin/usersInfo">
+                    <el-menu-item index="1-2">
                       <el-icon><User /></el-icon>用户管理
-                    </router-link>
-                  </el-menu-item>
+                    </el-menu-item>
+                  </router-link>
                 </el-menu-item-group>
               </el-sub-menu>
 
@@ -94,16 +123,17 @@ const confirmLogout = async () => {
                   <el-icon><List /></el-icon>销售管理
                 </template>
                 <el-menu-item-group>
-                  <el-menu-item index="2-1">
-                    <router-link to="/admin/ordersInfo">
+                  <router-link to="/admin/ordersInfo">
+                    <el-menu-item index="2-1">
                       <el-icon><Tickets /></el-icon>订单管理
-                    </router-link>
-                  </el-menu-item>
-                  <el-menu-item index="2-2">
-                    <router-link to="/admin/afterSale">
+                    </el-menu-item>
+                  </router-link>
+
+                  <router-link to="/admin/afterSale">
+                    <el-menu-item index="2-2">
                       <el-icon><Memo /></el-icon>售后管理
-                    </router-link>
-                  </el-menu-item>
+                    </el-menu-item>
+                  </router-link>
                 </el-menu-item-group>
               </el-sub-menu>
 
@@ -113,30 +143,33 @@ const confirmLogout = async () => {
                   <el-icon><Histogram /></el-icon>内容管理
                 </template>
                 <el-menu-item-group>
-                  <el-menu-item index="3-1">
-                    <router-link to="/admin/announcementInfo">
+                  <router-link to="/admin/announcementInfo">
+                    <el-menu-item index="3-1">
                       <el-icon><Notification /></el-icon>公告管理
-                    </router-link>
-                  </el-menu-item>
-                  <el-menu-item index="3-2">
-                    <router-link to="/admin/categoryInfo">
+                    </el-menu-item>
+                  </router-link>
+
+                  <router-link to="/admin/categoryInfo">
+                    <el-menu-item index="3-2">
                       <el-icon><Box /></el-icon>分类管理
-                    </router-link>
-                  </el-menu-item>
-                  <el-menu-item index="3-3">
-                    <router-link to="/admin/commentInfo">
+                    </el-menu-item>
+                  </router-link>
+
+                  <router-link to="/admin/commentInfo">
+                    <el-menu-item index="3-3">
                       <el-icon><ChatDotSquare /></el-icon>评论管理
-                    </router-link>
-                  </el-menu-item>
+                    </el-menu-item>
+                  </router-link>
                 </el-menu-item-group>
               </el-sub-menu>
 
               <!-- 个人账户菜单项 -->
-              <el-menu-item index="4">
-                <router-link to="/admin/profiles">
+
+              <router-link to="/admin/profiles">
+                <el-menu-item index="4">
                   <el-icon><Avatar /></el-icon>个人信息
-                </router-link>
-              </el-menu-item>
+                </el-menu-item>
+              </router-link>
             </el-menu>
           </el-scrollbar>
         </el-aside>
@@ -210,5 +243,14 @@ const confirmLogout = async () => {
 .el-aside {
   min-height: 93vh;
   background: #ffffff;
+}
+
+.el-menu-item.is-active {
+  background-color: $comColor;
+  color: #fff !important;
+}
+/* 确保 router-link 的文字也变为白色 */
+.el-menu-item.is-active a {
+  color: #fff !important;
 }
 </style>

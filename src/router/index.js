@@ -94,6 +94,7 @@ const router = createRouter({
     {
       path: '/admin',
       component: AdminManagement,
+      redirect: '/admin/usersInfo',
       children: [
         {
           path: 'adminInfo',

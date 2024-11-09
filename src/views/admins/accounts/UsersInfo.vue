@@ -1,5 +1,5 @@
 <script setup>
-import { ref, computed } from 'vue'
+import { ref, computed, nextTick } from 'vue'
 import { ElMessage, ElMessageBox } from 'element-plus'
 import { Search } from '@element-plus/icons-vue'
 
@@ -24,6 +24,46 @@ const userList = ref([
     school: 'school2',
     userStatus: 1,
     avatarUrl: 'https://via.placeholder.com/200'
+  },
+  {
+    userID: 3,
+    userName: 'urge1',
+    mail: 'urge1@123.com',
+    tel: '0987654321',
+    gender: 1,
+    school: 'school2',
+    userStatus: 0,
+    avatarUrl: 'https://via.placeholder.com/200'
+  },
+  {
+    userID: 4,
+    userName: 'urge2',
+    mail: 'urge2@123.com',
+    tel: '0987654321',
+    gender: 0,
+    school: 'school2',
+    userStatus: 0,
+    avatarUrl: 'https://via.placeholder.com/200'
+  },
+  {
+    userID: 5,
+    userName: 'urge3',
+    mail: 'urg3e@123.com',
+    tel: '0987654321',
+    gender: 1,
+    school: 'school2',
+    userStatus: 1,
+    avatarUrl: 'https://via.placeholder.com/200'
+  },
+  {
+    userID: 6,
+    userName: 'urge4',
+    mail: 'urge4@123.com',
+    tel: '0987654321',
+    gender: 0,
+    school: 'school2',
+    userStatus: 0,
+    avatarUrl: 'https://via.placeholder.com/200'
   }
 ])
 
@@ -40,9 +80,9 @@ const filteredUserList = computed(() => {
   return userList.value.filter((user) => user.userName.includes(searchQuery.value))
 })
 
-// 编辑/新增用户弹窗显示状态
+// 弹窗显示状态和标题
 const dialogVisible = ref(false)
-const dialogTitle = ref('编辑用户') // 弹窗标题
+const dialogTitle = ref('编辑用户')
 
 // 编辑表单数据
 const editUserForm = ref({
@@ -67,32 +107,34 @@ const rules = {
   school: [{ required: true, message: '请输入学校', trigger: 'blur' }]
 }
 
+// 表单引用
+const formRef = ref(null)
+
 // 打开新增用户表单
 const openAddUserForm = () => {
-  dialogTitle.value = '新增用户' // 修改弹窗标题
+  dialogTitle.value = '新增用户' // 设置弹窗标题
   editUserForm.value = {
-    // 清空表单
     userID: '',
     userName: '',
     mail: '',
     tel: '',
-    gender: 0,
-    userStatus: 0
+    gender: '',
+    userStatus: ''
   }
   dialogVisible.value = true
-  formRef.value.clearValidate()
+  // 在 `nextTick` 中调用 `clearValidate` 确保表单加载完成
+  nextTick(() => formRef.value?.clearValidate())
 }
 
 // 编辑用户
 const editUser = (user) => {
-  dialogTitle.value = '编辑用户' // 修改弹窗标题
+  dialogTitle.value = '编辑用户' // 设置弹窗标题
   editUserForm.value = { ...user } // 填充表单数据
   dialogVisible.value = true
-  formRef.value.clearValidate()
+  // 在 `nextTick` 中调用 `clearValidate` 确保表单加载完成
+  nextTick(() => formRef.value?.clearValidate())
 }
 
-// 表单引用
-const formRef = ref(null)
 // 提交表单
 function submitEditForm() {
   formRef.value.validate((valid) => {
@@ -135,16 +177,23 @@ const deleteUser = async (userID) => {
   }
 }
 
-// 处理分页
+// 计算当前页显示的用户列表
+const paginatedUserList = computed(() => {
+  const startIndex = (currentPage.value - 1) * pageSize.value
+  const endIndex = startIndex + pageSize.value
+  return filteredUserList.value.slice(startIndex, endIndex)
+})
+
+// 分页处理函数
 const handlePageChange = (newPage) => {
   currentPage.value = newPage
 }
 </script>
 
 <template>
-  <div>
-    <h1>用户信息</h1>
-    <br />
+  <div class="contain">
+    <h1 class="h1">用户管理</h1>
+    <br /><br />
     <!-- 新增按钮 -->
     <div style="display: flex; justify-content: space-between; margin-bottom: 15px">
       <!-- 增加按钮 -->
@@ -161,34 +210,37 @@ const handlePageChange = (newPage) => {
     </div>
 
     <!-- 用户列表 -->
-    <el-table :data="filteredUserList" border>
-      <el-table-column label="用户名" prop="userName" width="180" align="center"></el-table-column>
-      <el-table-column label="头像" width="180" align="center">
+    <el-table :data="paginatedUserList" border>
+      <el-table-column label="用户名" prop="userName" align="center"></el-table-column>
+      <el-table-column label="头像" align="center">
         <template #default="{ row }">
           <img :src="row.avatarUrl" alt="头像" style="width: 80px" />
         </template>
       </el-table-column>
 
-      <el-table-column label="性别" prop="gender" width="100" align="center">
+      <el-table-column label="性别" prop="gender" align="center">
         <template #default="{ row }">
           <span>{{ row.gender === 0 ? '女' : '男' }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="学校" prop="school" width="180" align="center"></el-table-column>
-      <el-table-column label="邮箱" prop="mail" width="250" align="center"></el-table-column>
-      <el-table-column label="电话" prop="tel" width="250" align="center"></el-table-column>
+      <el-table-column label="学校" prop="school" align="center"></el-table-column>
+      <el-table-column label="邮箱" prop="mail" align="center"></el-table-column>
+      <el-table-column label="电话" prop="tel" align="center"></el-table-column>
 
-      <el-table-column label="用户状态" prop="userStatus" width="120" align="center">
+      <el-table-column label="用户状态" prop="userStatus" align="center">
         <template #default="{ row }">
           <el-tag :type="row.userStatus === 0 ? 'success' : 'danger'" style="font-size: 14px; padding: 15px 17px">
             {{ row.userStatus === 0 ? '正常' : '异常' }}
           </el-tag>
         </template>
       </el-table-column>
-      <el-table-column label="操作" width="190" align="center">
+
+      <el-table-column label="操作" align="center">
         <template #default="{ row }">
-          <el-button @click="editUser(row)" type="primary">编辑</el-button>
-          <el-button @click="deleteUser(row.userID)" type="danger">删除</el-button>
+          <el-row type="flex" justify="center" :gutter="10">
+            <el-button @click="editUser(row)" type="primary">编辑</el-button>
+            <el-button @click="deleteUser(row.userID)" type="danger">删除</el-button>
+          </el-row>
         </template>
       </el-table-column>
     </el-table>
@@ -243,6 +295,19 @@ const handlePageChange = (newPage) => {
 </template>
 
 <style scoped>
+.h1 {
+  font-size: 25px;
+  color: dimgray;
+}
+
+.contain {
+  background: #fff;
+  border-radius: 10px; /* 圆角 */
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); /* 阴影效果 */
+  padding: 30px;
+  margin-top: 20px;
+}
+
 .el-table .el-table-column {
   text-align: center;
 }
@@ -251,6 +316,6 @@ const handlePageChange = (newPage) => {
   display: flex;
   justify-content: center; /* 水平居中 */
   align-items: center; /* 垂直居中 (可选) */
-  margin-top: 20px; /* 可根据需要调整分页与内容的距离 */
+  margin-top: 50px; /* 可根据需要调整分页与内容的距离 */
 }
 </style>

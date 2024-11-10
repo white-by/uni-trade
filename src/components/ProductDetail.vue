@@ -103,13 +103,14 @@
         </el-row>
       </div>
 
-      <div class="btn-group">
+      <div class="btn-group" v-if="product.isSold == 0">
         <el-button type="primary" size="large" style="font-size: 16px; width: 140px">购买</el-button>
         <el-button type="primary" plain size="large" circle style="margin-left: 300px" @click="toggleStarred">
           <i :class="isStarred ? 'iconfont icon-starred' : 'iconfont icon-star'"></i>
         </el-button>
         <el-button type="primary" plain size="large" circle><i class="iconfont icon-chat"></i></el-button>
       </div>
+      <div v-else style="height: 50px"></div>
     </el-form>
   </div>
 </template>

@@ -4,15 +4,16 @@
       <ProfilesNav />
     </div>
     <div class="published-container">
-      <div v-for="(item, index) in publishedItems" :key="item.id" class="published-item">
+      <div v-for="item in publishedItems" :key="item.id" class="published-item">
         <img :src="item.imageUrl" alt="商品图片" class="item-image" />
-        <div class="item-info">
-          <h3 class="item-title">{{ item.title }}</h3>
-          <p class="item-price">￥{{ item.price }}</p>
-          <span class="item-desc" :title="item.description">{{ item.description }}</span>
-        </div>
-        <!-- 使用 v-model:item 绑定数据 -->
-        <EditBtn v-model:item="publishedItems[index]" label="查看" />
+        <router-link :to="`/detail/${item.id}`">
+          <div class="item-info">
+            <h3 class="item-title">{{ item.title }}</h3>
+
+            <p class="item-price">￥{{ item.price }}</p>
+            <span class="item-desc" :title="item.description">{{ item.description }}</span>
+          </div></router-link
+        >
       </div>
     </div>
   </div>
@@ -20,7 +21,6 @@
 
 <script setup>
 import { reactive, onMounted } from 'vue'
-import EditBtn from './components/EditBtn.vue'
 import ProfilesNav from './components/ProfilesNav.vue'
 import { useCategoryStore } from '@/store/sortCategory'
 
@@ -32,7 +32,7 @@ onMounted(() => {
 // 示例商品数据
 const publishedItems = reactive([
   {
-    id: 1,
+    id: 99,
     title: '商品标题1',
     price: 50.0,
     description:
@@ -48,7 +48,7 @@ const publishedItems = reactive([
   },
 
   {
-    id: 2,
+    id: 99,
     title: '商品标题2',
     price: 30.0,
     imageUrl: 'https://via.placeholder.com/400'

@@ -6,7 +6,7 @@ import ProfilesNav from './components/ProfilesNav.vue'
 const comments = ref([
   {
     commentID: 1,
-    goodsID: 101,
+    goodsID: 99,
     commentatorID: 201,
     commentatorName: '用户A',
     commentatorAvatar: 'https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png',
@@ -15,7 +15,7 @@ const comments = ref([
   },
   {
     commentID: 2,
-    goodsID: 3,
+    goodsID: 99,
     commentatorID: 202,
     commentatorName: '用户B',
     commentatorAvatar: 'https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png',
@@ -25,7 +25,7 @@ const comments = ref([
   },
   {
     commentID: 3,
-    goodsID: 300,
+    goodsID: 99,
     commentatorID: 202,
     commentatorName: '用户C',
     commentatorAvatar: 'https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png',

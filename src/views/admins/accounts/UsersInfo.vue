@@ -1,71 +1,14 @@
 <script setup>
-import { ref, computed, nextTick } from 'vue'
+import { ref, nextTick, onMounted, computed } from 'vue'
 import { ElMessage, ElMessageBox } from 'element-plus'
 import { Search } from '@element-plus/icons-vue'
+import { useUserStore } from '@/store/userStore'
 
-// 用户列表数据
-const userList = ref([
-  {
-    userID: 1,
-    userName: 'tav',
-    mail: 'tav@123.com',
-    tel: '1234567890',
-    gender: 0,
-    school: 'school1',
-    userStatus: 0,
-    avatarUrl: 'https://via.placeholder.com/200'
-  },
-  {
-    userID: 2,
-    userName: 'urge',
-    mail: 'urge@123.com',
-    tel: '0987654321',
-    gender: 0,
-    school: 'school2',
-    userStatus: 1,
-    avatarUrl: 'https://via.placeholder.com/200'
-  },
-  {
-    userID: 3,
-    userName: 'urge1',
-    mail: 'urge1@123.com',
-    tel: '0987654321',
-    gender: 1,
-    school: 'school2',
-    userStatus: 0,
-    avatarUrl: 'https://via.placeholder.com/200'
-  },
-  {
-    userID: 4,
-    userName: 'urge2',
-    mail: 'urge2@123.com',
-    tel: '0987654321',
-    gender: 0,
-    school: 'school2',
-    userStatus: 0,
-    avatarUrl: 'https://via.placeholder.com/200'
-  },
-  {
-    userID: 5,
-    userName: 'urge3',
-    mail: 'urg3e@123.com',
-    tel: '0987654321',
-    gender: 1,
-    school: 'school2',
-    userStatus: 1,
-    avatarUrl: 'https://via.placeholder.com/200'
-  },
-  {
-    userID: 6,
-    userName: 'urge4',
-    mail: 'urge4@123.com',
-    tel: '0987654321',
-    gender: 0,
-    school: 'school2',
-    userStatus: 0,
-    avatarUrl: 'https://via.placeholder.com/200'
-  }
-])
+const userStore = useUserStore()
+
+onMounted(() => {
+  userStore.getUsersList()
+})
 
 // 搜索框的绑定值
 const searchQuery = ref('')
@@ -76,8 +19,8 @@ const pageSize = ref(5)
 
 // 计算过滤后的用户列表
 const filteredUserList = computed(() => {
-  if (!searchQuery.value) return userList.value
-  return userList.value.filter((user) => user.userName.includes(searchQuery.value))
+  if (!searchQuery.value) return userStore.usersList
+  return userStore.usersList.filter((user) => user.userName.includes(searchQuery.value))
 })
 
 // 弹窗显示状态和标题
@@ -103,8 +46,7 @@ const rules = {
   ],
   tel: [{ required: true, message: '请输入电话', trigger: 'blur' }],
   gender: [{ required: true, message: '请选择性别', trigger: 'change' }],
-  userStatus: [{ required: true, message: '请选择用户状态', trigger: 'change' }],
-  school: [{ required: true, message: '请输入学校', trigger: 'blur' }]
+  userStatus: [{ required: true, message: '请选择用户状态', trigger: 'change' }]
 }
 
 // 表单引用
@@ -142,15 +84,15 @@ function submitEditForm() {
       console.log('提交的表单数据:', editUserForm.value)
       if (editUserForm.value.userID) {
         // 编辑用户
-        const index = userList.value.findIndex((user) => user.userID === editUserForm.value.userID)
+        const index = userStore.usersList.findIndex((user) => user.userID === editUserForm.value.userID)
         if (index !== -1) {
-          userList.value[index] = { ...editUserForm.value }
+          userStore.usersList[index] = { ...editUserForm.value }
           ElMessage.success('用户信息已更新')
         }
       } else {
         // 新增用户
         const newUser = { ...editUserForm.value, userID: Date.now() }
-        userList.value.push(newUser)
+        userStore.usersList.push(newUser)
         ElMessage.success('新增用户成功')
       }
       dialogVisible.value = false // 关闭对话框
@@ -169,7 +111,7 @@ const deleteUser = async (userID) => {
       cancelButtonText: '取消',
       type: 'warning'
     })
-    userList.value = userList.value.filter((user) => user.userID !== userID)
+    userStore.usersList = userStore.usersList.filter((user) => user.userID !== userID)
     ElMessage.success('用户已删除')
   } catch (error) {
     console.log(error)
@@ -192,7 +134,7 @@ const handlePageChange = (newPage) => {
 
 <template>
   <div class="contain">
-    <h1 class="h1">用户管理</h1>
+    <h1>用户管理</h1>
     <br /><br />
     <!-- 新增按钮 -->
     <div style="display: flex; justify-content: space-between; margin-bottom: 15px">
@@ -250,7 +192,7 @@ const handlePageChange = (newPage) => {
       <el-pagination
         :current-page="currentPage"
         :page-size="pageSize"
-        :total="userList.length"
+        :total="userStore.usersList.length"
         layout="total, prev, pager, next, jumper"
         @current-change="handlePageChange"
       />
@@ -295,7 +237,7 @@ const handlePageChange = (newPage) => {
 </template>
 
 <style scoped>
-.h1 {
+h1 {
   font-size: 25px;
   color: dimgray;
 }

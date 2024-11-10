@@ -96,7 +96,7 @@ watch(
       <el-container>
         <el-aside width="200px">
           <el-scrollbar>
-            <el-menu :default-openeds="['1', '2', '3']" :default-active="activeIndex" @select="menuSelect">
+            <el-menu :default-openeds="['1', '2', '3']" :default-active="activeIndex">
               <!-- 账户管理 -->
               <el-sub-menu index="1">
                 <template #title>
@@ -164,7 +164,6 @@ watch(
               </el-sub-menu>
 
               <!-- 个人账户菜单项 -->
-
               <router-link to="/admin/profiles">
                 <el-menu-item index="4">
                   <el-icon><Avatar /></el-icon>个人信息
@@ -237,6 +236,7 @@ watch(
     }
   }
 }
+
 .layout-container .el-menu {
   border-right: none;
 }

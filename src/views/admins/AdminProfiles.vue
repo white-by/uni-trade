@@ -100,6 +100,8 @@ h1 {
   font-weight: bold;
   text-align: center;
   margin-bottom: 40px;
+  font-size: 25px;
+  color: dimgray;
 }
 
 .form {

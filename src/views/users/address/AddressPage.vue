@@ -39,47 +39,58 @@
 
     <!-- 修改地址对话框 -->
     <el-dialog title="修改地址" v-model="editDialogVisible" width="470px" @close="resetEditForm">
-      <el-form-item label="新地址">
-        <AreaComponets
-          ref="areaComponentRef"
-          @updateProvince="editForm.province = $event"
-          @updateCity="editForm.city = $event"
-          @updateArea="editForm.area = $event"
-        />
-        <el-input
-          v-model="editForm.detailArea"
-          placeholder="请输入详细地址"
-          style="margin-top: 10px; width: 340px"
-        ></el-input>
-      </el-form-item>
-      <span class="dialog-footer" style="display: flex; justify-content: center">
-        <el-button type="primary" @click="confirmEdit">确认修改</el-button>
-      </span>
+      <el-form :model="editForm" :rules="rules" ref="editAddressFormRef" label-width="80px">
+        <el-form-item label="新地址">
+          <AreaComponets
+            ref="areaComponentRef"
+            @updateProvince="editForm.province = $event"
+            @updateCity="editForm.city = $event"
+            @updateArea="editForm.area = $event"
+          />
+          <el-input
+            v-model="editForm.detailArea"
+            placeholder="请输入详细地址"
+            style="margin-top: 10px; width: 340px"
+          ></el-input>
+        </el-form-item>
+        <el-form-item label="联系人" prop="name" style="width: 420px">
+          <el-input v-model="editForm.name" placeholder="请输入联系人姓名"></el-input>
+        </el-form-item>
+        <el-form-item label="联系电话" prop="tel" style="width: 420px">
+          <el-input v-model="editForm.tel" placeholder="请输入联系人电话"></el-input>
+        </el-form-item>
+        <span class="dialog-footer" style="display: flex; justify-content: center">
+          <el-button type="primary" @click="confirmEdit">确认修改</el-button>
+        </span>
+      </el-form>
     </el-dialog>
 
     <!-- 添加地址对话框 -->
     <el-dialog title="新增地址" v-model="addDialogVisible" width="470px" @close="resetAddForm">
-      <el-form-item label="联系地址">
-        <AreaComponets
-          @updateProvince="editForm.province = $event"
-          @updateCity="editForm.city = $event"
-          @updateArea="editForm.area = $event"
-        />
-        <el-input
-          v-model="editForm.detailArea"
-          placeholder="请输入详细地址"
-          style="margin-top: 10px; width: 340px"
-        ></el-input>
-      </el-form-item>
-      <el-form-item label="联系人" style="width: 286px; margin-left: 14px"
-        ><el-input placeholder="请输入联系人姓名"></el-input
-      ></el-form-item>
-      <el-form-item label="联系电话" style="width: 300px"
-        ><el-input placeholder="请输入联系人电话"></el-input
-      ></el-form-item>
-      <span class="dialog-footer" style="display: flex; justify-content: center">
-        <el-button type="primary">新增</el-button>
-      </span>
+      <el-form :model="newAddress" :rules="rules" ref="addAddressFormRef" label-width="80px">
+        <el-form-item label="联系地址" prop="province">
+          <AreaComponets
+            ref="_areaComponentRef"
+            @updateProvince="newAddress.province = $event"
+            @updateCity="newAddress.city = $event"
+            @updateArea="newAddress.area = $event"
+          />
+          <el-input
+            v-model="newAddress.detailArea"
+            placeholder="请输入详细地址"
+            style="margin-top: 10px; width: 340px"
+          ></el-input>
+        </el-form-item>
+        <el-form-item label="联系人" prop="name" style="width: 420px">
+          <el-input v-model="newAddress.name" placeholder="请输入联系人姓名"></el-input>
+        </el-form-item>
+        <el-form-item label="联系电话" prop="tel" style="width: 420px">
+          <el-input v-model="newAddress.tel" placeholder="请输入联系人电话"></el-input>
+        </el-form-item>
+        <span class="dialog-footer" style="display: flex; justify-content: center">
+          <el-button type="primary" @click="submitAddressForm">新增</el-button>
+        </span>
+      </el-form>
     </el-dialog>
   </div>
   <UserFooter />
@@ -90,70 +101,141 @@ import UserNav from '@/components/UserNav.vue'
 import UserFooter from '@/components/UserFooter.vue'
 import AreaComponets from '@/components/AreaComponets.vue'
 import { ref, onMounted } from 'vue'
-import { getAddressListAPI } from '@/api/address'
+import { getAddressListAPI, addAddressAPI, updateAddressAPI } from '@/api/address'
+import { ElMessage } from 'element-plus'
 
+//从接口拿地址列表
 const addressData = ref([])
 const getAddressList = async () => {
   const res = await getAddressListAPI()
   console.log('getAddressListAPI响应', res.data)
   addressData.value = res.data.data
+  defaultAddressId.value = addressData.value.find((address) => address.isDefault === 1)?.id || null
+}
+// 默认地址
+const defaultAddressId = ref(addressData.value.find((address) => address.isDefault === 1)?.id || null)
+const setDefaultAddress = (id) => {
+  addressData.value.forEach((address) => {
+    address.isDefault = address.id === id ? 1 : 0
+  })
 }
 
-onMounted(() => {
-  getAddressList()
-})
-
-//新增地址组件逻辑
+//新增地址
 const addDialogVisible = ref(false)
 const openAddDialog = () => {
   addDialogVisible.value = true
+  addAddressFormRef.value?.clearValidate()
 }
-
-//修改地址组件逻辑
-const editDialogVisible = ref(false)
-const editForm = ref({
-  id: '',
+const newAddress = ref({
+  name: '',
   province: '',
   city: '',
   area: '',
-  detailArea: ''
+  detailArea: '',
+  tel: '',
+  isDefault: 0
+})
+
+// 定义验证规则
+const rules = {
+  province: [{ required: true, message: '请选择省份', trigger: 'change' }],
+  city: [{ required: true, message: '请选择城市', trigger: 'change' }],
+  area: [{ required: true, message: '请选择区县', trigger: 'change' }],
+  detailArea: [{ required: true, message: '请输入详细地址', trigger: 'blur' }],
+  name: [{ required: true, message: '请输入联系人姓名', trigger: 'blur' }],
+  tel: [{ required: true, message: '请输入联系电话', trigger: 'blur' }]
+}
+
+const addAddressFormRef = ref(null)
+// 提交表单
+const submitAddressForm = () => {
+  addAddressFormRef.value.validate(async (valid) => {
+    if (valid) {
+      const res = await addAddressAPI(newAddress.value)
+      if (res.data.code === 1) {
+        const newAddressWithID = { ...newAddress.value, id: res.data.data.id }
+        addressData.value.push(newAddressWithID)
+        addDialogVisible.value = false
+        resetAddForm()
+        ElMessage.success('添加成功')
+      } else {
+        ElMessage.error(`新增地址失败: ${res.msg}`)
+      }
+    } else {
+      ElMessage.warning('请填写完整的地址信息')
+    }
+  })
+}
+const _areaComponentRef = ref(null)
+const resetAddForm = () => {
+  newAddress.value = {
+    name: '',
+    province: '',
+    city: '',
+    area: '',
+    detailArea: '',
+    tel: '',
+    isDefault: 0
+  }
+  if (_areaComponentRef.value) {
+    _areaComponentRef.value.resetAddress()
+  }
+  addAddressFormRef.value?.clearValidate()
+}
+
+//修改地址
+const editDialogVisible = ref(false)
+const editForm = ref({
+  id: '',
+  name: '',
+  province: '',
+  city: '',
+  area: '',
+  detailArea: '',
+  tel: '',
+  isDefault: 0
 })
 
 const areaComponentRef = ref(null)
 const openEditDialog = (row) => {
   editDialogVisible.value = true
   editForm.value = { ...row }
-  editForm.value.detailArea = ''
+  if (areaComponentRef.value) {
+    areaComponentRef.value.setAddress(editForm.value.province, editForm.value.city, editForm.value.area)
+  }
 }
 
-const confirmEdit = () => {
-  // 更新订单数据中的地址信息
-  const order = addressData.value.find((item) => item.id === editForm.value.id)
-  if (order) {
-    order.province = editForm.value.province
-    order.city = editForm.value.city
-    order.area = editForm.value.area
-    order.detailArea = editForm.value.detailArea
-    console.log('更新后的地址信息：', order)
-  }
-  editDialogVisible.value = false
-  resetEditForm()
+const editAddressFormRef = ref(null)
+const confirmEdit = async () => {
+  editAddressFormRef.value.validate(async (valid) => {
+    if (valid) {
+      console.log('修改后的地址信息: ', editForm.value)
+      const res = await updateAddressAPI(editForm.value.id, editForm.value)
+      if (res.data.code === 1) {
+        const addressIndex = addressData.value.findIndex((item) => item.id === editForm.value.id)
+        if (addressIndex !== -1) {
+          addressData.value[addressIndex] = { ...editForm.value }
+        }
+        editDialogVisible.value = false
+        resetEditForm()
+        ElMessage.success('修改成功')
+      } else {
+        console.error('更新地址失败', res.data.msg)
+      }
+    } else {
+      ElMessage.warning('请填写完整的地址信息')
+    }
+  })
 }
 
 const resetEditForm = () => {
-  //重置表单数据
   editForm.value = { id: '', province: '', city: '', area: '', detailAddress: '' }
   if (areaComponentRef.value) {
     areaComponentRef.value.resetAddress()
   }
-  console.log('已重置表单数据')
 }
 
-const defaultAddressId = ref(addressData.value.find((address) => address.isDefault === 1)?.id || null)
-
-const setDefaultAddress = (id) => {
-  addressData.value.forEach((address) => {
-    address.isDefault = address.id === id ? 1 : 0
-  })
-}
+onMounted(() => {
+  getAddressList()
+})
 </script>

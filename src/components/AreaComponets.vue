@@ -26,7 +26,7 @@
 </template>
 
 <script setup>
-import { ref, computed, watch } from 'vue'
+import { ref, computed, watch, nextTick } from 'vue'
 import areaObj from '../../public/area.json'
 
 const selectedProvince = ref('')
@@ -70,5 +70,15 @@ const resetAddress = () => {
   selectedArea.value = ''
 }
 
-defineExpose({ resetAddress })
+const setAddress = async (province, city, area) => {
+  selectedProvince.value = province
+  nextTick(() => {
+    selectedCity.value = city
+    nextTick(() => {
+      selectedArea.value = area
+    })
+  })
+}
+
+defineExpose({ resetAddress, setAddress })
 </script>

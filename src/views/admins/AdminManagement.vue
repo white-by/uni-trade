@@ -16,10 +16,14 @@ import {
 import { ElMessageBox } from 'element-plus'
 import { RouterView, useRoute, useRouter } from 'vue-router'
 import { ref, watch } from 'vue'
+import { useAdminStore } from '@/store/adminStore'
 
 const router = useRouter()
 const route = useRoute()
 const activeIndex = ref('')
+
+const adminStore = useAdminStore()
+const adminName = adminStore.adminInfo.data.adminName
 
 const confirmLogout = async () => {
   try {
@@ -28,6 +32,7 @@ const confirmLogout = async () => {
       cancelButtonText: '取消',
       type: 'warning'
     })
+    adminStore.clearAdminInfo()
     router.push('/admin/login')
   } catch (error) {
     console.log('取消了登出操作', error)
@@ -76,7 +81,7 @@ watch(
         <div class="header-right">
           <el-dropdown placement="bottom" size="large">
             <span class="el-dropdown-link">
-              <i class="iconfont icon-user"></i> 白烟
+              <i class="iconfont icon-user"></i> {{ adminName }}
               <el-icon class="el-icon--right">
                 <ArrowDown />
               </el-icon>

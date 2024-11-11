@@ -5,10 +5,10 @@
         <h3 class="title">LoginAdmin</h3>
       </div>
       <br />
-      <el-form-item prop="email">
+      <el-form-item prop="mail">
         <el-icon size="20" class="svg-container"><Edit /></el-icon>
         <span>请输入邮箱</span>
-        <el-input v-model="form.email"> </el-input>
+        <el-input v-model="form.mail"> </el-input>
       </el-form-item>
 
       <el-form-item prop="password">
@@ -27,18 +27,21 @@
 <script setup>
 import { ref } from 'vue'
 import { Edit, Lock } from '@element-plus/icons-vue'
+import { ElMessage } from 'element-plus'
+import { useRouter } from 'vue-router'
+import { useAdminStore } from '@/store/adminStore'
+
+const adminStore = useAdminStore()
+
 let form = ref({
-  email: '',
+  mail: '',
   password: ''
 })
 
-const login = async (formData) => {
-  // 这里放置你的登录逻辑
-  console.log('Logging in with:', formData)
-}
+const router = useRouter()
 
 const rules = ref({
-  email: [
+  mail: [
     { required: true, message: '请输入邮箱', trigger: 'blur' },
     { type: 'email', message: '请输入有效的邮箱地址', trigger: ['blur', 'change'] },
     { min: 5, max: 20, message: '长度应为 5 到 20 位', trigger: 'blur' }
@@ -68,12 +71,16 @@ const rules = ref({
 
 const formRef = ref(null)
 const handleLogin = () => {
-  formRef.value.validate((valid, fields) => {
+  formRef.value.validate(async (valid, fields) => {
     // 添加 fields 参数
+    const { mail, password } = form.value
     if (valid) {
-      login(form.value)
-      // alert('submit')
-      // console.log('submit!')
+      await adminStore.getAdminInfo({ mail, password })
+      ElMessage({
+        type: 'success',
+        message: '登录成功'
+      })
+      router.replace('/admin')
     } else {
       console.log('error submit!', fields)
       return false

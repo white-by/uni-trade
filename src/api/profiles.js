@@ -1,33 +1,42 @@
 import httpInstance from "@/utils/https";
 
-//应该在header里带一个jtoken
+
 // 顶栏个人简介
 export function getIntroductionAPI(){
     return httpInstance({
-        url: '/profiles/introduction'
+        url: '/profiles/introduction',
+        headers: {
+            Authorization: `Bearer ${localStorage.getItem('token')}`, 
+        }
     })
 }
 
-//应该在header里带一个jtoken
 // 已发布
 export function getPublishedProductsAPI(){
     return httpInstance({
-        url: '/profiles/published'
+        url: '/profiles/published',
+        headers: {
+            Authorization: `Bearer ${localStorage.getItem('token')}`, 
+        }
     })
 }
 
-//应该在header里带一个jtoken
 // 已完成
 export function getFinishedProductsAPI(){
     return httpInstance({
-        url: '/profiles/finished'
+        url: '/profiles/finished',
+        headers: {
+            Authorization: `Bearer ${localStorage.getItem('token')}`, 
+        }
     })
 }
 
-//应该在header里带一个jtoken
 // 评价
 export function getCommentsAPI(){
     return httpInstance({
-        url: '/profiles/comment'
+        url: '/profiles/comment',
+        headers: {
+            Authorization: `Bearer ${localStorage.getItem('token')}`, 
+        }
     })
 }

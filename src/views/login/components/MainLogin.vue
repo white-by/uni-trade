@@ -102,6 +102,11 @@ const rules = ref({
 const handleLogin = async (formData) => {
   // 这里放置你的登录逻辑
   console.log('Logging in with:', formData)
+  // 假设这是从登录接口返回的 token
+  const token =
+    'jiazhuangzheshiyigetoken.eyJzdWIiOiJ7XKDmmbrmlZnogrIrMVwiLFwiaWRcIjpcIjEzNjk1OTQ5NTQ3Mzk4NTk0NThcIixcInVzZXJuYW1lXCI6XCJ4aWFvdHV4aWFuMDAxXCJ9IiwiaWF0IjoxNjU2NzY2MzkwLCJleHAiOjE2NTcwMjU1OTB9.g-0SLjVSVh2A6Zt14enZsP1bsImxLhaQclfyItIFrAs'
+  // 将 token 存储在 localStorage 中
+  localStorage.setItem('token', token)
 }
 
 const handleResetPassword = () => {

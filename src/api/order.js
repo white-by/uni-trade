@@ -8,13 +8,15 @@ import httpInstance from '@/utils/https'
  * @param {每页最大信息条数 默认为5条} pageSize 
  * @returns 
  */
-export function getPurchasedDataAPI(userId, page, pageSize){
+export function getPurchasedDataAPI(page, pageSize){
     return httpInstance({
         url: '/orders/purchased',
         params : {
-            userId,
             page,
             pageSize
+        },
+        headers: {
+            Authorization: `Bearer ${localStorage.getItem('token')}`, 
         }
     })
 }
@@ -26,13 +28,15 @@ export function getPurchasedDataAPI(userId, page, pageSize){
  * @param {每页最大信息条数 默认为5条} pageSize 
  * @returns 
  */
-export function getSelledDataAPI(userId, page, pageSize){
+export function getSelledDataAPI(page, pageSize){
     return httpInstance({
         url: '/orders/selled',
         params : {
-            userId,
             page,
             pageSize
+        },
+        headers: {
+            Authorization: `Bearer ${localStorage.getItem('token')}`, 
         }
     })
 }

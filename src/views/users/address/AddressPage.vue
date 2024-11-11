@@ -89,7 +89,19 @@
 import UserNav from '@/components/UserNav.vue'
 import UserFooter from '@/components/UserFooter.vue'
 import AreaComponets from '@/components/AreaComponets.vue'
-import { ref } from 'vue'
+import { ref, onMounted } from 'vue'
+import { getAddressListAPI } from '@/api/address'
+
+const addressData = ref([])
+const getAddressList = async () => {
+  const res = await getAddressListAPI()
+  console.log('getAddressListAPI响应', res.data)
+  addressData.value = res.data.data
+}
+
+onMounted(() => {
+  getAddressList()
+})
 
 //新增地址组件逻辑
 const addDialogVisible = ref(false)
@@ -136,32 +148,6 @@ const resetEditForm = () => {
   }
   console.log('已重置表单数据')
 }
-
-//静态数据
-const addressData = ref([
-  {
-    id: 1,
-    userID: 1,
-    name: '明萨拉',
-    province: '广东省',
-    city: '广州市',
-    area: '白云区',
-    detailArea: '白云大道北嘉禾望岗',
-    tel: '18620715773',
-    isDefault: 1
-  },
-  {
-    id: 2,
-    userID: 1,
-    name: '李四',
-    province: '江苏省',
-    city: '南京市',
-    area: '玄武区',
-    detailArea: '中山路',
-    tel: '13812345678',
-    isDefault: 0
-  }
-])
 
 const defaultAddressId = ref(addressData.value.find((address) => address.isDefault === 1)?.id || null)
 

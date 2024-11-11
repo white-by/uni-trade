@@ -260,14 +260,13 @@ import AreaComponets from '@/components/AreaComponets.vue'
 import { getPurchasedDataAPI, getSelledDataAPI } from '@/api/order.js'
 
 // 测试用参数，后续应按需更改
-const userId = 1 //当前登录用户id
 const page = 1 //表格页码
 const pageSize = 5 //每页最大展示条数
 
 // 从接口拿取“我买到的”订单信息
 const purchasedData = ref([])
 const getPurchasedData = async () => {
-  const res = await getPurchasedDataAPI(userId, page, pageSize)
+  const res = await getPurchasedDataAPI(page, pageSize)
   console.log('getPurchasedDataAPI响应:', res.data.data)
   purchasedData.value = res.data.data
 }
@@ -275,7 +274,7 @@ const getPurchasedData = async () => {
 // 从接口拿取“我卖出的”订单信息
 const selledData = ref([])
 const getSelledData = async () => {
-  const res = await getSelledDataAPI(userId, page, pageSize)
+  const res = await getSelledDataAPI(page, pageSize)
   console.log('getSelledDataAPI响应:', res.data.data)
   selledData.value = res.data.data
 }

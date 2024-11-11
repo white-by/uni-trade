@@ -1,42 +1,15 @@
 <script setup>
-import { ref } from 'vue'
 import ProfilesNav from './components/ProfilesNav.vue'
+import { useProfilesStore } from '@/store/profilesStore'
 
-// 示例评论数据
-const comments = ref([
-  {
-    commentID: 1,
-    goodsID: 99,
-    commentatorID: 201,
-    commentatorName: '用户A',
-    commentatorAvatar: 'https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png',
-    commentContent: '这个商品真不错！',
-    commentTime: new Date(Date.now() - 3600 * 1000 * 2) // 2小时前
-  },
-  {
-    commentID: 2,
-    goodsID: 99,
-    commentatorID: 202,
-    commentatorName: '用户B',
-    commentatorAvatar: 'https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png',
-    commentContent:
-      '老人小孩都爱吃！ps://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.pngps://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.pngps://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.pngps://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.pngps://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.pngps://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.pngps://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png',
-    commentTime: new Date(Date.now() - 3600 * 1000 * 48) // 2天前
-  },
-  {
-    commentID: 3,
-    goodsID: 99,
-    commentatorID: 202,
-    commentatorName: '用户C',
-    commentatorAvatar: 'https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png',
-    commentContent: '不想写了，我好想打牌阿😭😭',
-    commentTime: new Date(Date.now() - 360000 * 1000 * 48) // 2天前
-  }
-])
+const profilesStore = useProfilesStore()
 
 const timeAgo = (time) => {
+  // 解析时间字符串为 Date 对象
+  const targetTime = new Date(time.replace(/-/g, '/')) // 替换“-”为“/”，确保跨浏览器兼容
+
   const now = new Date()
-  const seconds = Math.floor((now - time) / 1000)
+  const seconds = Math.floor((now - targetTime) / 1000)
   const minutes = Math.floor(seconds / 60)
   const hours = Math.floor(seconds / 3600)
   const days = Math.floor(seconds / 86400)
@@ -58,7 +31,7 @@ const timeAgo = (time) => {
       <ProfilesNav />
     </div>
     <div class="comment-container">
-      <div v-for="comment in comments" :key="comment.commentID" class="comment-item">
+      <div v-for="comment in profilesStore.comments" :key="comment.commentID" class="comment-item">
         <el-avatar :src="comment.commentatorAvatar" class="avatar" />
         <div class="comment-details">
           <div class="comment-header">

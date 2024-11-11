@@ -18,7 +18,7 @@
       </div>
 
       <!-- 商品描述 -->
-      <p class="describe" style="padding-left: 50px; padding-top: 10px">
+      <p class="description" style="padding-left: 50px; padding-top: 10px">
         {{ product.describe }}
       </p>
 
@@ -216,7 +216,7 @@ const toggleStarred = () => {
   background-color: white !important;
 }
 
-.describe {
+.description {
   font-size: 20px;
   width: 560px;
   height: auto;

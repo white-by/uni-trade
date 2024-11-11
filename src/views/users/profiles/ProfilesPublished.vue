@@ -4,56 +4,28 @@
       <ProfilesNav />
     </div>
     <div class="published-container">
-      <div v-for="(item, index) in publishedItems" :key="item.id" class="published-item">
-        <img :src="item.imageUrl" alt="商品图片" class="item-image" />
+      <div v-for="(product, index) in profilesStore.publishedProducts" :key="product.id" class="published-item">
+        <img :src="product.imageURL" alt="商品图片" class="item-image" />
         <div class="item-info">
-          <h3 class="item-title">{{ item.title }}</h3>
-          <p class="item-price">￥{{ item.price }}</p>
-          <span class="item-desc" :title="item.description">{{ item.description }}</span>
+          <router-link :to="`/detail/${product.id}`"
+            ><h3 class="item-title">{{ product.title }}</h3></router-link
+          >
+          <p class="item-price">￥{{ product.price }}</p>
+          <span class="item-desc" :title="product.description">{{ product.description }}</span>
         </div>
         <!-- 使用 v-model:item 绑定数据 -->
-        <EditBtn v-model:item="publishedItems[index]" label="编辑" />
+        <EditBtn v-model:item="profilesStore.publishedProducts[index]" label="编辑" />
       </div>
     </div>
   </div>
 </template>
 
 <script setup>
-import { reactive, onMounted } from 'vue'
 import EditBtn from './components/EditBtn.vue'
 import ProfilesNav from './components/ProfilesNav.vue'
-import { useCategoryStore } from '@/store/sortCategory'
+import { useProfilesStore } from '@/store/profilesStore'
 
-const categoryStore = useCategoryStore()
-onMounted(() => {
-  categoryStore.getCategory()
-})
-
-// 示例商品数据
-const publishedItems = reactive([
-  {
-    id: 1,
-    title: '商品标题1',
-    price: 50.0,
-    description:
-      '非常好物品，使我的卡牌旋转。\n以下为测试；以下为测试；以下为测试；以下为测试；以下为测试；以下为测试；以下为测试；以下为测试；',
-    category: '日常用品',
-    province: '广东省',
-    city: '珠海市',
-    area: '香洲区',
-    detailArea: '中山大学',
-    deliveryMethod: '邮寄',
-    shippingCost: 8,
-    imageUrl: 'https://via.placeholder.com/400'
-  },
-
-  {
-    id: 2,
-    title: '商品标题2',
-    price: 30.0,
-    imageUrl: 'https://via.placeholder.com/400'
-  }
-])
+const profilesStore = useProfilesStore()
 </script>
 
 <style scoped lang="scss">
@@ -93,6 +65,12 @@ const publishedItems = reactive([
     font-weight: bold;
     margin-bottom: 5px;
     margin-top: -20px;
+    display: block;
+    word-break: keep-all;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 400px; // 你可以根据实际需要调整宽度
   }
   .item-price {
     font-size: 1em;

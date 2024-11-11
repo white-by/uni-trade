@@ -1,27 +1,20 @@
 <script setup>
-import { ref, computed, onMounted } from 'vue'
+import { computed, onMounted } from 'vue'
 import axios from 'axios'
+import { useProfilesStore } from '@/store/profilesStore'
 
-const user = ref({
-  avatarUrl: 'https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png',
-  userID: '123',
-  userName: '随便来个用户名',
-  gender: '0',
-  school: '中山大学',
-  email: '123@123.com',
-  tel: '123456789'
-})
+const profilesStore = useProfilesStore()
 
 const genderText = computed(() => {
-  return user.value.gender === '0' ? '女' : '男'
+  return profilesStore.introduction.gender === '0' ? '女' : '男'
 })
 
 async function fetchAvatar() {
   try {
     const response = await axios.get('https://dog.ceo/api/breeds/image/random')
-    user.value.avatarUrl = response.data.message // 更新头像 URL
+    profilesStore.introduction.avatarUrl = response.data.message // 更新头像 URL
   } catch (error) {
-    user.value.avatarUrl = 'https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png'
+    profilesStore.introduction.avatarUrl = 'https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png'
     console.error('获取头像失败:', error)
   }
 }
@@ -33,11 +26,11 @@ onMounted(() => {
 
 <template>
   <div class="profile-container">
-    <el-avatar :size="120" :src="user.avatarUrl" class="avatar" />
+    <el-avatar :size="120" :src="profilesStore.introduction.avatarUrl" class="avatar" />
     <div class="info-column">
-      <span>{{ user.userName }}</span>
+      <span>{{ profilesStore.introduction.userName }}</span>
       <span>{{ genderText }}</span>
-      <span>{{ user.school }}</span>
+      <span>{{ profilesStore.introduction.school }}</span>
     </div>
     <div class="profile-link">
       <router-link to="/user">

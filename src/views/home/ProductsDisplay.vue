@@ -20,7 +20,7 @@ const getProductsList = async () => {
 
     const res = await getProductsListAPI(categoryStore.categoryID, currentPage.value, pageSize.value)
     console.log('API响应:', res.data)
-    console.log('res.data.data.length: ', res.data.data.length)
+    // console.log('res.data.data.length: ', res.data.data.length)
 
     if (res.data.data.length < pageSize.value) {
       hasMoreData.value = false // 没有更多数据了

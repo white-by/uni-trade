@@ -1,11 +1,14 @@
 import httpInstance from '@/utils/https'
 
 /**
- * 获取所有用户
+ * 获取用户
+ * @param {当前页} pageNum
+ * @param {每页行数} pageSize
  * @returns
  */
-export function getUsersListApi() {
+export const getUsersListApi = (params) => {
   return httpInstance({
-    url: '/admin/usersInfo'
+    url: '/admin/usersInfo',
+    params
   })
 }

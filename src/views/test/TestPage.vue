@@ -1,62 +1,58 @@
+<script setup>
+import { getUsersListApi } from '@/api/usersInfo'
+import { ref } from 'vue'
+const queryForm = ref({
+  pageNum: 1,
+  pageSize: 5
+})
+
+const usersList = ref([])
+
+const getUsersList = async () => {
+  const res = await getUsersListApi(queryForm.value)
+
+  usersList.value = res.data.data.usersList
+  console.log(usersList.value)
+  console.log(res.data)
+}
+
+getUsersList()
+</script>
+
 <template>
-  <div v-if="userStore.userList.length">
-    <el-table :data="userStore.usersList" style="width: 100%">
-      <el-table-column prop="avatarUrl" label="头像" width="120">
-        <template #default="scope">
-          <img :src="scope.row.avatarUrl" alt="avatar" class="avatar" />
+  <div class="">
+    <el-table :data="usersList" border>
+      <el-table-column label="用户名" prop="userName" align="center"></el-table-column>
+      <el-table-column label="头像" align="center">
+        <template #default="{ row }">
+          <img :src="row.avatarUrl" alt="头像" style="width: 80px" />
         </template>
       </el-table-column>
-
-      <el-table-column prop="userName" label="用户名" width="150" />
-      <el-table-column prop="mail" label="邮箱" width="200" />
-      <el-table-column prop="tel" label="电话" width="150" />
-
-      <el-table-column prop="gender" label="性别" width="100">
-        <template #default="scope">
-          {{ scope.row.gender === 0 ? '女' : '男' }}
+      <el-table-column label="性别" prop="gender" align="center">
+        <template #default="{ row }">
+          <span>{{ row.gender === 0 ? '女' : '男' }}</span>
         </template>
       </el-table-column>
-
-      <el-table-column prop="status" label="状态" width="100">
-        <template #default="scope">
-          {{ scope.row.status === 1 ? '活跃' : '禁用' }}
+      <el-table-column label="学校" prop="school" align="center"></el-table-column>
+      <el-table-column label="邮箱" prop="mail" align="center"></el-table-column>
+      <el-table-column label="电话" prop="tel" align="center"></el-table-column>
+      <el-table-column label="用户状态" prop="userStatus" align="center">
+        <template #default="{ row }">
+          <el-tag :type="row.userStatus === 0 ? 'success' : 'danger'" style="font-size: 14px; padding: 15px 17px">
+            {{ row.userStatus === 0 ? '正常' : '异常' }}
+          </el-tag>
         </template>
       </el-table-column>
-
-      <el-table-column prop="school" label="学校ID" width="100" />
-
-      <el-table-column label="操作" width="150">
-        <template #default="scope">
-          <el-button type="primary" size="small" @click="editUser(scope.row)">编辑</el-button>
+      <el-table-column label="操作" align="center">
+        <template #default="{ row }">
+          <el-row type="flex" justify="center" :gutter="10">
+            <el-button @click="editUser(row)" type="primary">编辑</el-button>
+            <el-button @click="deleteUser(row.userID)" type="danger">删除</el-button>
+          </el-row>
         </template>
       </el-table-column>
     </el-table>
   </div>
-
-  <div v-else>
-    <!-- 没有数据时的显示 -->
-    <p>No data available</p>
-  </div>
 </template>
 
-<script setup>
-import { useUserStore } from '@/store/userStore'
-import { onMounted } from 'vue'
-
-// 获取 Pinia store
-const userStore = useUserStore()
-
-onMounted(() => {
-  // 每次页面刷新时请求数据
-  userStore.getUsersList()
-})
-</script>
-
-<style scoped lang="scss">
-.avatar {
-  width: 100px;
-  height: 100px;
-  border-radius: 50%;
-  margin-bottom: 10px;
-}
-</style>
+<style scoped></style>

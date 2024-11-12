@@ -1,7 +1,4 @@
 <template>
-  <!--TODO: 
-  1. 地址应为必填
-  -->
   <UserNav />
   <!-- 我买到的 -->
   <div style="display: flex; justify-content: center; margin: 50px">
@@ -111,7 +108,10 @@
           size="small"
           style="justify-content: center; margin-top: 20px"
           layout="prev, pager, next"
-          :total="50"
+          :current-page="purchasedPageNum"
+          :page-size="purchasedPageSize"
+          :total="purchasedTotal"
+          @current-change="handlePruchasedPageChange"
         />
       </div>
     </el-card>
@@ -244,7 +244,10 @@
           size="small"
           style="justify-content: center; margin-top: 20px"
           layout="prev, pager, next"
-          :total="50"
+          :current-page="selledPageNum"
+          :page-size="selledPageSize"
+          :total="selledTotal"
+          @current-change="handleSelledPageChange"
         />
       </div>
     </el-card>
@@ -259,24 +262,38 @@ import { onMounted, ref } from 'vue'
 import AreaComponets from '@/components/AreaComponets.vue'
 import { getPurchasedDataAPI, getSelledDataAPI } from '@/api/order.js'
 
-// 测试用参数，后续应按需更改
-const page = 1 //表格页码
-const pageSize = 5 //每页最大展示条数
-
 // 从接口拿取“我买到的”订单信息
+let purchasedPageNum = ref(1) //表格页码
+let purchasedPageSize = ref(5) //每页最大展示条数
+const purchasedTotal = ref(0)
 const purchasedData = ref([])
 const getPurchasedData = async () => {
-  const res = await getPurchasedDataAPI(page, pageSize)
+  const res = await getPurchasedDataAPI(purchasedPageNum.value, purchasedPageSize.value)
   console.log('getPurchasedDataAPI响应:', res.data.data)
-  purchasedData.value = res.data.data
+  purchasedData.value = res.data.data.orderList
+  purchasedTotal.value = res.data.data.total
+}
+
+const handlePruchasedPageChange = (page) => {
+  purchasedPageNum.value = page
+  getPurchasedData()
 }
 
 // 从接口拿取“我卖出的”订单信息
+let selledPageNum = ref(1) //表格页码
+let selledPageSize = ref(5) //每页最大展示条数
+const selledTotal = ref(0)
 const selledData = ref([])
 const getSelledData = async () => {
-  const res = await getSelledDataAPI(page, pageSize)
+  const res = await getSelledDataAPI(selledPageNum.value, selledPageSize.value)
   console.log('getSelledDataAPI响应:', res.data.data)
-  selledData.value = res.data.data
+  selledData.value = res.data.data.orderList
+  selledTotal.value = res.data.data.total
+}
+
+const handleSelledPageChange = (page) => {
+  selledPageNum.value = page
+  getSelledData()
 }
 
 onMounted(() => {

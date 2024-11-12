@@ -42,3 +42,26 @@ export function updateAddressAPI(id, updatedData) {
         }
     });
 }
+
+// 修改默认地址
+export function setDefaultAddressAPI(data) {
+    return httpInstance({
+        url: `/address/setDefault/{id}`,  
+        method: 'put',
+        data: data,  
+        headers: {
+            Authorization: `Bearer ${localStorage.getItem('token')}`, 
+        }
+    });
+}
+
+// 删除地址
+export function deleteAddressAPI(id) {
+  return httpInstance({
+    url: `/address/${id}`,  
+    method: 'delete',
+    headers: {
+      Authorization: `Bearer ${localStorage.getItem('token')}`,  
+    },
+  });
+}

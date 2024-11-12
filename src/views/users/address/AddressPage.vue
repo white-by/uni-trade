@@ -18,17 +18,19 @@
             <el-radio
               v-model="defaultAddressId"
               :label="scope.row.id"
-              @change="setDefaultAddress(scope.row.id)"
+              @change="handleDefaultAddressChange(scope.row.id)"
               style="display: flex; justify-content: center"
-              ><p></p
-            ></el-radio>
+            >
+              <p></p>
+            </el-radio>
           </template>
         </el-table-column>
         <el-table-column label="操作" width="120px">
           <template #default="scope">
             <el-button size="small" type="primary" @click="openEditDialog(scope.row)"
               ><i class="iconfont icon-edit"></i></el-button
-            ><el-button size="small" type="danger"><i class="iconfont icon-delete"></i></el-button
+            ><el-button size="small" type="danger" @click="handleDelete(scope.row.id)"
+              ><i class="iconfont icon-delete"></i></el-button
           ></template>
         </el-table-column>
       </el-table>
@@ -101,8 +103,14 @@ import UserNav from '@/components/UserNav.vue'
 import UserFooter from '@/components/UserFooter.vue'
 import AreaComponets from '@/components/AreaComponets.vue'
 import { ref, onMounted } from 'vue'
-import { getAddressListAPI, addAddressAPI, updateAddressAPI } from '@/api/address'
-import { ElMessage } from 'element-plus'
+import {
+  getAddressListAPI,
+  addAddressAPI,
+  updateAddressAPI,
+  setDefaultAddressAPI,
+  deleteAddressAPI
+} from '@/api/address'
+import { ElMessage, ElMessageBox } from 'element-plus'
 
 //从接口拿地址列表
 const addressData = ref([])
@@ -112,12 +120,38 @@ const getAddressList = async () => {
   addressData.value = res.data.data
   defaultAddressId.value = addressData.value.find((address) => address.isDefault === 1)?.id || null
 }
-// 默认地址
+
+// 当前默认地址的 ID
 const defaultAddressId = ref(addressData.value.find((address) => address.isDefault === 1)?.id || null)
-const setDefaultAddress = (id) => {
+let oldAddressId = defaultAddressId.value
+let isThrottling = false // 控制节流状态
+
+// 设置默认地址
+const setDefaultAddress = async (newAddressId) => {
   addressData.value.forEach((address) => {
-    address.isDefault = address.id === id ? 1 : 0
+    address.isDefault = address.id === newAddressId ? 1 : 0
   })
+  const res = await setDefaultAddressAPI({ oldAddressId, newAddressId })
+  if (res.data.code === 1) {
+    ElMessage.success('修改成功')
+    oldAddressId = newAddressId
+  } else {
+    ElMessage.error('修改失败')
+  }
+}
+
+// 处理默认地址改变
+const handleDefaultAddressChange = (newAddressId) => {
+  if (isThrottling) {
+    defaultAddressId.value = oldAddressId
+    ElMessage.warning('操作过于频繁，请稍后再试')
+    return
+  }
+  isThrottling = true
+  setDefaultAddress(newAddressId)
+  setTimeout(() => {
+    isThrottling = false
+  }, 2000)
 }
 
 //新增地址
@@ -232,6 +266,27 @@ const resetEditForm = () => {
   editForm.value = { id: '', province: '', city: '', area: '', detailAddress: '' }
   if (areaComponentRef.value) {
     areaComponentRef.value.resetAddress()
+  }
+}
+
+// 删除地址
+const handleDelete = async (id) => {
+  try {
+    await ElMessageBox.confirm('确认删除地址？', '提示', {
+      confirmButtonText: '确认',
+      cancelButtonText: '取消',
+      type: 'warning'
+    })
+  } catch (error) {
+    console.log('取消了删除操作', error)
+    return
+  }
+  const res = await deleteAddressAPI(id)
+  if (res.data.code === 1) {
+    addressData.value = addressData.value.filter((address) => address.id !== id)
+    ElMessage.success('删除成功')
+  } else {
+    ElMessage.error('删除失败')
   }
 }
 

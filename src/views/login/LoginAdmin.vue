@@ -30,6 +30,7 @@ import { Edit, Lock } from '@element-plus/icons-vue'
 import { ElMessage } from 'element-plus'
 import { useRouter } from 'vue-router'
 import { useAdminStore } from '@/store/adminStore'
+import useASE from '@/hooks/useASE'
 
 const adminStore = useAdminStore()
 
@@ -69,11 +70,16 @@ const rules = ref({
   ]
 })
 
+const { encrypt } = useASE()
+
 const formRef = ref(null)
 const handleLogin = () => {
   formRef.value.validate(async (valid, fields) => {
+    console.log('加密前：', form.value.password)
+    const password = encrypt(form.value.password)
+    console.log('加密后：', password)
     // 添加 fields 参数
-    const { mail, password } = form.value
+    const { mail } = form.value
     if (valid) {
       await adminStore.getAdminInfo({ mail, password })
       ElMessage({

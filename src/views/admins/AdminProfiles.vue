@@ -14,7 +14,7 @@
 
       <!-- 密码 -->
       <el-form-item label="密码">
-        <el-input v-model="admin.password" :type="addPassFlag ? 'text' : 'password'">
+        <el-input v-model="pswText.value" :type="addPassFlag ? 'text' : 'password'">
           <template #suffix>
             <span @click="addPassFlag = !addPassFlag">
               <el-icon v-if="addPassFlag"><View /></el-icon>
@@ -55,15 +55,25 @@
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { onMounted, ref } from 'vue'
 import { View, Hide } from '@element-plus/icons-vue'
 import { ElMessage } from 'element-plus'
 import { useAdminStore } from '@/store/adminStore'
+import useASE from '@/hooks/useASE'
 
 const adminStore = useAdminStore()
 const admin = adminStore.adminInfo.data
 
 const addPassFlag = ref(false)
+
+const { decrypt } = useASE()
+const pswText = ref('')
+onMounted(() => {
+  console.log('获得的', admin.password)
+
+  pswText.value = ref(decrypt(admin.password))
+  console.log('解密的', pswText.value)
+})
 
 function onSubmit() {
   console.log('更改信息:', admin.value)

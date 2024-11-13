@@ -133,11 +133,13 @@ const handleConfirm = async () => {
       console.log('提交的表单数据:', userForm.value)
 
       if (userForm.value.userID) {
-        await editUserApi(userForm.value)
-        ElMessage.success('用户信息已更新')
+        const res = await editUserApi(userForm.value)
+        if (res.data.code === 1) ElMessage.success('用户信息已更新')
+        else ElMessage.error('更新失败')
       } else {
-        await addUserApi(userForm.value)
-        ElMessage.success('用户信息已添加')
+        const res = await addUserApi(userForm.value)
+        if (res.data.code === 1) ElMessage.success('用户信息已添加')
+        else ElMessage.error('添加失败')
       }
 
       dialogVisible.value = false
@@ -234,8 +236,8 @@ const deleteUser = async (userID) => {
     </div>
 
     <!-- 编辑/新增用户弹窗 -->
-    <el-dialog :title="dialogTitle" v-model="dialogVisible" @close="closeDialog">
-      <el-form :model="userForm" :rules="rules" ref="formRef" label-width="120px">
+    <el-dialog :title="dialogTitle" v-model="dialogVisible" @close="closeDialog" style="width: 500px">
+      <el-form :model="userForm" :rules="rules" ref="formRef" label-width="100px">
         <el-form-item label="用户名" prop="userName">
           <el-input v-model="userForm.userName" placeholder="请输入用户名"></el-input>
         </el-form-item>
@@ -260,10 +262,10 @@ const deleteUser = async (userID) => {
             <el-radio :value="1">异常</el-radio>
           </el-radio-group>
         </el-form-item>
-        <el-form-item>
+        <span style="display: flex; justify-content: center">
           <el-button type="primary" @click="handleConfirm">提交</el-button>
           <el-button @click="dialogVisible = false">取消</el-button>
-        </el-form-item>
+        </span>
       </el-form>
     </el-dialog>
   </div>
@@ -273,6 +275,10 @@ const deleteUser = async (userID) => {
 h1 {
   font-size: 25px;
   color: dimgray;
+}
+
+.el-input {
+  padding-right: 10%;
 }
 
 .contain {

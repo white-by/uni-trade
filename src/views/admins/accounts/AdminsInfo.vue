@@ -8,18 +8,17 @@ import { getAdminListApi, addAdminApi, editAdminApi, deleteAdminApi } from '@/ap
 const queryForm = ref({
   searchQuery: '',
   pageNum: 1,
-  pageSize: 5
+  pageSize: 10
 })
 const total = ref(0)
 const AdminList = ref([])
 
 const getAdminList = async () => {
-  // console.log('query: ', queryForm.value)
   const res = await getAdminListApi(queryForm.value)
-  // console.log('res: ', res.data)
-  AdminList.value = res.data.data.adminList
-  total.value = res.data.data.total
-  // console.log('adminList: ', adminList.value)
+  if (res.data.code === 1) {
+    AdminList.value = res.data.data.adminList
+    total.value = res.data.data.total
+  } else ElMessage.error('获取管理员信息失败')
 }
 onMounted(() => {
   getAdminList()
@@ -27,7 +26,7 @@ onMounted(() => {
 
 // 弹窗显示状态和标题
 const dialogVisible = ref(false)
-const dialogTitle = ref('编辑用户')
+const dialogTitle = ref('编辑管理员')
 
 // 编辑表单数据
 const adminForm = ref({
@@ -40,7 +39,7 @@ const adminForm = ref({
 
 // 表单验证规则
 const rules = {
-  adminName: [{ required: true, message: '请输入用户名', trigger: 'blur' }],
+  adminName: [{ required: true, message: '请输入管理员名', trigger: 'blur' }],
   mail: [
     { required: true, message: '请输入邮箱', trigger: 'blur' },
     { type: 'email', message: '请输入有效的邮箱地址', trigger: ['blur', 'change'] }
@@ -55,9 +54,9 @@ const rules = {
 // 表单引用
 const formRef = ref(null)
 
-// 打开新增用户表单
+// 打开新增管理员表单
 const openAddAdminForm = () => {
-  dialogTitle.value = '新增用户'
+  dialogTitle.value = '新增管理员'
   adminForm.value = {
     adminID: '',
     adminName: '',
@@ -83,9 +82,9 @@ const closeDialog = () => {
   formRef.value?.clearValidate()
 }
 
-// 编辑用户
+// 编辑管理员
 const editAdmin = (admin) => {
-  dialogTitle.value = '编辑用户'
+  dialogTitle.value = '编辑管理员'
   adminForm.value = { ...admin }
   dialogVisible.value = true
   nextTick(() => formRef.value?.clearValidate())
@@ -102,11 +101,13 @@ const handleConfirm = async () => {
       console.log('提交的表单数据:', adminForm.value)
 
       if (adminForm.value.adminID) {
-        await editAdminApi(adminForm.value)
-        ElMessage.success('管理员信息已更新')
+        const res = await editAdminApi(adminForm.value)
+        if (res.data.code === 1) ElMessage.success('管理员信息已更新')
+        else ElMessage.error('更新失败')
       } else {
-        await addAdminApi(adminForm.value)
-        ElMessage.success('管理员信息已添加')
+        const res = await addAdminApi(adminForm.value)
+        if (res.data.code === 1) ElMessage.success('管理员信息已添加')
+        else ElMessage.error('添加失败')
       }
 
       dialogVisible.value = false
@@ -119,7 +120,7 @@ const handleConfirm = async () => {
   })
 }
 
-// 删除用户
+// 删除管理员
 const deleteAdmin = async (adminID) => {
   try {
     await ElMessageBox.confirm('确定要删除此管理员吗？', '提示', {
@@ -130,11 +131,11 @@ const deleteAdmin = async (adminID) => {
     const res = await deleteAdminApi(adminID)
     if (res.data.code === 1) {
       AdminList.value = AdminList.value.filter((admin) => admin.adminID !== adminID)
-      ElMessage.success('用户已删除')
+      ElMessage.success('管理员已删除')
     }
     // getAdminList()
   } catch (error) {
-    console.log('用户删除操作已取消', error)
+    console.log('管理员删除操作已取消', error)
   }
 }
 </script>
@@ -149,7 +150,7 @@ const deleteAdmin = async (adminID) => {
       <div style="display: flex; justify-content: flex-end">
         <el-input
           v-model="queryForm.searchQuery"
-          placeholder="请输入用户名进行搜索"
+          placeholder="请输入管理员名进行搜索"
           @keyup.enter="getAdminList"
           style="width: 200px"
         >
@@ -160,9 +161,9 @@ const deleteAdmin = async (adminID) => {
       </div>
     </div>
 
-    <!-- 用户列表 -->
+    <!-- 管理员列表 -->
     <el-table :data="AdminList" border>
-      <el-table-column label="用户名" prop="adminName" align="center"></el-table-column>
+      <el-table-column label="管理员名" prop="adminName" align="center"></el-table-column>
 
       <el-table-column label="性别" prop="gender" align="center">
         <template #default="{ row }">
@@ -192,11 +193,11 @@ const deleteAdmin = async (adminID) => {
       />
     </div>
 
-    <!-- 编辑/新增用户弹窗 -->
+    <!-- 编辑/新增管理员弹窗 -->
     <el-dialog :title="dialogTitle" v-model="dialogVisible" @close="closeDialog" style="width: 500px">
       <el-form :model="adminForm" :rules="rules" ref="formRef" label-width="120px">
-        <el-form-item label="用户名" prop="userName">
-          <el-input v-model="adminForm.adminName" placeholder="请输入用户名"></el-input>
+        <el-form-item label="管理员名" prop="adminName">
+          <el-input v-model="adminForm.adminName" placeholder="请输入管理员名"></el-input>
         </el-form-item>
         <el-form-item label="性别" prop="gender">
           <el-radio-group v-model="adminForm.gender">
@@ -210,10 +211,10 @@ const deleteAdmin = async (adminID) => {
         <el-form-item label="电话" prop="tel">
           <el-input v-model="adminForm.tel" placeholder="请输入电话"></el-input>
         </el-form-item>
-        <el-form-item>
+        <span style="display: flex; justify-content: center">
           <el-button type="primary" @click="handleConfirm">提交</el-button>
           <el-button @click="dialogVisible = false">取消</el-button>
-        </el-form-item>
+        </span>
       </el-form>
     </el-dialog>
   </div>
@@ -223,6 +224,10 @@ const deleteAdmin = async (adminID) => {
 h1 {
   font-size: 25px;
   color: dimgray;
+}
+
+.el-input {
+  padding-right: 10%;
 }
 
 .contain {

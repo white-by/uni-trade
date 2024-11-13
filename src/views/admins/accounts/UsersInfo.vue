@@ -279,8 +279,7 @@ h1 {
   background: #fff;
   border-radius: 10px;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-  padding: 30px;
-  margin-top: 20px;
+  padding: 2%;
 }
 
 .el-table .el-table-column {

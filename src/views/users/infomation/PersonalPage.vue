@@ -2,22 +2,22 @@
   <UserNav />
   <div class="content">
     <br /><br />
-    <el-form :model="user" label-width="40px" class="form" style="max-width: 600px">
+    <el-form :model="userInfo" label-width="40px" class="form" style="max-width: 600px">
       <div class="avatar-container" @click="selectAvatar">
-        <el-avatar :size="130" :src="user.avatarUrl" />
+        <el-avatar :size="130" :src="userInfo.picture" />
         <input type="file" ref="fileInput" @change="onFileChange" style="display: none" accept="image/*" />
       </div>
 
       <el-form-item label="ID">
-        <el-input v-model="user.userID" disabled />
+        <el-input v-model="userInfo.userID" disabled />
       </el-form-item>
 
       <el-form-item label="昵称">
-        <el-input v-model="user.userName" />
+        <el-input v-model="userInfo.userName" />
       </el-form-item>
 
       <el-form-item label="密码">
-        <el-input v-model="user.password" :type="addPassFlag ? 'text' : 'password'">
+        <el-input v-model="userInfo.password" :type="addPassFlag ? 'text' : 'password'">
           <template #suffix>
             <span @click="addPassFlag = !addPassFlag">
               <el-icon v-if="addPassFlag"><View /></el-icon>
@@ -28,22 +28,22 @@
       </el-form-item>
 
       <el-form-item label="性别">
-        <el-select v-model="user.gender" size="large">
-          <el-option label="女" value="0" />
-          <el-option label="男" value="1" />
+        <el-select v-model="userInfo.gender" size="large">
+          <el-option label="女" :value="0" />
+          <el-option label="男" :value="1" />
         </el-select>
       </el-form-item>
 
       <el-form-item label="学校">
-        <el-input v-model="user.school" disabled />
+        <el-input v-model="userInfo.schoolName" disabled />
       </el-form-item>
 
       <el-form-item label="邮箱">
-        <el-input v-model="user.email" disabled />
+        <el-input v-model="userInfo.mail" disabled />
       </el-form-item>
 
       <el-form-item label="电话">
-        <el-input v-model="user.tel" />
+        <el-input v-model="userInfo.tel" />
       </el-form-item>
 
       <el-form-item>
@@ -61,16 +61,24 @@ import { View, Hide } from '@element-plus/icons-vue'
 import UserFooter from '@/components/UserFooter.vue'
 import axios from 'axios'
 import { ElMessage } from 'element-plus'
+import { getUserInfoAPI, editUserInfoAPI } from '@/api/profiles'
+import useASE from '@/hooks/useASE'
 
-const user = ref({
-  avatarUrl: 'https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png',
-  userID: '123',
-  userName: 'name',
-  password: '123456',
-  gender: '0',
-  school: '中山大学',
-  email: '123@123.com',
-  tel: '123456789'
+const { encrypt, decrypt } = useASE()
+
+// 从接口获取数据
+const userInfo = ref({})
+const getUserInfo = async () => {
+  const res = await getUserInfoAPI()
+  // console.log('getUserInfoAPI响应：', res.data)
+  res.data.data.password = decrypt(res.data.data.password)
+  // console.log('解密后：', res.data.data.password)
+  userInfo.value = res.data.data
+  fetchAvatar()
+}
+
+onMounted(() => {
+  getUserInfo()
 })
 
 const addPassFlag = ref(false)
@@ -78,23 +86,19 @@ const addPassFlag = ref(false)
 async function fetchAvatar() {
   try {
     const response = await axios.get('https://dog.ceo/api/breeds/image/random')
-    user.value.avatarUrl = response.data.message // 更新头像 URL
+    userInfo.value.picture = response.data.message // 更新头像 URL
   } catch (error) {
-    user.value.avatarUrl = 'https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png'
+    userInfo.value.picture = 'https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png'
     console.error('获取头像失败:', error)
   }
 }
-
-onMounted(() => {
-  fetchAvatar() // 在组件挂载后获取头像
-})
 
 function onFileChange(event) {
   const file = event.target.files[0]
   if (file) {
     const reader = new FileReader()
     reader.onload = (e) => {
-      user.value.avatarUrl = e.target.result // 更新头像 URL
+      userInfo.value.picture = e.target.result // 更新头像 URL
     }
     reader.readAsDataURL(file) // 将文件转换为 Data URL
   }
@@ -104,12 +108,24 @@ function selectAvatar() {
   fileInput.value.click() // 点击文件输入框
 }
 
-function onSubmit() {
-  console.log('更改信息')
-  ElMessage({
-    type: 'success',
-    message: '修改成功'
-  })
+// 提交修改
+const onSubmit = async () => {
+  const updatedData = {
+    userID: userInfo.value.userID,
+    userName: userInfo.value.userName,
+    password: encrypt(userInfo.value.password),
+    picture: userInfo.value.picture,
+    gender: userInfo.value.gender,
+    tel: userInfo.value.tel
+  }
+  console.log('更新的数据：', updatedData)
+  const res = await editUserInfoAPI(updatedData)
+  if (res.data.code === 1) {
+    ElMessage({
+      type: 'success',
+      message: '修改成功'
+    })
+  } else ElMessage.error('修改失败')
 }
 </script>
 

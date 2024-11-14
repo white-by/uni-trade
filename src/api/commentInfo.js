@@ -7,7 +7,7 @@ import httpInstance from '@/utils/https'
  */
 export const getCommentListApi = (params) => {
   return httpInstance({
-    url: '/comment',
+    url: '/admin/comment',
     params
   })
 }
@@ -19,7 +19,7 @@ export const getCommentListApi = (params) => {
  */
 export const addCommentApi = (commentData) => {
   return httpInstance({
-    url: '/comment',
+    url: '/admin/comment',
     method: 'POST',
     data: commentData
   })
@@ -31,7 +31,7 @@ export const addCommentApi = (commentData) => {
  */
 export const editCommentApi = (commentData) => {
   return httpInstance({
-    url: `/comment/${commentData.commentID}`,
+    url: `/admin/comment/${commentData.commentID}`,
     method: 'PUT',
     data: commentData
   })
@@ -44,7 +44,7 @@ export const editCommentApi = (commentData) => {
  */
 export const deleteCommentApi = (commentID) => {
   return httpInstance({
-    url: `/comment/${commentID}`,
+    url: `/admin/comment/${commentID}`,
     method: 'DELETE'
   })
 }

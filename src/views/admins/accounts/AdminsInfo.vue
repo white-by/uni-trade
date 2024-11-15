@@ -146,19 +146,21 @@ const deleteAdmin = async (adminID) => {
     <br /><br />
     <!-- 新增按钮 -->
     <div style="display: flex; justify-content: space-between; margin-bottom: 15px">
-      <el-button type="primary" @click="openAddAdminForm">增加</el-button>
-      <div style="display: flex; justify-content: flex-end">
+      <div>
         <el-input
           v-model="queryForm.searchQuery"
           placeholder="请输入管理员名进行搜索"
           @keyup.enter="getAdminList"
-          style="width: 200px"
+          style="width: 250px"
         >
           <template #prefix>
             <el-icon><Search /></el-icon>
           </template>
         </el-input>
       </div>
+      <el-button style="display: flex; justify-content: flex-end" type="primary" @click="openAddAdminForm"
+        >增加</el-button
+      >
     </div>
 
     <!-- 管理员列表 -->

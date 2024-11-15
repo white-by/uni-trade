@@ -141,21 +141,22 @@ const deleteAnnouncement = async (announcementID) => {
   <div class="contain">
     <h1>公告管理</h1>
     <br /><br />
-    <!-- 新增按钮 -->
+
     <div style="display: flex; justify-content: space-between; margin-bottom: 15px">
-      <el-button type="primary" @click="openAddAnnouncementForm">增加</el-button>
       <div style="display: flex; justify-content: flex-end">
         <el-input
           v-model="queryForm.searchQuery"
           placeholder="请输入公告标题进行搜索"
           @keyup.enter="getAnnouncementList"
-          style="width: 200px"
+          style="width: 250px"
         >
           <template #prefix>
             <el-icon><Search /></el-icon>
           </template>
         </el-input>
       </div>
+      <!-- 新增按钮 -->
+      <el-button type="primary" @click="openAddAnnouncementForm">增加</el-button>
     </div>
 
     <!-- 公告列表 -->

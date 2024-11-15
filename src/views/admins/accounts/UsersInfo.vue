@@ -104,29 +104,6 @@ const handlePageChange = (pageNum) => {
   getUsersList()
 }
 
-// 提交表单
-// function submitEditForm() {
-//   formRef.value.validate((valid) => {
-//     if (valid) {
-//       console.log('提交的表单数据:', editUserForm.value)
-//       if (editUserForm.value.userID) {
-//         const index = usersList.value.findIndex((user) => user.userID === editUserForm.value.userID)
-//         if (index !== -1) {
-//           usersList[index] = { ...editUserForm.value }
-//           ElMessage.success('用户信息已更新')
-//         }
-//       } else {
-//         const newUser = { ...editUserForm.value, userID: Date.now() }
-//         usersList.value.push(newUser)
-//         ElMessage.success('新增用户成功')
-//       }
-//       dialogVisible.value = false
-//     } else {
-//       console.log('表单校验失败')
-//       return false
-//     }
-//   })
-// }
 const handleConfirm = async () => {
   formRef.value.validate(async (valid) => {
     if (valid) {
@@ -176,19 +153,19 @@ const deleteUser = async (userID) => {
     <br /><br />
     <!-- 新增按钮 -->
     <div style="display: flex; justify-content: space-between; margin-bottom: 15px">
-      <el-button type="primary" @click="openAddUserForm">增加</el-button>
       <div style="display: flex; justify-content: flex-end">
         <el-input
           v-model="queryForm.searchQuery"
           placeholder="请输入用户名进行搜索"
           @keyup.enter="getUsersList"
-          style="width: 200px"
+          style="width: 250px"
         >
           <template #prefix>
             <el-icon><Search /></el-icon>
           </template>
         </el-input>
       </div>
+      <el-button type="primary" @click="openAddUserForm">增加</el-button>
     </div>
 
     <!-- 用户列表 -->

@@ -13,32 +13,7 @@ export const getCommentListApi = (params) => {
 }
 
 /**
- * 新增评论
- * @param commentData
- * @returns
- */
-export const addCommentApi = (commentData) => {
-  return httpInstance({
-    url: '/admin/comment',
-    method: 'POST',
-    data: commentData
-  })
-}
-/**
- * 编辑评论
- * @param commentData
- * @returns
- */
-export const editCommentApi = (commentData) => {
-  return httpInstance({
-    url: `/admin/comment/${commentData.commentID}`,
-    method: 'PUT',
-    data: commentData
-  })
-}
-
-/**
- * 编辑评论
+ * 删除评论
  * @param commentData
  * @returns
  */

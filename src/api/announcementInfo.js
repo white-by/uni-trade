@@ -8,7 +8,7 @@ import httpInstance from '@/utils/https'
  */
 export const getAnnouncementListApi = (params) => {
   return httpInstance({
-    url: '/announcement',
+    url: '/admin/announcement',
     params
   })
 }
@@ -20,7 +20,7 @@ export const getAnnouncementListApi = (params) => {
  */
 export const addAnnouncementApi = (announcementData) => {
   return httpInstance({
-    url: '/announcement',
+    url: '/admin/announcement',
     method: 'POST',
     data: announcementData
   })
@@ -32,7 +32,7 @@ export const addAnnouncementApi = (announcementData) => {
  */
 export const editAnnouncementApi = (announcementData) => {
   return httpInstance({
-    url: `/announcement/${announcementData.announcementID}`,
+    url: `/admin/announcement/${announcementData.announcementID}`,
     method: 'PUT',
     data: announcementData
   })
@@ -45,7 +45,7 @@ export const editAnnouncementApi = (announcementData) => {
  */
 export const deleteAnnouncementApi = (announcementID) => {
   return httpInstance({
-    url: `/announcement/${announcementID}`,
+    url: `/admin/announcement/${announcementID}`,
     method: 'DELETE'
   })
 }

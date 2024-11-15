@@ -40,3 +40,22 @@ export function getCommentsAPI(){
         }
     })
 }
+
+// 获取个人资料
+export function getUserInfoAPI(){
+    return httpInstance({
+        url: '/profiles/info',
+        headers: {
+            Authorization: `Bearer ${localStorage.getItem('token')}`, 
+        }
+    })
+}
+
+// 修改个人资料
+export const editUserInfoAPI = (Data) => {
+  return httpInstance({
+    url: `/profiles/info/${Data.userID}`,
+    method: 'PUT',
+    data: Data
+  })
+}

@@ -1,9 +1,9 @@
-<!-- 只能查询 -->
+<!-- 查询，删除 -->
 
 <script setup></script>
 
 <template>
-  <div class="">ordersInfo</div>
+  <div class="">productsInfo</div>
 </template>
 
 <style scoped></style>

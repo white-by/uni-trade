@@ -23,6 +23,7 @@ import AnnouncementInfo from '@/views/admins/contents/AnnouncementInfo.vue'
 import CategoryInfo from '@/views/admins/contents/CategoryInfo.vue'
 import CommentInfo from '@/views/admins/contents/CommentInfo.vue'
 import AdminProfiles from '@/views/admins/AdminProfiles.vue'
+import ProductsInfo from '@/views/admins/sales/ProductsInfo.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -103,6 +104,10 @@ const router = createRouter({
         {
           path: 'usersInfo',
           component: UsersInfo
+        },
+         {
+          path: 'productsInfo',
+          component: ProductsInfo
         },
         {
           path: 'ordersInfo',

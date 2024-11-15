@@ -11,7 +11,8 @@ import {
   Notification,
   Box,
   ChatDotSquare,
-  Avatar
+  Avatar,
+  ShoppingBag
 } from '@element-plus/icons-vue'
 import { ElMessageBox } from 'element-plus'
 import { RouterView, useRoute, useRouter } from 'vue-router'
@@ -51,6 +52,8 @@ watch(
       activeIndex.value = '2-1'
     } else if (newPath === '/admin/afterSale') {
       activeIndex.value = '2-2'
+    } else if (newPath === '/admin/productsInfo') {
+      activeIndex.value = '2-3'
     } else if (newPath === '/admin/announcementInfo') {
       activeIndex.value = '3-1'
     } else if (newPath === '/admin/categoryInfo') {
@@ -137,6 +140,12 @@ watch(
                   <router-link to="/admin/afterSale">
                     <el-menu-item index="2-2">
                       <el-icon><Memo /></el-icon>售后管理
+                    </el-menu-item>
+                  </router-link>
+
+                  <router-link to="/admin/productsInfo">
+                    <el-menu-item index="2-3">
+                      <el-icon><ShoppingBag /></el-icon>商品管理
                     </el-menu-item>
                   </router-link>
                 </el-menu-item-group>

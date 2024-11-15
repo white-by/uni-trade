@@ -6,7 +6,11 @@ import { useProfilesStore } from '@/store/profilesStore'
 const profilesStore = useProfilesStore()
 
 const genderText = computed(() => {
-  return profilesStore.introduction.gender === '0' ? '女' : '男'
+  // 避免加载时显示男
+  if (profilesStore.introduction.gender === '0') return '女'
+  else if (profilesStore.introduction.gender === '1') return '男'
+  else return null
+  // return profilesStore.introduction.gender === '0' ? '女' : '男'
 })
 
 async function fetchAvatar() {

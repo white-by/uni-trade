@@ -7,7 +7,7 @@ import httpInstance from '@/utils/https'
  */
 export const getCategoryListApi = (params) => {
   return httpInstance({
-    url: '/category',
+    url: '/admin/category',
     params
   })
 }
@@ -19,7 +19,7 @@ export const getCategoryListApi = (params) => {
  */
 export const addCategoryApi = (categoryData) => {
   return httpInstance({
-    url: '/category',
+    url: '/admin/category',
     method: 'POST',
     data: categoryData
   })
@@ -31,7 +31,7 @@ export const addCategoryApi = (categoryData) => {
  */
 export const editCategoryApi = (categoryData) => {
   return httpInstance({
-    url: `/category/${categoryData.categoryID}`,
+    url: `/admin/category/${categoryData.categoryID}`,
     method: 'PUT',
     data: categoryData
   })
@@ -44,7 +44,7 @@ export const editCategoryApi = (categoryData) => {
  */
 export const deleteCategoryApi = (categoryID) => {
   return httpInstance({
-    url: `/category/${categoryID}`,
+    url: `/admin/category/${categoryID}`,
     method: 'DELETE'
   })
 }

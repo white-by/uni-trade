@@ -77,8 +77,11 @@ const addPassFlag = ref(false)
 
 async function fetchAvatar() {
   try {
-    const response = await axios.get('https://dog.ceo/api/breeds/image/random')
-    user.value.avatarUrl = response.data.message // 更新头像 URL
+    // const response = await axios.get('https://dog.ceo/api/breeds/image/random')
+    // user.value.avatarUrl = response.data.message // 更新头像 URL
+    const response = await axios.get('https://api.thecatapi.com/v1/images/search')
+    user.value.avatarUrl = response.data[0].url // 更新头像 URL
+    console.log(response.data[0])
   } catch (error) {
     user.value.avatarUrl = 'https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png'
     console.error('获取头像失败:', error)

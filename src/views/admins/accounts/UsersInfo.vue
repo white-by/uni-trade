@@ -1,9 +1,10 @@
 <script setup>
-import { ref, nextTick, onMounted } from 'vue'
+import { ref, nextTick, onMounted, watch } from 'vue'
 import { ElMessage, ElMessageBox } from 'element-plus'
 import { Search } from '@element-plus/icons-vue'
 
 import { getUsersListApi, addUserApi, editUserApi, deleteUserApi } from '@/api/usersInfo'
+import schoolData from '@/../public/school.json'
 
 const queryForm = ref({
   searchQuery: '',
@@ -43,18 +44,39 @@ const userForm = ref({
 // 表单验证规则
 const rules = {
   userName: [{ required: true, message: '请输入用户名', trigger: 'blur' }],
-  mail: [
-    { required: true, message: '请输入邮箱', trigger: 'blur' },
-    { type: 'email', message: '请输入有效的邮箱地址', trigger: ['blur', 'change'] }
-  ],
+  schoolName: [{ required: true, message: '请选择学校', trigger: 'change' }],
+  mail: [{ required: true, message: '请输入邮箱', trigger: 'blur' }],
   tel: [
     { required: true, message: '请输入电话', trigger: 'blur' },
     { pattern: /^[0-9]+$/, message: '电话号码只能包含数字', trigger: 'blur' }
   ],
-  schoolName: [{ required: true, message: '请输入学校全称', trigger: 'blur' }],
   gender: [{ required: true, message: '请选择性别', trigger: 'change' }],
   status: [{ required: true, message: '请选择用户状态', trigger: 'change' }]
 }
+
+// 获取学校列表
+const schoolList = Object.keys(schoolData)
+// 当前选中的学校
+const selectedSchool = ref('') // 默认选中第一个学校
+// 邮箱后缀
+const schoolEmailSuffix = ref() // 默认后缀
+// 前缀
+const mailPrefix = ref('')
+
+// 动态更新邮箱前缀到 mail 字段中
+const updateMail = () => {
+  userForm.value.mail = `${mailPrefix.value}${schoolEmailSuffix.value}`
+}
+// 监听选中的学校变化
+watch(
+  () => userForm.value.schoolName, // 监听表单中学校的变化
+  (newSchool) => {
+    if (newSchool) {
+      selectedSchool.value = newSchool // 同步更新 selectedSchool
+      schoolEmailSuffix.value = schoolData[newSchool]
+    }
+  }
+)
 
 // 表单引用
 const formRef = ref(null)
@@ -71,6 +93,8 @@ const openAddUserForm = () => {
     gender: null,
     status: null
   }
+  mailPrefix.value = ''
+  schoolEmailSuffix.value = '@edu.cn'
   dialogVisible.value = true
   nextTick(() => formRef.value?.clearValidate())
 }
@@ -95,6 +119,10 @@ const closeDialog = () => {
 const editUser = (user) => {
   dialogTitle.value = '编辑用户'
   userForm.value = { ...user }
+  // 分离邮箱前缀和后缀
+  const [prefix] = user.mail.split('@')
+  mailPrefix.value = prefix
+
   dialogVisible.value = true
   nextTick(() => formRef.value?.clearValidate())
 }
@@ -108,7 +136,8 @@ const handleConfirm = async () => {
   formRef.value.validate(async (valid) => {
     if (valid) {
       console.log('提交的表单数据:', userForm.value)
-
+      const updatedMail = `${mailPrefix.value}${schoolEmailSuffix.value}`
+      userForm.value.mail = updatedMail
       if (userForm.value.userID) {
         const res = await editUserApi(userForm.value)
         if (res.data.code === 1) ElMessage.success('用户信息已更新')
@@ -224,11 +253,16 @@ const deleteUser = async (userID) => {
             <el-radio :value="1">男</el-radio>
           </el-radio-group>
         </el-form-item>
+
         <el-form-item label="学校" prop="schoolName">
-          <el-input v-model="userForm.schoolName" placeholder="请输入学校全称"></el-input>
+          <el-select v-model="userForm.schoolName" placeholder="请选择学校">
+            <el-option v-for="(school, index) in schoolList" :key="index" :label="school" :value="school"></el-option>
+          </el-select>
         </el-form-item>
         <el-form-item label="邮箱" prop="mail">
-          <el-input v-model="userForm.mail" placeholder="请输入邮箱"></el-input>
+          <el-input v-model="mailPrefix" placeholder="请输入邮箱前缀" @input="updateMail">
+            <template #append>{{ schoolEmailSuffix }}</template>
+          </el-input>
         </el-form-item>
         <el-form-item label="电话" prop="tel">
           <el-input v-model="userForm.tel" placeholder="请输入电话"></el-input>
@@ -273,5 +307,9 @@ h1 {
   display: flex;
   justify-content: center;
   margin-top: 50px;
+}
+
+.el-select {
+  width: 90% !important;
 }
 </style>

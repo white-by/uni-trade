@@ -135,9 +135,9 @@ const handlePageChange = (pageNum) => {
 const handleConfirm = async () => {
   formRef.value.validate(async (valid) => {
     if (valid) {
-      console.log('提交的表单数据:', userForm.value)
       const updatedMail = `${mailPrefix.value}${schoolEmailSuffix.value}`
       userForm.value.mail = updatedMail
+      console.log('提交的表单数据:', userForm.value)
       if (userForm.value.userID) {
         const res = await editUserApi(userForm.value)
         if (res.data.code === 1) ElMessage.success('用户信息已更新')

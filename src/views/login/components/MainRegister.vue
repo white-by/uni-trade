@@ -10,9 +10,22 @@
         <el-col :span="12" class="register-form">
           <div class="frosted-glass">
             <br />
-            <el-form :model="form" :rules="rules">
-              <el-form-item prop="email">
-                <el-input placeholder="请输入邮箱" v-model="form.email" />
+
+            <el-form :model="form" :rules="rules" ref="formRef">
+              <el-form-item prop="schoolName">
+                <el-select v-model="form.schoolName" placeholder="请选择学校" size="large">
+                  <el-option
+                    v-for="(school, index) in schoolList"
+                    :key="index"
+                    :label="school"
+                    :value="school"
+                  ></el-option>
+                </el-select>
+              </el-form-item>
+              <el-form-item prop="mail">
+                <el-input placeholder="请输入邮箱前缀" v-model="mailPrefix" @input="updateMail">
+                  <template #append>{{ schoolEmailSuffix }}</template>
+                </el-input>
               </el-form-item>
 
               <el-form-item prop="verificationCode">
@@ -75,26 +88,50 @@
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { ref, watch } from 'vue'
 import { View, Hide } from '@element-plus/icons-vue'
+import { ElMessage } from 'element-plus'
+import schoolData from '@/../public/school.json'
 
 let form = ref({
-  email: '',
+  schoolName: '',
+  mail: '',
   verificationCode: '',
   password: '',
   confirmPassword: ''
 })
+
+// 获取学校列表
+const schoolList = Object.keys(schoolData)
+// 当前选中的学校
+const selectedSchool = ref('') // 默认选中第一个学校
+// 邮箱后缀
+const schoolEmailSuffix = ref('@edu.cn') // 默认后缀
+// 前缀
+const mailPrefix = ref('')
+
+// 动态更新邮箱前缀到 mail 字段中
+const updateMail = () => {
+  form.value.mail = `${mailPrefix.value}${schoolEmailSuffix.value}`
+}
+// 监听选中的学校变化
+watch(
+  () => form.value.schoolName, // 监听表单中学校的变化
+  (newSchool) => {
+    if (newSchool) {
+      selectedSchool.value = newSchool // 同步更新 selectedSchool
+      schoolEmailSuffix.value = schoolData[newSchool]
+    }
+  }
+)
 
 const addPassFlag = ref(false)
 const isCounting = ref(false)
 const countdown = ref(120)
 
 const rules = ref({
-  email: [
-    { required: true, message: '请输入邮箱', trigger: 'blur' },
-    { type: 'email', message: '请输入有效的邮箱地址', trigger: ['blur', 'change'] },
-    { min: 5, max: 50, message: '长度应为 5 到 50 位', trigger: 'blur' }
-  ],
+  schoolName: [{ required: true, message: '请选择学校', trigger: 'change' }],
+  mail: [{ required: true, message: '请输入邮箱前缀', trigger: 'blur' }],
 
   verificationCode: [{ required: true, message: '请输入验证码', trigger: 'blur' }],
 
@@ -136,7 +173,7 @@ const rules = ref({
 
 const sendVerificationCode = () => {
   // 这里添加发送验证码的逻辑
-  console.log('Sending verification code to:', form.value.email)
+  console.log('Sending verification code to:', form.value.mail)
   // 启动倒计时
   isCounting.value = true
   countdown.value = 60
@@ -150,9 +187,28 @@ const sendVerificationCode = () => {
   // 发送验证码的 API 调用
 }
 
-const handleRegister = async (formData) => {
-  // 这里放置你的注册逻辑
-  console.log('Registering with:', formData)
+const formRef = ref(null) // 引用表单
+
+const handleRegister = () => {
+  // 调用表单验证
+  formRef.value?.validate((valid) => {
+    if (valid) {
+      // 验证通过，执行注册逻辑
+      const updatedMail = `${mailPrefix.value}${schoolEmailSuffix.value}`
+      form.value.mail = updatedMail
+      const newForm = ref({
+        schoolName: form.value.schoolName,
+        mail: form.value.mail,
+        code: form.value.verificationCode,
+        password: form.value.password
+      })
+
+      console.log('注册信息:', newForm.value)
+      ElMessage.success('注册成功')
+    } else {
+      console.log('表单验证失败')
+    }
+  })
 }
 </script>
 

@@ -81,7 +81,7 @@ onMounted(() => {
 .product-container {
   padding-left: 60px;
   padding-right: 60px;
-  height: 700px;
+  /* height: 700px; */
   overflow-y: auto;
 }
 

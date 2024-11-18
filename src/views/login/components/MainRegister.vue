@@ -90,8 +90,13 @@
 <script setup>
 import { ref, watch } from 'vue'
 import { View, Hide } from '@element-plus/icons-vue'
-import { ElMessage } from 'element-plus'
+import { ElMessage, ElNotification } from 'element-plus'
 import schoolData from '@/../public/school.json'
+import { useRouter } from 'vue-router'
+
+import 'element-plus/theme-chalk/el-notification.css'
+
+const router = useRouter()
 
 let form = ref({
   schoolName: '',
@@ -204,7 +209,28 @@ const handleRegister = () => {
       })
 
       console.log('注册信息:', newForm.value)
-      ElMessage.success('注册成功')
+
+      const returnCode = 1 //test用
+      if (returnCode) {
+        // 显示成功消息
+        ElNotification({
+          title: '注册成功',
+          message: '3秒后返回登录页',
+          type: 'success',
+          duration: 3000 // 消息持续时间为3秒
+        })
+
+        // 3秒后跳转到登录页
+        setTimeout(() => {
+          // 使用 Vue Router 跳转
+          router.replace('/login')
+        }, 3000)
+      } else {
+        ElMessage({
+          message: '注册失败',
+          type: 'error'
+        })
+      }
     } else {
       console.log('表单验证失败')
     }

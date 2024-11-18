@@ -24,6 +24,7 @@ export const addCategoryApi = (categoryData) => {
     data: categoryData
   })
 }
+
 /**
  * 编辑分类
  * @param categoryData
@@ -38,7 +39,7 @@ export const editCategoryApi = (categoryData) => {
 }
 
 /**
- * 编辑分类
+ * 删除分类
  * @param categoryData
  * @returns
  */

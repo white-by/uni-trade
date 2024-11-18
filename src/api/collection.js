@@ -1,6 +1,6 @@
 import httpInstance from '@/utils/https'
 
-export function getCollectionListAPI (page, pageSize){
+export const getCollectionListAPI  = (page, pageSize) => {
     return httpInstance({
         url: '/collection',
          params : {

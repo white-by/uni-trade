@@ -33,5 +33,19 @@ export default defineConfig({
         `
       }
     }
+  },
+  server: {
+    port: 5173, // 本地开发服务器端口
+    proxy: {
+      '/fanBlog': {
+        target: 'http://localhost:8888', // 将 /fanBlog 的请求转发到本地后端，这里应该填后端url?
+        changeOrigin: true
+      },
+      '/api': {
+        target: 'https://smms.app', // 将 /api 的请求转发到 sm.ms 的 API
+        changeOrigin: true,
+        secure: false // 若目标为 HTTPS 且证书无效，可设置为 false
+      }
+    }
   }
 })

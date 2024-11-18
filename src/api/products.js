@@ -4,7 +4,7 @@ import httpInstance from "@/utils/https";
  * 获取分类
  * @returns 
  */
-export function getCategoryAPI(){
+export const getCategoryAPI = () => {
     return httpInstance({
         url: '/home/category'
     })
@@ -17,7 +17,7 @@ export function getCategoryAPI(){
  * @param {每页最大商品数 默认为12} limit 
  * @returns 
  */
-export function getProductsListAPI(category, page, limit){
+export const getProductsListAPI = (category, page, limit) => {
     return httpInstance({
         url: '/products',
         params: {
@@ -57,5 +57,17 @@ export function getFilteredProductsAPI({
             page,
             limit
         }
+    });
+}
+
+// 发布闲置
+export const postProductAPI = (data) => {
+    return httpInstance({
+        url: '/postProduct',
+        method: 'post',
+        headers: {
+            Authorization: `Bearer ${localStorage.getItem('token')}`,
+        },
+        data: data
     });
 }

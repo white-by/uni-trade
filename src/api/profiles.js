@@ -2,7 +2,7 @@ import httpInstance from "@/utils/https";
 
 
 // 顶栏个人简介
-export function getIntroductionAPI(){
+export const getIntroductionAPI = () => {
     return httpInstance({
         url: '/profiles/introduction',
         headers: {
@@ -12,7 +12,7 @@ export function getIntroductionAPI(){
 }
 
 // 已发布
-export function getPublishedProductsAPI(){
+export const getPublishedProductsAPI = () => {
     return httpInstance({
         url: '/profiles/published',
         headers: {
@@ -22,7 +22,7 @@ export function getPublishedProductsAPI(){
 }
 
 // 已完成
-export function getFinishedProductsAPI(){
+export const getFinishedProductsAPI = () => {
     return httpInstance({
         url: '/profiles/finished',
         headers: {
@@ -32,7 +32,7 @@ export function getFinishedProductsAPI(){
 }
 
 // 评价
-export function getCommentsAPI(){
+export const getCommentsAPI = () => {
     return httpInstance({
         url: '/profiles/comment',
         headers: {
@@ -42,7 +42,7 @@ export function getCommentsAPI(){
 }
 
 // 获取个人资料
-export function getUserInfoAPI(){
+export const getUserInfoAPI = () => {
     return httpInstance({
         url: '/profiles/info',
         headers: {

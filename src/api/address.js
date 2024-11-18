@@ -1,7 +1,7 @@
 import httpInstance from '@/utils/https'
 
 //获取地址列表
-export function getAddressListAPI() {
+export const getAddressListAPI = () => {
     return httpInstance({
         url: '/address',
         method: 'get', 
@@ -12,7 +12,7 @@ export function getAddressListAPI() {
 }
 
 // 添加新地址
-export function addAddressAPI(data) {
+export const addAddressAPI = (data) => {
     return httpInstance({
         url: '/address',
         method: 'post',
@@ -32,7 +32,7 @@ export function addAddressAPI(data) {
 }
 
 // 修改地址
-export function updateAddressAPI(id, updatedData) {
+export const updateAddressAPI = (id, updatedData) => {
     return httpInstance({
         url: `/address/${id}`,  
         method: 'put',
@@ -44,7 +44,7 @@ export function updateAddressAPI(id, updatedData) {
 }
 
 // 修改默认地址
-export function setDefaultAddressAPI(data) {
+export const setDefaultAddressAPI = (data) => {
     return httpInstance({
         url: `/address/setDefault/{id}`,  
         method: 'put',
@@ -56,7 +56,7 @@ export function setDefaultAddressAPI(data) {
 }
 
 // 删除地址
-export function deleteAddressAPI(id) {
+export const deleteAddressAPI = (id) => {
   return httpInstance({
     url: `/address/${id}`,  
     method: 'delete',

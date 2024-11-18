@@ -28,7 +28,7 @@ export function getPurchasedDataAPI(page, pageSize){
  * @param {每页最大信息条数 默认为5条} pageSize 
  * @returns 
  */
-export function getSelledDataAPI(page, pageSize){
+export const getSelledDataAPI = (page, pageSize) => {
     return httpInstance({
         url: '/orders/selled',
         params : {

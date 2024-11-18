@@ -25,21 +25,26 @@
         </el-form-item>
 
         <!-- 物品图片上传 -->
-        <el-form-item label="物品图片">
+        <el-form-item label="物品图片" prop="imageUrl">
           <el-upload
-            class="upload-demo"
-            drag
-            action="https://run.mocky.io/v3/9d059bf9-4660-45f2-925d-ce80ad6c4d15"
-            multiple
-            style="width: auto"
+            class="uploadPic"
+            list-type="picture-card"
+            action="#"
+            limit="2"
+            :http-request="upload"
+            :on-preview="handlePictureCardPreview"
+            :on-remove="handleRemove"
+            :disabled="imageLimited"
           >
-            <el-icon class="el-icon--upload"><upload-filled /></el-icon>
-            <div class="el-upload__text">将文件拖到此处或<em>点击上传</em></div>
+            <div class="el-upload__text"><em>上传图片</em></div>
             <template #tip>
-              <div class="el-upload__tip">jpg/png 文件，大小应小于 500kb</div>
+              <div class="el-upload__tip">jpg/png 文件，大小应小于 2MB</div>
             </template>
           </el-upload>
         </el-form-item>
+        <el-dialog v-model="picDialogVisible">
+          <img w-full :src="dialogImageUrl" alt="Preview Image" />
+        </el-dialog>
 
         <el-row>
           <!-- 物品类别 -->
@@ -52,9 +57,6 @@
                   :label="category.categoryName"
                   :value="category.categoryName"
                 ></el-option>
-                <!-- <el-option label="电子产品" value="电子产品"></el-option>
-                <el-option label="服装" value="服装"></el-option>
-                <el-option label="家具" value="家具"></el-option> -->
               </el-select>
             </el-form-item>
           </el-col>
@@ -151,8 +153,57 @@
 <script setup>
 import { ref, reactive, watch, computed } from 'vue'
 import areaObj from '../../public/area.json'
-import { UploadFilled } from '@element-plus/icons-vue'
 import { useCategoryStore } from '@/store/sortCategory'
+import axios from 'axios'
+import { postProductAPI } from '@/api/products'
+import { ElMessage } from 'element-plus'
+
+// 图片上传
+const imageLimited = ref(false) // 只能上传一张图片
+function upload(file) {
+  const formData = new FormData()
+  const timestamp = new Date().getTime()
+  const originalName = file.file.name
+  const extension = originalName.substring(originalName.lastIndexOf('.'))
+  const newFileName = `${originalName.replace(extension, '')}_${timestamp}${extension}`
+  console.log('新图片名:', newFileName)
+
+  formData.append('smfile', file.file, newFileName)
+  imageLimited.value = true //禁止下一张图片上传
+
+  return axios
+    .post('/api/v2/upload', formData, {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+        Authorization: 'OeXXrpbZISBaCBiL2g74WNPweSZkwODK'
+      }
+    })
+    .then((res) => {
+      if (res.data && res.data.data && res.data.data.url) {
+        console.log('图片上传成功:', res.data.data.url)
+        form.imageUrl = res.data.data.url // 更新表单中的图片 URL
+      } else if (res.data.success === false) {
+        console.log('图片重复', res.data.images)
+        form.imageUrl = res.data.images // 更新表单中的图片 URL
+      }
+    })
+    .catch((err) => {
+      console.error('图片上传失败:', err)
+    })
+}
+
+// 大图预览
+const dialogImageUrl = ref('')
+const picDialogVisible = ref(false)
+
+const handleRemove = (uploadFile, uploadFiles) => {
+  console.log(uploadFile, uploadFiles)
+}
+
+const handlePictureCardPreview = (uploadFile) => {
+  dialogImageUrl.value = uploadFile.url
+  picDialogVisible.value = true
+}
 
 const categoryStore = useCategoryStore()
 // 表单可见状态
@@ -163,7 +214,7 @@ let form = reactive({
   description: '',
   category: '',
   price: 0,
-
+  imageUrl: '',
   province: '广东省',
   city: '珠海市',
   area: '香洲区',
@@ -223,7 +274,8 @@ const rules = {
   description: [{ required: true, message: '请输入物品描述', trigger: 'blur' }],
   category: [{ required: true, message: '请选择物品类别', trigger: 'change' }],
   deliveryMethod: [{ required: true, message: '请选择配送方式', trigger: 'change' }],
-  price: [{ required: true, type: 'number', message: '请输入售价', trigger: 'blur' }]
+  price: [{ required: true, type: 'number', message: '请输入售价', trigger: 'blur' }],
+  imageUrl: [{ required: true, message: '请上传图片或等待上传完成', trigger: 'change' }]
 }
 
 // 表单引用
@@ -231,9 +283,14 @@ const formRef = ref(null)
 
 // 提交表单
 function submitForm() {
-  formRef.value.validate((valid) => {
+  formRef.value.validate(async (valid) => {
     if (valid) {
       console.log('提交的表单数据:', form)
+      const res = await postProductAPI(form)
+      if (res.data.code === 1) {
+        // const id = res.data.data.id //数据库返回的商品id
+        ElMessage.success('发布成功')
+      } else ElMessage.error('发布失败')
       dialogVisible.value = false // 关闭对话框
     } else {
       console.log('表单校验失败')

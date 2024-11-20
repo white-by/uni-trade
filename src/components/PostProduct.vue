@@ -1,10 +1,10 @@
 <template>
   <div>
     <!-- 发布物品按钮 -->
-    <el-button type="primary" @click="dialogVisible = true" round size="large">发布闲置</el-button>
+    <el-button type="primary" @click="openPostProductDialog" round size="large">发布闲置</el-button>
 
     <!-- 弹出表单对话框 -->
-    <el-dialog title="发布闲置" v-model="dialogVisible" width="50%" align-center center>
+    <el-dialog title="发布闲置" v-model="dialogVisible" width="50%" align-center center @close="closePostProductDialog">
       <el-form ref="formRef" :model="form" :rules="rules" label-width="120px" class="custom-form">
         <!-- 物品标题 -->
         <el-form-item label="物品标题" prop="title">
@@ -27,14 +27,15 @@
         <!-- 物品图片上传 -->
         <el-form-item label="物品图片" prop="imageUrl">
           <el-upload
+            ref="uploadRef"
             class="uploadPic"
             list-type="picture-card"
             action="#"
-            limit="2"
+            :limit="5"
             :http-request="upload"
             :on-preview="handlePictureCardPreview"
             :on-remove="handleRemove"
-            :disabled="imageLimited"
+            :on-success="onUploadSuccess"
           >
             <div class="el-upload__text"><em>上传图片</em></div>
             <template #tip>
@@ -151,27 +152,33 @@
 </template>
 
 <script setup>
-import { ref, reactive, watch, computed } from 'vue'
+import { ref, reactive, watch, computed, nextTick } from 'vue'
 import areaObj from '../../public/area.json'
 import { useCategoryStore } from '@/store/sortCategory'
 import axios from 'axios'
 import { postProductAPI } from '@/api/products'
 import { ElMessage } from 'element-plus'
 
+const categoryStore = useCategoryStore()
+
 // 图片上传
-const imageLimited = ref(false) // 只能上传一张图片
-function upload(file) {
+const uploadRef = ref(null)
+
+// 存储所有上传成功的图片 URL
+const uploadedImages = ref([])
+
+// 图片上传
+function upload(options) {
+  const { file, onSuccess, onError } = options // 获取回调函数
   const formData = new FormData()
   const timestamp = new Date().getTime()
-  const originalName = file.file.name
+  const originalName = file.name
   const extension = originalName.substring(originalName.lastIndexOf('.'))
   const newFileName = `${originalName.replace(extension, '')}_${timestamp}${extension}`
-  console.log('新图片名:', newFileName)
 
-  formData.append('smfile', file.file, newFileName)
-  imageLimited.value = true //禁止下一张图片上传
+  formData.append('smfile', file, newFileName)
 
-  return axios
+  axios
     .post('/api/v2/upload', formData, {
       headers: {
         'Content-Type': 'multipart/form-data',
@@ -181,45 +188,89 @@ function upload(file) {
     .then((res) => {
       if (res.data && res.data.data && res.data.data.url) {
         console.log('图片上传成功:', res.data.data.url)
-        form.imageUrl = res.data.data.url // 更新表单中的图片 URL
-      } else if (res.data.success === false) {
-        console.log('图片重复', res.data.images)
-        form.imageUrl = res.data.images // 更新表单中的图片 URL
+
+        // 调用 onSuccess 回调，传递响应和文件对象
+        onSuccess(res.data, file)
+      } else if (res.data.code === 'image_repeated') {
+        const repeatedImageUrl = res.data.images // 重复图片的 URL
+        console.warn('图片重复，使用已存在的图片:', repeatedImageUrl)
+        onSuccess({ data: { url: repeatedImageUrl } }, file) // 模拟成功回调
+      } else {
+        console.error('图片上传失败:', res)
+        onError(new Error('上传失败'))
       }
     })
     .catch((err) => {
-      console.error('图片上传失败:', err)
+      console.error('图片上传出错:', err)
+      onError(err) // 调用 onError 回调
     })
+}
+
+function onUploadSuccess(response, file) {
+  const uploadedUrl = response.data.url
+  if (uploadedUrl) {
+    file.url = uploadedUrl // 为文件对象绑定真实 URL
+    uploadedImages.value.push(uploadedUrl) // 添加到已上传图片列表
+    form.imageUrl = uploadedImages.value.join(',') // 更新拼接字符串
+    console.log('上传成功，当前图片列表:', form.imageUrl)
+  } else {
+    console.error('服务器返回的 URL 数据为空:', response)
+  }
+}
+
+// 删除图片
+function handleRemove(file) {
+  const urlToRemove = file.url
+  console.log('删除图片:', file.url)
+  if (!urlToRemove) {
+    console.error('无法找到需要删除的文件 URL')
+    return
+  }
+  // 查找 URL 并删除
+  const index = uploadedImages.value.findIndex((url) => url === urlToRemove)
+  if (index > -1) {
+    uploadedImages.value.splice(index, 1) // 从数组中删除该 URL
+    form.imageUrl = uploadedImages.value.join(',') // 更新拼接字符串
+    console.log('删除后图片列表:', form.imageUrl)
+  } else {
+    console.error('要删除的图片 URL 未找到:', urlToRemove)
+  }
 }
 
 // 大图预览
 const dialogImageUrl = ref('')
 const picDialogVisible = ref(false)
 
-const handleRemove = (uploadFile, uploadFiles) => {
-  console.log(uploadFile, uploadFiles)
-}
-
 const handlePictureCardPreview = (uploadFile) => {
   dialogImageUrl.value = uploadFile.url
   picDialogVisible.value = true
 }
 
-const categoryStore = useCategoryStore()
-// 表单可见状态
+// 打开表单
 const dialogVisible = ref(false)
+const openPostProductDialog = () => {
+  dialogVisible.value = true
+  resetForm()
+}
+
+// 关闭表单
+const closePostProductDialog = () => {
+  dialogVisible.value = false
+  resetForm()
+}
+
 // 表单数据
 let form = reactive({
   title: '',
   description: '',
-  category: '',
+  category: null,
   price: 0,
   imageUrl: '',
   province: '广东省',
   city: '珠海市',
   area: '香洲区',
   detailArea: '',
-  deliveryMethod: '',
+  deliveryMethod: null,
   shippingCost: 0
 })
 
@@ -275,7 +326,24 @@ const rules = {
   category: [{ required: true, message: '请选择物品类别', trigger: 'change' }],
   deliveryMethod: [{ required: true, message: '请选择配送方式', trigger: 'change' }],
   price: [{ required: true, type: 'number', message: '请输入售价', trigger: 'blur' }],
-  imageUrl: [{ required: true, message: '请上传图片或等待上传完成', trigger: 'change' }]
+  imageUrl: [{ required: true, message: '请上传图片或等待上传完成', trigger: 'blur' }]
+}
+
+// 清空表单
+const resetForm = () => {
+  form.title = ''
+  form.description = ''
+  form.category = null
+  form.price = 0
+  form.imageUrl = ''
+  form.province = '广东省'
+  form.city = '珠海市'
+  form.area = '香洲区'
+  form.detailArea = ''
+  form.deliveryMethod = null
+  form.shippingCost = 0
+  nextTick(() => formRef.value?.clearValidate())
+  nextTick(() => uploadRef.value?.clearFiles()) // 清空上传列表
 }
 
 // 表单引用
@@ -285,13 +353,14 @@ const formRef = ref(null)
 function submitForm() {
   formRef.value.validate(async (valid) => {
     if (valid) {
-      console.log('提交的表单数据:', form)
       const res = await postProductAPI(form)
       if (res.data.code === 1) {
         // const id = res.data.data.id //数据库返回的商品id
         ElMessage.success('发布成功')
-      } else ElMessage.error('发布失败')
-      dialogVisible.value = false // 关闭对话框
+      } else {
+        ElMessage.error('发布失败')
+      }
+      dialogVisible.value = false
     } else {
       console.log('表单校验失败')
       return false

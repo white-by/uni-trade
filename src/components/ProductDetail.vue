@@ -124,15 +124,16 @@ import { ElMessage } from 'element-plus'
 
 const product = ref({})
 const route = useRoute()
+const isStarred = ref(false)
 const getProducts = async () => {
   const res = await getDetail(route.params.id)
   product.value = res.data.data
-  //console.log('测试: ', product.value)
+  isStarred.value = product.value.isStarred
+  console.log('测试: ', product.value)
 }
 onMounted(() => getProducts())
 
 // 收藏
-const isStarred = ref(false)
 let isThrottled = false // 用于控制节流状态
 
 const toggleStarred = () => {
@@ -140,6 +141,8 @@ const toggleStarred = () => {
 
   isThrottled = true
   isStarred.value = !isStarred.value
+  product.value.isStarred = isStarred.value
+  console.log('product.value.isStarred:', product.value.isStarred)
 
   if (isStarred.value) {
     ElMessage({

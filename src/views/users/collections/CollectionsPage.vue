@@ -41,10 +41,16 @@ let pageSize = ref(5) //每页最大展示条数
 const total = ref(0)
 const collectionList = ref([])
 const getCollectionList = async () => {
-  const res = await getCollectionListAPI(pageNum, pageSize)
+  const res = await getCollectionListAPI(pageNum.value, pageSize.value)
   console.log('API返回数据', res)
   collectionList.value = res.data.data.collectionList
   total.value = res.data.data.total
+}
+
+// 页码变化处理
+const handlePageChange = (pageNum) => {
+  pageNum.value = pageNum
+  getCollectionList() // 页码变化时重新获取数据
 }
 
 onMounted(() => {

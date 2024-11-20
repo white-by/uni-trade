@@ -102,7 +102,7 @@
 import UserNav from '@/components/UserNav.vue'
 import UserFooter from '@/components/UserFooter.vue'
 import AreaComponets from '@/components/AreaComponets.vue'
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, nextTick } from 'vue'
 import {
   getAddressListAPI,
   addAddressAPI,
@@ -200,6 +200,8 @@ const submitAddressForm = () => {
     }
   })
 }
+
+// 添加地址对话框地址组件ref
 const _areaComponentRef = ref(null)
 const resetAddForm = () => {
   newAddress.value = {
@@ -230,13 +232,16 @@ const editForm = ref({
   isDefault: 0
 })
 
+// 修改地址对话框地址组件ref
 const areaComponentRef = ref(null)
 const openEditDialog = (row) => {
   editDialogVisible.value = true
   editForm.value = { ...row }
-  if (areaComponentRef.value) {
-    areaComponentRef.value.setAddress(editForm.value.province, editForm.value.city, editForm.value.area)
-  }
+  nextTick(() => {
+    if (areaComponentRef.value) {
+      areaComponentRef.value.setAddress(editForm.value.province, editForm.value.city, editForm.value.area)
+    }
+  })
 }
 
 const editAddressFormRef = ref(null)

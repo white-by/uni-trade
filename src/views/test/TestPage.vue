@@ -101,17 +101,17 @@ onMounted(() => {
 
 .avatar-uploader {
   position: absolute;
-  bottom: 0;
-  right: calc(50% - 20px); /* 图标居中对齐 */
+  bottom: 10;
+
   cursor: pointer;
 }
 
 .avatar-uploader-icon {
-  font-size: 24px;
+  font-size: 54px;
   color: #fff;
   background: rgba(0, 0, 0, 0.6);
   border-radius: 50%;
-  padding: 5px;
+  padding: 50px;
 }
 
 .form {

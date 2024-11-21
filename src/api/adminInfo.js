@@ -1,7 +1,7 @@
 import httpInstance from '@/utils/https'
 
 /**
- * 获取用户列表
+ * 获取管理员列表
  * @param params
  * @returns
  */
@@ -13,7 +13,7 @@ export const getAdminListApi = (params) => {
 }
 
 /**
- * 新增用户
+ * 新增管理员
  * @param adminData
  * @returns
  */
@@ -25,7 +25,7 @@ export const addAdminApi = (adminData) => {
   })
 }
 /**
- * 编辑用户
+ * 编辑管理员
  * @param adminData
  * @returns
  */
@@ -37,6 +37,8 @@ export const editAdminApi = (adminData) => {
   })
 }
 
+
+// 删除管理员
 export const deleteAdminApi = (adaminID) => {
   return httpInstance({
     url: `/admin/adminInfo/${adaminID}`,

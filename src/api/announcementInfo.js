@@ -39,8 +39,8 @@ export const editAnnouncementApi = (announcementData) => {
 }
 
 /**
- * 编辑公告
- * @param commentData
+ * 删除公告
+ * @param announcementID
  * @returns
  */
 export const deleteAnnouncementApi = (announcementID) => {

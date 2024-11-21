@@ -4,7 +4,7 @@
 import { ref, onMounted } from 'vue'
 import { Search } from '@element-plus/icons-vue'
 
-import { getOrderListApi } from '@/api/productInfo'
+import { getOrderListApi } from '@/api/saleInfo'
 
 const queryForm = ref({
   searchQuery: '',

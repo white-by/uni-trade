@@ -36,6 +36,7 @@ export const editUserApi = (userData) => {
   })
 }
 
+// 删除用户
 export const deleteUserApi = (userID) => {
   return httpInstance({
     url: `/admin/usersInfo/${userID}`,

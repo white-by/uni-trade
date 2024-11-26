@@ -14,8 +14,10 @@ watch(
       activeIndex.value = '1'
     } else if (newPath === '/profiles/finished') {
       activeIndex.value = '2'
-    } else if (newPath === '/profiles/comment') {
+    } else if (newPath === '/profiles/receivedComment') {
       activeIndex.value = '3'
+    } else if (newPath === '/profiles/givenComment') {
+      activeIndex.value = '4'
     }
   },
   { immediate: true }
@@ -29,7 +31,9 @@ function menuSelect(index) {
   } else if (index === '2') {
     router.push('/profiles/finished')
   } else if (index === '3') {
-    router.push('/profiles/comment')
+    router.push('/profiles/receivedComment')
+  } else if (index === '4') {
+    router.push('/profiles/givenComment')
   }
 }
 </script>
@@ -44,7 +48,10 @@ function menuSelect(index) {
         <router-link to="/profiles/finished">已完成</router-link>
       </el-menu-item>
       <el-menu-item index="3">
-        <router-link to="/profiles/comment">交易评价</router-link>
+        <router-link to="/profiles/receivedComment">收到的评价</router-link>
+      </el-menu-item>
+      <el-menu-item index="4">
+        <router-link to="/profiles/givenComment">发布的评价</router-link>
       </el-menu-item>
     </el-menu>
   </div>

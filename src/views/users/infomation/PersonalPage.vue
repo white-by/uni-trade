@@ -2,7 +2,7 @@
   <UserNav />
   <div class="content">
     <br /><br />
-    <el-form :model="userInfo" label-width="40px" class="form" style="max-width: 600px">
+    <el-form :model="userInfo" :rules="rules" ref="formRef" label-width="60px" class="form" style="max-width: 600px">
       <div class="avatar-container" @click="selectAvatar">
         <el-avatar :size="130" :src="userInfo.picture" />
         <input type="file" ref="fileInput" @change="onFileChange" style="display: none" accept="image/*" />
@@ -12,11 +12,11 @@
         <el-input v-model="userInfo.userID" disabled />
       </el-form-item>
 
-      <el-form-item label="昵称">
+      <el-form-item label="昵称" prop="userName">
         <el-input v-model="userInfo.userName" />
       </el-form-item>
 
-      <el-form-item label="密码">
+      <el-form-item label="密码" prop="password">
         <el-input v-model="userInfo.password" :type="addPassFlag ? 'text' : 'password'">
           <template #suffix>
             <span @click="addPassFlag = !addPassFlag">
@@ -42,7 +42,7 @@
         <el-input v-model="userInfo.mail" disabled />
       </el-form-item>
 
-      <el-form-item label="电话">
+      <el-form-item label="电话" prop="tel">
         <el-input v-model="userInfo.tel" />
       </el-form-item>
 
@@ -75,6 +75,22 @@ const getUserInfo = async () => {
   // console.log('解密后：', res.data.data.password)
   userInfo.value = res.data.data
   fetchAvatar()
+}
+
+// 表单引用
+const formRef = ref(null)
+
+// 表单验证规则
+const rules = {
+  userName: [{ required: true, message: '请输入用户名', trigger: 'blur' }],
+  tel: [
+    { required: true, message: '请输入电话', trigger: 'blur' },
+    { pattern: /^[0-9]{11}$/, message: '请输入有效的电话号码', trigger: 'blur' }
+  ],
+  password: [
+    { required: true, message: '请输入密码', trigger: 'blur' },
+    { pattern: /^[a-zA-Z0-9_]{6,16}$/, message: '密码只能包含数字、字母和下划线，长度为6-16位', trigger: 'blur' }
+  ]
 }
 
 onMounted(() => {
@@ -112,22 +128,29 @@ function selectAvatar() {
 
 // 提交修改
 const onSubmit = async () => {
-  const updatedData = {
-    userID: userInfo.value.userID,
-    userName: userInfo.value.userName,
-    password: encrypt(userInfo.value.password),
-    picture: userInfo.value.picture,
-    gender: userInfo.value.gender,
-    tel: userInfo.value.tel
-  }
-  console.log('更新的数据：', updatedData)
-  const res = await editUserInfoAPI(updatedData)
-  if (res.data.code === 1) {
-    ElMessage({
-      type: 'success',
-      message: '修改成功'
-    })
-  } else ElMessage.error('修改失败')
+  formRef.value.validate(async (valid) => {
+    if (valid) {
+      const updatedData = {
+        userID: userInfo.value.userID,
+        userName: userInfo.value.userName,
+        password: encrypt(userInfo.value.password),
+        picture: userInfo.value.picture,
+        gender: userInfo.value.gender,
+        tel: userInfo.value.tel
+      }
+      console.log('更新的数据：', updatedData)
+      const res = await editUserInfoAPI(updatedData)
+      if (res.data.code === 1) {
+        ElMessage({
+          type: 'success',
+          message: '修改成功'
+        })
+      } else ElMessage.error('修改失败')
+    } else {
+      console.log('表单校验失败')
+      return false
+    }
+  })
 }
 </script>
 

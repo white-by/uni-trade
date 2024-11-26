@@ -31,10 +31,20 @@ export const getFinishedProductsAPI = () => {
     })
 }
 
-// 评价
-export const getCommentsAPI = () => {
+// 我收到的评价
+export const getReceivedCommentsAPI = () => {
     return httpInstance({
-        url: '/profiles/comment',
+        url: '/profiles/comment/received',
+        headers: {
+            Authorization: `Bearer ${localStorage.getItem('token')}`, 
+        }
+    })
+}
+
+// 我发布的评价
+export const getGivenCommentsAPI = () => {
+    return httpInstance({
+        url: '/profiles/comment/given',
         headers: {
             Authorization: `Bearer ${localStorage.getItem('token')}`, 
         }

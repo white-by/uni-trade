@@ -1,3 +1,5 @@
+<!-- 给出的评价 -->
+
 <script setup>
 import ProfilesNav from './components/ProfilesNav.vue'
 import { useProfilesStore } from '@/store/profilesStore'
@@ -31,7 +33,7 @@ const timeAgo = (time) => {
       <ProfilesNav />
     </div>
     <div class="comment-container">
-      <div v-for="comment in profilesStore.comments" :key="comment.commentID" class="comment-item">
+      <div v-for="comment in profilesStore.givenComments" :key="comment.commentID" class="comment-item">
         <el-avatar :src="comment.commentatorAvatar" class="avatar" />
         <div class="comment-details">
           <div class="comment-header">

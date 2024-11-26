@@ -39,7 +39,7 @@
           >
             <div class="el-upload__text"><em>上传图片</em></div>
             <template #tip>
-              <div class="el-upload__tip">jpg/png 文件，大小应小于 2MB</div>
+              <div class="el-upload__tip">请上传大小不超过 2MB 的 JPG / PNG 格式图片，最多 5 张</div>
             </template>
           </el-upload>
         </el-form-item>

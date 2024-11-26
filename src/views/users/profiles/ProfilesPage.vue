@@ -15,7 +15,8 @@ onMounted(() => {
     profilesStore.getIntroduction(),
     profilesStore.getPublishedProducts(),
     profilesStore.getFinishedProducts(),
-    profilesStore.getComments()
+    profilesStore.getReceivedComments(),
+    profilesStore.getGivenComments()
 })
 </script>
 

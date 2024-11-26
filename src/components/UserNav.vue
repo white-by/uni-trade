@@ -60,7 +60,9 @@ const confirmLogout = async () => {
               </span>
               <template #dropdown>
                 <el-dropdown-menu>
-                  <router-link to="/profiles/comment"><el-dropdown-item>个人中心</el-dropdown-item></router-link>
+                  <router-link to="/profiles/receivedComment"
+                    ><el-dropdown-item>个人中心</el-dropdown-item></router-link
+                  >
                   <router-link to="/user/order"><el-dropdown-item>我的订单</el-dropdown-item></router-link>
                   <router-link to="/profiles/published"><el-dropdown-item>我的商品</el-dropdown-item></router-link>
                   <router-link to="/user/address"><el-dropdown-item>我的地址</el-dropdown-item></router-link>

@@ -51,16 +51,16 @@ const rules = ref({
   password: [
     { required: true, message: '请输入密码', trigger: 'blur' },
     {
-      min: 5,
-      max: 20,
-      message: '长度应为 5 到 20 位',
+      min: 6,
+      max: 16,
+      message: '长度应为 6 到 16 位',
       trigger: 'blur'
     },
     {
       validator: (rule, value, callback) => {
-        const regex = /^[A-Za-z0-9]+$/ // 只允许字母和数字
+        const regex = /^[a-zA-Z0-9_]{6,16}$/
         if (value && !regex.test(value)) {
-          callback(new Error('密码只能由字母和数字组成。'))
+          callback(new Error('密码只能由字母、数字和下划线组成。'))
         } else {
           callback() // 验证通过
         }

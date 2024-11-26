@@ -48,7 +48,7 @@ const rules = {
   mail: [{ required: true, message: '请输入邮箱', trigger: 'blur' }],
   tel: [
     { required: true, message: '请输入电话', trigger: 'blur' },
-    { pattern: /^[0-9]+$/, message: '电话号码只能包含数字', trigger: 'blur' }
+    { pattern: /^[0-9]{11}$/, message: '请输入有效的电话号码', trigger: 'blur' }
   ],
   gender: [{ required: true, message: '请选择性别', trigger: 'change' }],
   status: [{ required: true, message: '请选择用户状态', trigger: 'change' }]

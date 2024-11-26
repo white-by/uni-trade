@@ -46,7 +46,7 @@ const rules = {
   ],
   tel: [
     { required: true, message: '请输入电话', trigger: 'blur' },
-    { pattern: /^[0-9]+$/, message: '电话号码只能包含数字', trigger: 'blur' }
+    { pattern: /^[0-9]{11}$/, message: '请输入有效的电话号码', trigger: 'blur' }
   ],
   gender: [{ required: true, message: '请选择性别', trigger: 'change' }]
 }

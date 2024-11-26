@@ -8,7 +8,8 @@ import RegisterUser from '@/views/login/RegisterUser.vue'
 import Detail from '@/views/detail/DetailPage.vue'
 import Order from '@/views/users/orders/OrderPage.vue'
 import ProfilesPage from '@/views/users/profiles/ProfilesPage.vue'
-import ProfilesComment from '@/views/users/profiles/ProfilesComment.vue'
+import ReceivedComments from '@/views/users/profiles/ReceivedComments.vue'
+import GivenComments from '@/views/users/profiles/GivenComments.vue'
 import ProfilesPublished from '@/views/users/profiles/ProfilesPublished.vue'
 import ProfilesFinished from '@/views/users/profiles/ProfilesFinished.vue'
 import AddressPage from '@/views/users/address/AddressPage.vue'
@@ -54,8 +55,12 @@ const router = createRouter({
           component: ProfilesFinished
         },
         {
-          path: 'comment',
-          component: ProfilesComment
+          path: 'receivedComment',
+          component: ReceivedComments
+        },
+        {
+          path: 'givenComment',
+          component: GivenComments
         }
       ]
     },

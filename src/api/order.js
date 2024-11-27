@@ -40,3 +40,33 @@ export const getSelledDataAPI = (page, pageSize) => {
         }
     })
 }
+
+// 订单操作
+export const operateOrderAPI = (Data) => {
+    return httpInstance({
+        url: `/orders/operate/${Data.id}`,
+        method: 'post',
+        data: Data,
+         headers: {
+            Authorization: `Bearer ${localStorage.getItem('token')}`, 
+        }
+    })
+}
+
+// 订单操作
+export const editAddressAPI = (Data) => {
+    return httpInstance({
+        url: `/orders/address/${Data.tradeID}`,
+        method: 'post',
+        data: {
+            id: Data.tradeID,
+            province: Data.province,
+            city: Data.city,
+            area: Data.area,
+            detailArea: Data.detailArea
+        },
+         headers: {
+            Authorization: `Bearer ${localStorage.getItem('token')}`, 
+        }
+    })
+}

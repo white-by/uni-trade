@@ -1,3 +1,5 @@
+<!-- 暂时删掉了卖家的评价功能，目前只有买家能评价 -->
+
 <template>
   <UserNav />
   <!-- 我买到的 -->
@@ -58,7 +60,7 @@
               size="small"
               type="primary"
               plain
-              @click="openEditDialog(scope.row)"
+              @click="openAddressEditDialog(scope.row)"
             >
               修改地址
             </el-button>
@@ -68,7 +70,7 @@
               size="small"
               type="primary"
               plain
-              @click="handleComfirm(scope.$index, scope.row)"
+              @click="handleReceiving(scope.$index, scope.row)"
             >
               确认收货
             </el-button>
@@ -77,7 +79,7 @@
               size="small"
               type="primary"
               plain
-              @click="handleComment(scope.$index, scope.row)"
+              @click="showCommentDialog(scope.row)"
             >
               去评价
             </el-button>
@@ -85,7 +87,7 @@
               v-if="scope.row.status == '未发货' || scope.row.status == '已发货'"
               size="small"
               type="danger"
-              @click="handleRefund(scope.$index, scope.row)"
+              @click="showRefundDialog(scope.row)"
             >
               退款
             </el-button>
@@ -133,7 +135,35 @@
       </el-form-item>
 
       <span class="dialog-footer" style="display: flex; justify-content: center">
-        <el-button type="primary" @click="confirmEdit">确认修改</el-button>
+        <el-button type="primary" @click="confirmAddressEdit">确认修改</el-button>
+      </span>
+    </el-dialog>
+
+    <!-- 评价对话框 -->
+    <el-dialog title="评价内容" v-model="commentDialogVisible" width="400px" @close="resetCommentForm">
+      <el-input
+        v-model="comment"
+        placeholder="请输入评价内容"
+        :rows="3"
+        type="textarea"
+        style="margin-bottom: 10px"
+      ></el-input>
+      <span class="dialog-footer" style="display: flex; justify-content: center">
+        <el-button type="primary" @click="handleComment">确 定</el-button>
+      </span>
+    </el-dialog>
+
+    <!-- 退款对话框 -->
+    <el-dialog title="退款理由" v-model="refundDialogVisible" width="400px" @close="resetRefundForm">
+      <el-input
+        v-model="refundReason"
+        placeholder="请条理清晰地填写退款理由。纠纷订单将交付管理员处理。"
+        :rows="3"
+        type="textarea"
+        style="margin-bottom: 10px"
+      ></el-input>
+      <span class="dialog-footer" style="display: flex; justify-content: center">
+        <el-button type="primary" @click="handleRefund">确 定</el-button>
       </span>
     </el-dialog>
   </div>
@@ -204,25 +234,17 @@
               v-if="scope.row.status == '未发货'"
               size="small"
               type="danger"
-              @click="handleComfirm(scope.$index, scope.row)"
+              @click="handleCancelOrder(scope.$index, scope.row)"
             >
               取消订单
             </el-button>
-            <el-button
-              v-if="scope.row.status == '交易完成'"
-              size="small"
-              type="primary"
-              plain
-              @click="handleComment(scope.$index, scope.row)"
-            >
-              去评价
-            </el-button>
+
             <el-button
               v-if="scope.row.status == '退款中'"
               size="small"
               type="primary"
               plain
-              @click="handleCancelRefund(scope.$index, scope.row)"
+              @click="handleAcceptRefund(scope.$index, scope.row)"
             >
               同意退款
             </el-button>
@@ -230,13 +252,27 @@
               v-if="scope.row.status == '退款中'"
               size="small"
               type="danger"
-              @click="handleCancelRefund(scope.$index, scope.row)"
+              @click="showRejectRefundDialog(scope.row)"
             >
               拒绝退款
             </el-button>
           </template></el-table-column
         >
       </el-table>
+
+      <!-- 拒绝退款对话框 -->
+      <el-dialog title="拒绝退款理由" v-model="rejectRefundDialogVisible" width="400px" @close="resetRefundForm">
+        <el-input
+          v-model="refundReason"
+          placeholder="请条理清晰地填写拒绝退款理由。纠纷订单将交付管理员处理。"
+          :rows="3"
+          type="textarea"
+          style="margin-bottom: 10px"
+        ></el-input>
+        <span class="dialog-footer" style="display: flex; justify-content: center">
+          <el-button type="primary" @click="handleRejectRefund">确 定</el-button>
+        </span>
+      </el-dialog>
 
       <!-- 分页 -->
       <div>
@@ -258,9 +294,10 @@
 <script setup>
 import UserNav from '@/components/UserNav.vue'
 import UserFooter from '@/components/UserFooter.vue'
-import { onMounted, ref } from 'vue'
+import { onMounted, ref, reactive, nextTick } from 'vue'
 import AreaComponets from '@/components/AreaComponets.vue'
-import { getPurchasedDataAPI, getSelledDataAPI } from '@/api/order.js'
+import { getPurchasedDataAPI, getSelledDataAPI, operateOrderAPI, editAddressAPI } from '@/api/order.js'
+import { ElMessage } from 'element-plus'
 
 // 从接口拿取“我买到的”订单信息
 let purchasedPageNum = ref(1) //表格页码
@@ -296,6 +333,213 @@ const handleSelledPageChange = (page) => {
   getSelledData()
 }
 
+// 对话框状态
+const commentDialogVisible = ref(false)
+const refundDialogVisible = ref(false)
+const rejectRefundDialogVisible = ref(false)
+
+// 当前操作的订单信息
+const currentOrder = reactive({
+  id: null,
+  targetStatus: ''
+})
+
+// 评价和退款的输入内容
+const comment = ref('')
+const refundReason = ref('')
+
+// 重置评价表单数据
+const resetCommentForm = () => {
+  comment.value = ''
+}
+
+// 重置退款表单数据
+const resetRefundForm = () => {
+  refundReason.value = ''
+}
+
+// 显示评价对话框
+const showCommentDialog = (order) => {
+  currentOrder.id = order.tradeID
+  currentOrder.targetStatus = '已评价'
+  commentDialogVisible.value = true
+}
+
+// 显示退款对话框
+const showRefundDialog = (order) => {
+  currentOrder.id = order.tradeID
+  currentOrder.targetStatus = '退款中'
+  refundDialogVisible.value = true
+}
+
+// 显示拒绝退款对话框
+const showRejectRefundDialog = (order) => {
+  currentOrder.id = order.tradeID
+  currentOrder.targetStatus = '处理中'
+  rejectRefundDialogVisible.value = true
+}
+
+// 确认评价
+const handleComment = async () => {
+  if (!comment.value) {
+    ElMessage.warning('请输入评价内容')
+    return
+  }
+
+  const res = await operateOrderAPI({
+    id: currentOrder.id,
+    status: currentOrder.targetStatus,
+    comment: comment.value
+  })
+  if (res.data.code === 1) {
+    ElMessage.success('评价成功！')
+    // 最新状态
+    const currentStatus = res.data.data.status
+    // 查找表格中对应的订单并更新状态 插入哪张表？？要不就只有买家能评价吧
+    const order = purchasedData.value.find((item) => item.tradeID === currentOrder.id)
+    if (order) {
+      order.status = currentStatus // 更新表格数据的状态
+    }
+  } else {
+    ElMessage.error('网络请求失败')
+  }
+  commentDialogVisible.value = false
+}
+
+// 退款
+const handleRefund = async () => {
+  if (!refundReason.value) {
+    ElMessage.warning('请输入退款理由')
+    return
+  }
+
+  const res = await operateOrderAPI({
+    id: currentOrder.id,
+    status: currentOrder.targetStatus,
+    refundReason: refundReason.value
+  })
+  if (res.data.code === 1) {
+    ElMessage.success('退款申请成功！')
+    // 最新状态
+    const currentStatus = res.data.data.status
+    // 查找表格中对应的订单并更新状态
+    const order = purchasedData.value.find((item) => item.tradeID === currentOrder.id)
+    if (order) {
+      order.status = currentStatus
+    }
+  } else {
+    ElMessage.error('网络请求失败')
+  }
+  refundDialogVisible.value = false
+}
+
+// 确认收货
+const handleReceiving = async (index, row) => {
+  const res = await operateOrderAPI({
+    id: row.tradeID,
+    status: '交易完成'
+  })
+  if (res.data.code === 1) {
+    ElMessage.success('收货成功！')
+    // 最新状态
+    const currentStatus = res.data.data.status
+    row.status = currentStatus
+  } else {
+    ElMessage.error('网络请求失败')
+  }
+}
+
+// 取消退款
+const handleCancelRefund = async (index, row) => {
+  const res = await operateOrderAPI({
+    id: row.tradeID, // 使用订单ID
+    status: '退款的上一个状态' // 操作的目标状态
+  })
+  if (res.data.code === 1) {
+    ElMessage.success('取消退款成功！')
+    // 最新状态
+    const currentStatus = res.data.data.status
+    row.status = currentStatus
+  } else {
+    ElMessage.error('网络请求失败')
+  }
+}
+
+// 去发货
+const handleDispatch = async (row) => {
+  const res = await operateOrderAPI({
+    id: row.tradeID,
+    status: '已发货'
+  })
+  if (res.data.code === 1) {
+    ElMessage.success('发货成功！')
+    // 最新状态
+    const currentStatus = res.data.data.status
+    row.status = currentStatus
+  } else {
+    ElMessage.error('网络请求失败')
+  }
+}
+
+// 取消订单
+const handleCancelOrder = async (index, row) => {
+  const res = await operateOrderAPI({
+    id: row.tradeID,
+    status: '已取消'
+  })
+  if (res.data.code === 1) {
+    ElMessage.success('取消订单成功！')
+    // 最新状态
+    const currentStatus = res.data.data.status
+    row.status = currentStatus
+  } else {
+    ElMessage.error('网络请求失败')
+  }
+}
+
+// 同意退款
+const handleAcceptRefund = async (index, row) => {
+  const res = await operateOrderAPI({
+    id: row.tradeID,
+    status: '已退款'
+  })
+  if (res.data.code === 1) {
+    ElMessage.success('已同意退款')
+    // 最新状态
+    const currentStatus = res.data.data.status
+    row.status = currentStatus
+  } else {
+    ElMessage.error('网络请求失败')
+  }
+}
+
+// 拒绝退款
+const handleRejectRefund = async () => {
+  if (!refundReason.value) {
+    ElMessage.warning('请输入退款理由')
+    return
+  }
+
+  const res = await operateOrderAPI({
+    id: currentOrder.id,
+    status: '处理中',
+    refundReason: refundReason.value
+  })
+  if (res.data.code === 1) {
+    ElMessage.success('拒绝退款，移交管理员处理')
+    // 最新状态
+    const currentStatus = res.data.data.status
+    // 查找表格中对应的订单并更新状态
+    const order = selledData.value.find((item) => item.tradeID === currentOrder.id)
+    if (order) {
+      order.status = currentStatus
+    }
+  } else {
+    ElMessage.error('网络请求失败')
+  }
+  rejectRefundDialogVisible.value = false
+}
+
 onMounted(() => {
   getPurchasedData(), getSelledData()
 })
@@ -311,21 +555,38 @@ const editForm = ref({
   detailArea: ''
 })
 
-const openEditDialog = (row) => {
+const openAddressEditDialog = (row) => {
   dialogVisible.value = true
-  editForm.value = { ...row }
+  editForm.value = {
+    tradeID: row.tradeID,
+    province: row.shippingAddress.province,
+    city: row.shippingAddress.city,
+    area: row.shippingAddress.area,
+    detailArea: row.shippingAddress.detailArea
+  }
+  nextTick(() => {
+    if (areaComponentRef.value) {
+      areaComponentRef.value.setAddress(editForm.value.province, editForm.value.city, editForm.value.area)
+    }
+  })
 }
 
-const confirmEdit = () => {
-  // 更新订单数据中的地址信息
-  const order = purchasedData.value.find((item) => item.tradeID === editForm.value.tradeID)
-  if (order) {
-    order.shippingAddress.province = editForm.value.province
-    order.shippingAddress.city = editForm.value.city
-    order.shippingAddress.area = editForm.value.area
-    order.shippingAddress.detailArea = editForm.value.detailArea
-    console.log('更新后的地址信息：', order.shippingAddress)
+const confirmAddressEdit = async () => {
+  const res = await editAddressAPI(editForm.value)
+  if (res.data.code === 1) {
+    ElMessage.success('修改成功')
+    // 更新订单数据中的地址信息
+    const order = purchasedData.value.find((item) => item.tradeID === editForm.value.tradeID)
+    if (order) {
+      order.shippingAddress.province = editForm.value.province
+      order.shippingAddress.city = editForm.value.city
+      order.shippingAddress.area = editForm.value.area
+      order.shippingAddress.detailArea = editForm.value.detailArea
+    }
+  } else {
+    ElMessage.error('网络请求失败')
   }
+
   dialogVisible.value = false
   resetForm()
 }
@@ -336,6 +597,5 @@ const resetForm = () => {
   if (areaComponentRef.value) {
     areaComponentRef.value.resetAddress()
   }
-  console.log('已重置表单数据')
 }
 </script>

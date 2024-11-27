@@ -3,8 +3,18 @@ import { ArrowDown, Search } from '@element-plus/icons-vue'
 import { ElMessageBox } from 'element-plus'
 import { useRouter } from 'vue-router'
 import { ref } from 'vue'
+import AnnouncementBoard from './AnnouncementBoard.vue'
 
 let input = ref('')
+const dialogTableVisible = ref(false)
+// 模拟是否有新公告
+const hasNewAnnouncement = ref(true) // true 表示有新公告，false 表示没有新公告
+
+// 当用户查看公告时，关闭小红点
+function markAsRead() {
+  hasNewAnnouncement.value = false
+  dialogTableVisible.value = true
+}
 
 const router = useRouter()
 
@@ -40,9 +50,15 @@ const confirmLogout = async () => {
           />
         </div>
         <template v-if="true">
+          <!-- 使用el-badge显示小红点 -->
           <li>
-            <a href="javascript:;"><i class="iconfont icon-announcement"></i></a>
+            <el-badge is-dot :offset="[-15, 5]" :hidden="!hasNewAnnouncement">
+              <a href="javascript:;" @click="markAsRead">
+                <i class="iconfont icon-announcement"></i>
+              </a>
+            </el-badge>
           </li>
+
           <li>
             <router-link to="/"><i class="iconfont icon-shop"></i></router-link>
           </li>
@@ -84,6 +100,10 @@ const confirmLogout = async () => {
       </ul>
     </div>
   </nav>
+  <!-- 公告弹窗 -->
+  <el-dialog v-model="dialogTableVisible" title="公告栏" width="800">
+    <AnnouncementBoard />
+  </el-dialog>
 </template>
 
 <style scoped lang="scss">

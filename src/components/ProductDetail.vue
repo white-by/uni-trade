@@ -2,7 +2,11 @@
   <div style="display: flex; gap: 30px; padding: 50px">
     <!-- 左侧商品展示卡片 -->
     <div style="width: 50%">
-      <img class="product-image" :src="product.image" alt="商品图片" />
+      <el-carousel :interval="5000" height="550px" indicator-position="outside">
+        <el-carousel-item v-for="(image, index) in imageList" :key="index">
+          <img class="product-image" :src="image" alt="商品图片" />
+        </el-carousel-item>
+      </el-carousel>
     </div>
     <!-- 右侧详情表单 -->
     <el-form
@@ -123,13 +127,16 @@ import 'element-plus/theme-chalk/el-message.css'
 import { ElMessage } from 'element-plus'
 
 const product = ref({})
+const imageList = ref([])
 const route = useRoute()
 const isStarred = ref(false)
 const getProducts = async () => {
   const res = await getDetail(route.params.id)
   product.value = res.data.data
   isStarred.value = product.value.isStarred
-  console.log('测试: ', product.value)
+  // 将 product.image 按逗号分割成数组并赋值给 imageList
+  imageList.value = product.value.image ? product.value.image.split(',') : []
+  console.log('测试imageList.value: ', imageList.value)
 }
 onMounted(() => getProducts())
 

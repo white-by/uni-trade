@@ -25,12 +25,28 @@
         </el-form-item>
 
         <!-- 物品图片上传 -->
-        <el-form-item label="物品图片">
-          <div @click="selectAvatar">
-            <el-image style="width: 200px; height: 200px" :src="form.imageUrl" />
-            <input type="file" ref="fileInput" @change="onFileChange" style="display: none" accept="image/*" />
-          </div>
+        <el-form-item label="物品图片" prop="imageUrl">
+          <el-upload
+            ref="uploadRef"
+            class="uploadPic"
+            list-type="picture-card"
+            action="#"
+            :limit="5"
+            :http-request="upload"
+            :file-list="imageList"
+            :on-preview="handlePictureCardPreview"
+            :on-remove="handleRemove"
+            :on-success="onUploadSuccess"
+          >
+            <div class="el-upload__text"><em>上传图片</em></div>
+            <template #tip>
+              <div class="el-upload__tip">请上传大小不超过 2MB 的 JPG / PNG 格式图片，最多 5 张</div>
+            </template>
+          </el-upload>
         </el-form-item>
+        <el-dialog v-model="picDialogVisible">
+          <img w-full :src="dialogImageUrl" alt="Preview Image" />
+        </el-dialog>
 
         <el-row>
           <!-- 物品类别 -->
@@ -140,6 +156,7 @@
 import { ref, reactive, watch, computed } from 'vue'
 import { useCategoryStore } from '@/store/sortCategory'
 import areaObj from '@/../public/area.json'
+import axios from 'axios'
 
 const categoryStore = useCategoryStore()
 
@@ -160,14 +177,107 @@ const dialogVisible = ref(false)
 const form = reactive({ ...props.item })
 const originalData = reactive({ ...props.item }) // 存储原始数据以便取消时恢复
 
+// 用于绑定图片上传列表
+const imageList = ref([])
+
 // 监听 item 的变化以更新表单数据
 watch(
   () => props.item,
   (newVal) => {
     Object.assign(form, newVal)
     Object.assign(originalData, newVal)
-  }
+    // 如果 imageURL 存在，将图片 URL 分割成数组并赋值给 imageList
+    if (newVal.imageURL) {
+      imageList.value = newVal.imageURL.split(',').map((url) => ({ url }))
+    }
+  },
+  { immediate: true }
 )
+
+// 图片上传
+const uploadRef = ref(null)
+
+// 存储所有上传成功的图片 URL
+const uploadedImages = ref([])
+
+// 图片上传
+function upload(options) {
+  const { file, onSuccess, onError } = options // 获取回调函数
+  const formData = new FormData()
+  const timestamp = new Date().getTime()
+  const originalName = file.name
+  const extension = originalName.substring(originalName.lastIndexOf('.'))
+  const newFileName = `${originalName.replace(extension, '')}_${timestamp}${extension}`
+
+  formData.append('smfile', file, newFileName)
+
+  axios
+    .post('/api/v2/upload', formData, {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+        Authorization: 'OeXXrpbZISBaCBiL2g74WNPweSZkwODK'
+      }
+    })
+    .then((res) => {
+      if (res.data && res.data.data && res.data.data.url) {
+        console.log('图片上传成功:', res.data.data.url)
+
+        // 调用 onSuccess 回调，传递响应和文件对象
+        onSuccess(res.data, file)
+      } else if (res.data.code === 'image_repeated') {
+        const repeatedImageUrl = res.data.images // 重复图片的 URL
+        console.warn('图片重复，使用已存在的图片:', repeatedImageUrl)
+        onSuccess({ data: { url: repeatedImageUrl } }, file) // 模拟成功回调
+      } else {
+        console.error('图片上传失败:', res)
+        onError(new Error('上传失败'))
+      }
+    })
+    .catch((err) => {
+      console.error('图片上传出错:', err)
+      onError(err) // 调用 onError 回调
+    })
+}
+
+function onUploadSuccess(response, file) {
+  const uploadedUrl = response.data.url
+  if (uploadedUrl) {
+    file.url = uploadedUrl // 为文件对象绑定真实 URL
+    uploadedImages.value.push(uploadedUrl) // 添加到已上传图片列表
+    form.imageUrl = uploadedImages.value.join(',') // 更新拼接字符串
+    console.log('上传成功，当前图片列表:', form.imageUrl)
+  } else {
+    console.error('服务器返回的 URL 数据为空:', response)
+  }
+}
+
+// 删除图片
+function handleRemove(file) {
+  const urlToRemove = file.url
+  console.log('删除图片:', file.url)
+  if (!urlToRemove) {
+    console.error('无法找到需要删除的文件 URL')
+    return
+  }
+  // 查找 URL 并删除
+  const index = uploadedImages.value.findIndex((url) => url === urlToRemove)
+  if (index > -1) {
+    uploadedImages.value.splice(index, 1) // 从数组中删除该 URL
+    form.imageUrl = uploadedImages.value.join(',') // 更新拼接字符串
+    console.log('删除后图片列表:', form.imageUrl)
+  } else {
+    console.warn('要删除的图片 URL 未找到:', urlToRemove)
+  }
+}
+
+// 大图预览
+const dialogImageUrl = ref('')
+const picDialogVisible = ref(false)
+
+const handlePictureCardPreview = (uploadFile) => {
+  dialogImageUrl.value = uploadFile.url
+  picDialogVisible.value = true
+}
 
 // 打开对话框
 function openDialog() {
@@ -176,6 +286,8 @@ function openDialog() {
 
 // 提交表单并触发更新事件
 function submitForm() {
+  // 更新图片URL，将文件列表的图片合并成逗号分隔的字符串
+  form.imageURL = imageList.value.map((item) => item.url).join(',')
   emit('update:item', form) // 将更新的数据传递给父组件
   closeDialog() // 关闭对话框
 }
@@ -188,21 +300,7 @@ function closeDialog() {
 // 重置表单数据
 function resetForm() {
   Object.assign(form, originalData) // 恢复到打开对话框前的初始数据
-}
-
-function onFileChange(event) {
-  const file = event.target.files[0]
-  if (file) {
-    const reader = new FileReader()
-    reader.onload = (e) => {
-      form.imageUrl = e.target.result
-    }
-    reader.readAsDataURL(file)
-  }
-}
-const fileInput = ref(null)
-function selectAvatar() {
-  fileInput.value.click() // 点击文件输入框
+  imageList.value = originalData.imageURL ? originalData.imageURL.split(',').map((url) => ({ url })) : []
 }
 
 const isShippingDisabled = ref(false)

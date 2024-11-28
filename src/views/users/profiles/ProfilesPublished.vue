@@ -5,7 +5,7 @@
     </div>
     <div class="published-container">
       <div v-for="(product, index) in profilesStore.publishedProducts" :key="product.id" class="published-item">
-        <img :src="product.imageURL" alt="商品图片" class="item-image" />
+        <img :src="getFirstImageURL(product.imageURL)" alt="商品图片" class="item-image" />
         <div class="item-info">
           <router-link :to="`/detail/${product.id}`"
             ><h3 class="item-title">{{ product.title }}</h3></router-link
@@ -26,6 +26,11 @@ import ProfilesNav from './components/ProfilesNav.vue'
 import { useProfilesStore } from '@/store/profilesStore'
 
 const profilesStore = useProfilesStore()
+
+// 获取第一张图片URL
+const getFirstImageURL = (imageURL) => {
+  return imageURL ? imageURL.split(',')[0] : ''
+}
 </script>
 
 <style scoped lang="scss">

@@ -1,7 +1,3 @@
-<!-- 查询，删除 -->
-
-<!-- 只能查询 -->
-
 <script setup>
 import { ref, onMounted } from 'vue'
 import { Search } from '@element-plus/icons-vue'
@@ -72,7 +68,7 @@ onMounted(() => {
     </div>
 
     <!-- 商品列表 -->
-    <el-table :data="productList" bproduct>
+    <el-table :data="productList" border>
       <el-table-column prop="id" label="商品编号" align="center"></el-table-column>
 
       <el-table-column prop="title" label="商品名称" align="center"></el-table-column>
@@ -80,7 +76,24 @@ onMounted(() => {
       <el-table-column prop="category" label="分类" align="center"></el-table-column>
       <el-table-column prop="userName" label="发布者" align="center"></el-table-column>
       <el-table-column prop="description" label="物品描述" align="center"></el-table-column>
-      <el-table-column prop="imageUrl" label="图片" align="center"> </el-table-column>
+
+      <el-table-column label="图片" align="center">
+        <template #default="{ row }">
+          <!-- 使用 el-popover 显示图片 -->
+          <el-popover trigger="hover" placement="top" width="150px">
+            <template #default>
+              <div class="image-list">
+                <!-- 遍历 imageUrl 字段中的图片URL -->
+                <el-image v-for="(url, index) in row.imageUrl.split(',')" :key="index" :src="url" fit="cover" />
+              </div>
+            </template>
+            <template #reference>
+              <el-button link type="primary" size="small"> 查看图片 </el-button>
+            </template>
+          </el-popover>
+        </template>
+      </el-table-column>
+
       <el-table-column prop="deliveryMethod" label="配送方式" align="center"> </el-table-column>
       <el-table-column label="发货地址" align="center">
         <template #default="{ row }"> {{ row.province }}{{ row.city }}{{ row.area }}{{ row.detailArea }} </template>

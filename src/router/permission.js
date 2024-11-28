@@ -2,7 +2,7 @@ import { useAdminStore } from '@/store/adminStore'
 import { useUserStore } from '@/store/userStore'
 import router from '@/router' // 引入 router 实例
 
-const whiteList = ['/admin/login', '/login'] // 定义白名单路径
+const whiteList = ['/admin/login', '/login', '/register', '/reset-psw'] // 定义白名单路径
 
 // 定义检查白名单的函数
 const isInWhiteList = (path) => whiteList.includes(path)

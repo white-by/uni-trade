@@ -10,9 +10,9 @@
         <el-col :span="12" class="login-form">
           <div class="frosted-glass">
             <br />
-            <el-form :model="form" :rules="rules">
+            <el-form ref="formRef" :model="form" :rules="rules">
               <el-form-item prop="email">
-                <el-input placeholder="请输入邮箱" v-model="form.email" />
+                <el-input placeholder="请输入邮箱" v-model="form.mail" />
               </el-form-item>
 
               <el-form-item prop="password">
@@ -61,20 +61,22 @@
 import { ref } from 'vue'
 import { View, Hide } from '@element-plus/icons-vue'
 import { useRouter } from 'vue-router'
+import { ElMessage } from 'element-plus'
+import { useUserStore } from '@/store/userStore'
+import useASE from '@/hooks/useASE'
 
 const router = useRouter()
 let form = ref({
-  email: '',
+  mail: '',
   password: ''
 })
 
 const addPassFlag = ref(false)
-
+const userStore = useUserStore()
 const rules = ref({
-  email: [
+  mail: [
     { required: true, message: '请输入邮箱', trigger: 'blur' },
-    { type: 'email', message: '请输入有效的邮箱地址', trigger: ['blur', 'change'] },
-    { min: 5, max: 20, message: '长度应为 5 到 20 位', trigger: 'blur' }
+    { type: 'email', message: '请输入有效的邮箱地址', trigger: ['blur', 'change'] }
   ],
 
   password: [
@@ -99,14 +101,28 @@ const rules = ref({
   ]
 })
 
-const handleLogin = async (formData) => {
-  // 这里放置你的登录逻辑
-  console.log('Logging in with:', formData)
-  // 假设这是从登录接口返回的 token
-  const token =
-    'jiazhuangzheshiyigetoken.eyJzdWIiOiJ7XKDmmbrmlZnogrIrMVwiLFwiaWRcIjpcIjEzNjk1OTQ5NTQ3Mzk4NTk0NThcIixcInVzZXJuYW1lXCI6XCJ4aWFvdHV4aWFuMDAxXCJ9IiwiaWF0IjoxNjU2NzY2MzkwLCJleHAiOjE2NTcwMjU1OTB9.g-0SLjVSVh2A6Zt14enZsP1bsImxLhaQclfyItIFrAs'
-  // 将 token 存储在 localStorage 中
-  localStorage.setItem('token', token)
+const { encrypt } = useASE()
+
+const formRef = ref(null)
+const handleLogin = () => {
+  formRef.value.validate(async (valid, fields) => {
+    console.log('加密前：', form.value.password)
+    const password = encrypt(form.value.password)
+    console.log('加密后：', password)
+    // 添加 fields 参数
+    const { mail } = form.value
+    if (valid) {
+      await userStore.getUserInfo({ mail, password })
+      ElMessage({
+        type: 'success',
+        message: '登录成功'
+      })
+      router.replace('/')
+    } else {
+      console.log('error submit!', fields)
+      return false
+    }
+  })
 }
 
 const handleResetPassword = () => {

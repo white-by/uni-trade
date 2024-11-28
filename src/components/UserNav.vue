@@ -4,6 +4,10 @@ import { ElMessageBox } from 'element-plus'
 import { useRouter } from 'vue-router'
 import { ref } from 'vue'
 import AnnouncementBoard from './AnnouncementBoard.vue'
+import { useUserStore } from '@/store/userStore'
+
+const userStore = useUserStore()
+const userName = userStore.userInfo.data.userName
 
 let input = ref('')
 const dialogTableVisible = ref(false)
@@ -25,6 +29,7 @@ const confirmLogout = async () => {
       cancelButtonText: '取消',
       type: 'warning'
     })
+    userStore.clearUserInfo()
     router.push('/login')
   } catch (error) {
     console.log('取消了登出操作', error)
@@ -69,7 +74,7 @@ const confirmLogout = async () => {
           <li>
             <el-dropdown placement="bottom" size="large">
               <span class="el-dropdown-link">
-                <i class="iconfont icon-user"></i> 北风
+                <i class="iconfont icon-user"></i> {{ userName }}
                 <el-icon class="el-icon--right">
                   <arrow-down />
                 </el-icon>

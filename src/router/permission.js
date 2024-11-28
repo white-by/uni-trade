@@ -1,31 +1,43 @@
-import { useAdminStore } from '@/store/adminStore' // 确保路径正确
+import { useAdminStore } from '@/store/adminStore'
+import { useUserStore } from '@/store/userStore'
 import router from '@/router' // 引入 router 实例
 
-const whiteList = ['/admin/login'] // 定义白名单路径
+const whiteList = ['/admin/login', '/login'] // 定义白名单路径
 
-// 设置全局路由守卫
+// 定义检查白名单的函数
+const isInWhiteList = (path) => whiteList.includes(path)
+
+// 定义路由守卫
 router.beforeEach((to, from, next) => {
-  // 检查目标路径是否以 /admin 开头
-  if (to.path.startsWith('/admin')) {
+  const isAdminPath = to.path.startsWith('/admin')
+  const isUserPath = to.path.startsWith('/')
+
+  if (isAdminPath) {
     const adminStore = useAdminStore()
-    const token = adminStore.adminInfo?.data?.token // 确保安全获取 token
+    const token = adminStore.adminInfo?.data?.token
     if (token) {
-      // 如果有 token 且试图访问 /admin/login 页面，重定向到 /admin 首页
-      if (to.path === '/admin/login') {
-        return next('/admin')
-      } else {
-        return next() // 放行其他 /admin 下的路径
-      }
+      // 已登录管理员用户尝试访问登录页面，重定向到管理员首页
+      if (to.path === '/admin/login') return next('/admin')
+      return next() // 其他路径放行
     } else {
-      // 如果没有 token 且在白名单中，放行；否则重定向到 /admin/login
-      if (whiteList.includes(to.path)) {
-        return next()
-      } else {
-        return next('/admin/login')
-      }
+      // 未登录管理员用户，白名单放行，否则重定向
+      return isInWhiteList(to.path) ? next() : next('/admin/login')
     }
-  } else {
-    // 如果路径不以 /admin 开头，放行
-    next()
   }
+
+  if (isUserPath) {
+    const userStore = useUserStore()
+    const token = userStore.userInfo?.data?.token
+    if (token) {
+      // 已登录用户尝试访问用户登录页面，重定向到用户首页
+      if (to.path === '/login') return next('/')
+      return next() // 其他路径放行
+    } else {
+      // 未登录用户，白名单放行，否则重定向
+      return isInWhiteList(to.path) ? next() : next('/login')
+    }
+  }
+
+  // 其他路径默认放行
+  next()
 })

@@ -107,7 +107,7 @@
         </el-row>
       </div>
 
-      <div class="btn-group" v-if="product.isSold == 0">
+      <div class="btn-group" v-if="product.isSold == 0 && userStore.userID != product.userID">
         <el-button type="primary" size="large" style="font-size: 16px; width: 140px">购买</el-button>
         <el-button type="primary" plain size="large" circle style="margin-left: 300px" @click="toggleStarred">
           <i :class="isStarred ? 'iconfont icon-starred' : 'iconfont icon-star'"></i>
@@ -125,6 +125,9 @@ import { onMounted, ref } from 'vue'
 import { useRoute } from 'vue-router'
 import 'element-plus/theme-chalk/el-message.css'
 import { ElMessage } from 'element-plus'
+import { useUserStore } from '@/store/userStore'
+
+const userStore = useUserStore()
 
 const product = ref({})
 const imageList = ref([])

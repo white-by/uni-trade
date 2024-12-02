@@ -42,7 +42,7 @@ const router = createRouter({
       component: Order
     },
     {
-      path: '/profiles',
+      path: '/profiles/:id',
       component: ProfilesPage,
       redirect: '/profiles/published',
       children: [

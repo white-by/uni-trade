@@ -1,6 +1,9 @@
 <script setup>
 import { ref, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
+import { useUserStore } from '@/store/userStore'
+
+const userStore = useUserStore()
 
 const route = useRoute()
 const router = useRouter()
@@ -10,14 +13,19 @@ const activeIndex = ref('')
 watch(
   () => route.path,
   (newPath) => {
-    if (newPath === '/profiles/published' || newPath === '/profiles') {
-      activeIndex.value = '1'
-    } else if (newPath === '/profiles/finished') {
-      activeIndex.value = '2'
-    } else if (newPath === '/profiles/receivedComment') {
-      activeIndex.value = '3'
-    } else if (newPath === '/profiles/givenComment') {
-      activeIndex.value = '4'
+    const userIdPattern = new RegExp(`/profiles/${userStore.userInfo.userID}/(\\w+)$`)
+    const match = newPath.match(userIdPattern)
+    if (match) {
+      const subPath = match[1] // 提取路径的最后部分
+      if (subPath === 'published') {
+        activeIndex.value = '1'
+      } else if (subPath === 'finished') {
+        activeIndex.value = '2'
+      } else if (subPath === 'receivedComment') {
+        activeIndex.value = '3'
+      } else if (subPath === 'givenComment') {
+        activeIndex.value = '4'
+      }
     }
   },
   { immediate: true }
@@ -26,14 +34,15 @@ watch(
 // 切换导航项
 function menuSelect(index) {
   activeIndex.value = index
+  const userID = userStore.userInfo.userID // 获取当前用户ID
   if (index === '1') {
-    router.push('/profiles/published')
+    router.push(`/profiles/${userID}/published`)
   } else if (index === '2') {
-    router.push('/profiles/finished')
+    router.push(`/profiles/${userID}/finished`)
   } else if (index === '3') {
-    router.push('/profiles/receivedComment')
+    router.push(`/profiles/${userID}/receivedComment`)
   } else if (index === '4') {
-    router.push('/profiles/givenComment')
+    router.push(`/profiles/${userID}/givenComment`)
   }
 }
 </script>
@@ -42,16 +51,16 @@ function menuSelect(index) {
   <div class="container">
     <el-menu :default-active="activeIndex" mode="horizontal" @select="menuSelect">
       <el-menu-item index="1">
-        <router-link to="/profiles/published">发布中</router-link>
+        <router-link :to="`/profiles/${userStore.userInfo.userID}/published`">发布中</router-link>
       </el-menu-item>
       <el-menu-item index="2">
-        <router-link to="/profiles/finished">已完成</router-link>
+        <router-link :to="`/profiles/${userStore.userInfo.userID}/finished`">已完成</router-link>
       </el-menu-item>
       <el-menu-item index="3">
-        <router-link to="/profiles/receivedComment">收到的评价</router-link>
+        <router-link :to="`/profiles/${userStore.userInfo.userID}/receivedComment`">收到的评价</router-link>
       </el-menu-item>
       <el-menu-item index="4">
-        <router-link to="/profiles/givenComment">发布的评价</router-link>
+        <router-link :to="`/profiles/${userStore.userInfo.userID}/givenComment`">发布的评价</router-link>
       </el-menu-item>
     </el-menu>
   </div>

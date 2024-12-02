@@ -2,22 +2,29 @@
   <UserNav />
   <div class="content">
     <br /><br />
-    <el-form :model="userInfo" :rules="rules" ref="formRef" label-width="60px" class="form" style="max-width: 600px">
+    <el-form
+      :model="userStore.userInfo"
+      :rules="rules"
+      ref="formRef"
+      label-width="60px"
+      class="form"
+      style="max-width: 600px"
+    >
       <div class="avatar-container" @click="selectAvatar">
-        <el-avatar :size="130" :src="userInfo.picture" />
+        <el-avatar :size="130" :src="userStore.userInfo.picture" />
         <input type="file" ref="fileInput" @change="onFileChange" style="display: none" accept="image/*" />
       </div>
 
       <el-form-item label="ID">
-        <el-input v-model="userInfo.userID" disabled />
+        <el-input v-model="userStore.userInfo.userID" disabled />
       </el-form-item>
 
       <el-form-item label="昵称" prop="userName">
-        <el-input v-model="userInfo.userName" />
+        <el-input v-model="userStore.userInfo.userName" />
       </el-form-item>
 
       <el-form-item label="密码" prop="password">
-        <el-input v-model="userInfo.password" :type="addPassFlag ? 'text' : 'password'">
+        <el-input v-model="userStore.userInfo.password" :type="addPassFlag ? 'text' : 'password'">
           <template #suffix>
             <span @click="addPassFlag = !addPassFlag">
               <el-icon v-if="addPassFlag"><View /></el-icon>
@@ -28,22 +35,22 @@
       </el-form-item>
 
       <el-form-item label="性别">
-        <el-select v-model="userInfo.gender" size="large">
+        <el-select v-model="userStore.userInfo.gender" size="large">
           <el-option label="女" :value="0" />
           <el-option label="男" :value="1" />
         </el-select>
       </el-form-item>
 
       <el-form-item label="学校">
-        <el-input v-model="userInfo.schoolName" disabled />
+        <el-input v-model="userStore.userInfo.schoolName" disabled />
       </el-form-item>
 
       <el-form-item label="邮箱">
-        <el-input v-model="userInfo.mail" disabled />
+        <el-input v-model="userStore.userInfo.mail" disabled />
       </el-form-item>
 
       <el-form-item label="电话" prop="tel">
-        <el-input v-model="userInfo.tel" />
+        <el-input v-model="userStore.userInfo.tel" />
       </el-form-item>
 
       <el-form-item>
@@ -61,21 +68,13 @@ import { View, Hide } from '@element-plus/icons-vue'
 import UserFooter from '@/components/UserFooter.vue'
 import axios from 'axios'
 import { ElMessage } from 'element-plus'
-import { getUserInfoAPI, editUserInfoAPI } from '@/api/profiles'
+import { editUserInfoAPI } from '@/api/profiles'
+import { useUserStore } from '@/store/userStore'
 import useASE from '@/hooks/useASE'
 
-const { encrypt, decrypt } = useASE()
+const userStore = useUserStore()
 
-// 从接口获取数据
-const userInfo = ref({})
-const getUserInfo = async () => {
-  const res = await getUserInfoAPI()
-  // console.log('getUserInfoAPI响应：', res.data)
-  res.data.data.password = decrypt(res.data.data.password)
-  // console.log('解密后：', res.data.data.password)
-  userInfo.value = res.data.data
-  fetchAvatar()
-}
+const { encrypt } = useASE()
 
 // 表单引用
 const formRef = ref(null)
@@ -94,19 +93,17 @@ const rules = {
 }
 
 onMounted(() => {
-  getUserInfo()
+  fetchAvatar()
 })
 
 const addPassFlag = ref(false)
 
 async function fetchAvatar() {
   try {
-    //const response = await axios.get('https://dog.ceo/api/breeds/image/random')
-    //userInfo.value.picture = response.data.message // 更新头像 URL
     const response = await axios.get('https://api.thecatapi.com/v1/images/search')
-    userInfo.value.picture = response.data[0].url // 更新头像 URL
+    userStore.userInfo.picture = response.data[0].url // 更新头像 URL
   } catch (error) {
-    userInfo.value.picture = 'https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png'
+    userStore.userInfo.picture = 'https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png'
     console.error('获取头像失败:', error)
   }
 }
@@ -116,7 +113,7 @@ function onFileChange(event) {
   if (file) {
     const reader = new FileReader()
     reader.onload = (e) => {
-      userInfo.value.picture = e.target.result // 更新头像 URL
+      userStore.userInfo.picture = e.target.result // 更新头像 URL
     }
     reader.readAsDataURL(file) // 将文件转换为 Data URL
   }
@@ -131,21 +128,21 @@ const onSubmit = async () => {
   formRef.value.validate(async (valid) => {
     if (valid) {
       const updatedData = {
-        userID: userInfo.value.userID,
-        userName: userInfo.value.userName,
-        password: encrypt(userInfo.value.password),
-        picture: userInfo.value.picture,
-        gender: userInfo.value.gender,
-        tel: userInfo.value.tel
+        userID: userStore.userInfo.userID,
+        userName: userStore.userInfo.userName,
+        password: encrypt(userStore.userInfo.password),
+        picture: userStore.userInfo.picture,
+        gender: userStore.userInfo.gender,
+        tel: userStore.userInfo.tel
       }
-      console.log('更新的数据：', updatedData)
+      console.log('修改后的数据：', updatedData)
       const res = await editUserInfoAPI(updatedData)
       if (res.data.code === 1) {
-        ElMessage({
-          type: 'success',
-          message: '修改成功'
-        })
-      } else ElMessage.error('修改失败')
+        await userStore.fetchUserInfo() // 更新数据
+        ElMessage.success('修改成功')
+      } else {
+        ElMessage.error('修改失败')
+      }
     } else {
       console.log('表单校验失败')
       return false

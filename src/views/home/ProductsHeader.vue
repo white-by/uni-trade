@@ -9,7 +9,7 @@ const selectedCategoryID = ref(0)
 
 const handleCategoryClick = (categoryID) => {
   categoryStore.setCategoryID(categoryID)
-  console.log('点击了分类：', categoryID)
+  // console.log('点击了分类：', categoryID)
   selectedCategoryID.value = categoryID
 }
 </script>

@@ -30,12 +30,12 @@ export const useProfilesStore = defineStore('profiles', () => {
     }
     const getReceivedComments = async () => {
         const res = await getReceivedCommentsAPI()
-        console.log('getReceivedCommentsAPI: ', res.data)
+        // console.log('getReceivedCommentsAPI: ', res.data)
         receivedComments.value = res.data.data
     }
       const getGivenComments = async () => {
         const res = await getGivenCommentsAPI()
-        console.log('getGivenCommentsAPI: ', res.data)
+        // console.log('getGivenCommentsAPI: ', res.data)
         givenComments.value = res.data.data
     }
 

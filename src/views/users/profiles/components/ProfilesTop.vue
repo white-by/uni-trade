@@ -1,24 +1,20 @@
 <script setup>
 import { computed, onMounted } from 'vue'
 import axios from 'axios'
-import { useProfilesStore } from '@/store/profilesStore'
+import { useUserStore } from '@/store/userStore'
 
-const profilesStore = useProfilesStore()
+const userStore = useUserStore()
 
 const genderText = computed(() => {
-  // 避免加载时显示男
-  if (profilesStore.introduction.gender === '0') return '女'
-  else if (profilesStore.introduction.gender === '1') return '男'
-  else return null
-  // return profilesStore.introduction.gender === '0' ? '女' : '男'
+  return userStore.userInfo.gender === 0 ? '女' : '男'
 })
 
 async function fetchAvatar() {
   try {
     const response = await axios.get('https://dog.ceo/api/breeds/image/random')
-    profilesStore.introduction.avatarUrl = response.data.message // 更新头像 URL
+    userStore.userInfo.picture = response.data.message // 更新头像 URL
   } catch (error) {
-    profilesStore.introduction.avatarUrl = 'https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png'
+    userStore.userInfo.picture = 'https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png'
     console.error('获取头像失败:', error)
   }
 }
@@ -30,11 +26,11 @@ onMounted(() => {
 
 <template>
   <div class="profile-container">
-    <el-avatar :size="120" :src="profilesStore.introduction.avatarUrl" class="avatar" />
+    <el-avatar :size="120" :src="userStore.userInfo.picture" class="avatar" />
     <div class="info-column">
-      <span>{{ profilesStore.introduction.userName }}</span>
+      <span>{{ userStore.userInfo.userName }}</span>
       <span>{{ genderText }}</span>
-      <span>{{ profilesStore.introduction.school }}</span>
+      <span>{{ userStore.userInfo.schoolName }}</span>
     </div>
     <div class="profile-link">
       <router-link to="/user">

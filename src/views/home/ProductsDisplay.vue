@@ -16,11 +16,10 @@ const getProductsList = async () => {
 
   isLoading.value = true
   try {
-    console.log('发送了请求, cid: ', categoryStore.categoryID, 'page: ', currentPage.value, 'limit: ', pageSize.value)
+    // console.log('发送了请求, cid: ', categoryStore.categoryID, 'page: ', currentPage.value, 'limit: ', pageSize.value)
 
     const res = await getProductsListAPI(categoryStore.categoryID, currentPage.value, pageSize.value)
-    console.log('API响应:', res.data)
-    // console.log('res.data.data.length: ', res.data.data.length)
+    // console.log('API响应:', res.data)
 
     if (res.data.data.length < pageSize.value) {
       hasMoreData.value = false // 没有更多数据了

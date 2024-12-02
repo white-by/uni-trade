@@ -27,7 +27,7 @@ router.beforeEach((to, from, next) => {
 
   if (isUserPath) {
     const userStore = useUserStore()
-    const token = userStore.userInfo?.data?.token
+    const token = userStore.userInfo?.token
     if (token) {
       // 已登录用户尝试访问用户登录页面，重定向到用户首页
       if (to.path === '/login') return next('/')

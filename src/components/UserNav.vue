@@ -7,7 +7,7 @@ import AnnouncementBoard from './AnnouncementBoard.vue'
 import { useUserStore } from '@/store/userStore'
 
 const userStore = useUserStore()
-const userName = userStore.userInfo.data.userName
+const userName = userStore.userInfo.userName
 
 let input = ref('')
 const dialogTableVisible = ref(false)

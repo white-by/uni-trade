@@ -20,8 +20,10 @@
         <!-- 用户自己的收货地址 -->
         <el-table-column label="我的地址" width="200">
           <template #default="{ row }">
-            {{ row.shippingAddress.province }}{{ row.shippingAddress.city }}{{ row.shippingAddress.area
-            }}{{ row.shippingAddress.detailArea }}
+            {{ row.shippingAddress.province }}
+            {{ row.shippingAddress.city }}
+            {{ row.shippingAddress.area }}
+            {{ row.shippingAddress.detailArea }}
           </template>
         </el-table-column>
 
@@ -33,8 +35,10 @@
                 <div>商品金额: {{ scope.row.price }}元</div>
                 <div v-if="scope.row.shippingCost != 0">运费: {{ scope.row.shippingCost }}元</div>
                 <div>
-                  发货地址: {{ scope.row.SenderAddress.province }}{{ scope.row.SenderAddress.city
-                  }}{{ scope.row.SenderAddress.area }}{{ scope.row.SenderAddress.detailArea }}
+                  发货地址: {{ scope.row.SenderAddress.province }}
+                  {{ scope.row.SenderAddress.city }}
+                  {{ scope.row.SenderAddress.area }}
+                  {{ scope.row.SenderAddress.detailArea }}
                 </div>
                 <div>下单时间: {{ scope.row.orderTime }}</div>
                 <div>支付时间: {{ scope.row.payTime }}</div>
@@ -140,7 +144,7 @@
     </el-dialog>
 
     <!-- 评价对话框 -->
-    <el-dialog title="评价内容" v-model="commentDialogVisible" width="400px" @close="resetCommentForm">
+    <el-dialog title="评价内容" v-model="commentDialogVisible" width="500px" @close="resetCommentForm">
       <el-input
         v-model="comment"
         placeholder="请输入评价内容"
@@ -154,7 +158,7 @@
     </el-dialog>
 
     <!-- 退款对话框 -->
-    <el-dialog title="退款理由" v-model="refundDialogVisible" width="400px" @close="resetRefundForm">
+    <el-dialog title="退款理由" v-model="refundDialogVisible" width="500px" @close="resetRefundForm">
       <el-input
         v-model="refundReason"
         placeholder="请条理清晰地填写退款理由。纠纷订单将交付管理员处理。"
@@ -186,8 +190,10 @@
         <!-- 买家的收货地址 -->
         <el-table-column label="收货地址" width="200">
           <template #default="{ row }">
-            {{ row.shippingAddress.province }}{{ row.shippingAddress.city }}{{ row.shippingAddress.area
-            }}{{ row.shippingAddress.detailArea }}
+            {{ row.shippingAddress.province }}
+            {{ row.shippingAddress.city }}
+            {{ row.shippingAddress.area }}
+            {{ row.shippingAddress.detailArea }}
           </template>
         </el-table-column>
 
@@ -199,8 +205,10 @@
                 <div>商品金额: {{ scope.row.price }}元</div>
                 <div v-if="scope.row.shippingCost != 0">运费: {{ scope.row.shippingCost }}元</div>
                 <div>
-                  发货地址: {{ scope.row.SenderAddress.province }}{{ scope.row.SenderAddress.city
-                  }}{{ scope.row.SenderAddress.area }}{{ scope.row.SenderAddress.detailArea }}
+                  发货地址: {{ scope.row.SenderAddress.province }}
+                  {{ scope.row.SenderAddress.city }}
+                  {{ scope.row.SenderAddress.area }}
+                  {{ scope.row.SenderAddress.detailArea }}
                 </div>
                 <div>下单时间: {{ scope.row.orderTime }}</div>
                 <div>支付时间: {{ scope.row.payTime }}</div>
@@ -261,7 +269,7 @@
       </el-table>
 
       <!-- 拒绝退款对话框 -->
-      <el-dialog title="拒绝退款理由" v-model="rejectRefundDialogVisible" width="400px" @close="resetRefundForm">
+      <el-dialog title="拒绝退款理由" v-model="rejectRefundDialogVisible" width="500px" @close="resetRefundForm">
         <el-input
           v-model="refundReason"
           placeholder="请条理清晰地填写拒绝退款理由。纠纷订单将交付管理员处理。"

@@ -65,14 +65,18 @@ onMounted(() => {
       <el-table-column prop="deliveryMethod" label="发货方式" align="center"> </el-table-column>
       <el-table-column label="收货地址" align="center">
         <template #default="{ row }">
-          {{ row.shippingAddress.province }}{{ row.shippingAddress.city }}{{ row.shippingAddress.area
-          }}{{ row.shippingAddress.detailArea }}
+          {{ row.shippingAddress.province }}
+          {{ row.shippingAddress.city }}
+          {{ row.shippingAddress.area }}
+          {{ row.shippingAddress.detailArea }}
         </template>
       </el-table-column>
       <el-table-column label="发货地址" align="center">
         <template #default="{ row }">
-          {{ row.SenderAddress.province }}{{ row.SenderAddress.city }}{{ row.SenderAddress.area
-          }}{{ row.SenderAddress.detailArea }}
+          {{ row.SenderAddress.province }}
+          {{ row.SenderAddress.city }}
+          {{ row.SenderAddress.area }}
+          {{ row.SenderAddress.detailArea }}
         </template>
       </el-table-column>
 
@@ -94,8 +98,8 @@ onMounted(() => {
               <el-button link type="primary" size="small"> 查看详情 </el-button>
             </template>
           </el-popover>
-        </template></el-table-column
-      >
+        </template>
+      </el-table-column>
       <el-table-column prop="status" label="订单状态" align="center"></el-table-column>
     </el-table>
 

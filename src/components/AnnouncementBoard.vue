@@ -45,9 +45,4 @@ const announcements = ref([
 .announcement-board {
   margin: 30px;
 }
-
-.el-button {
-  padding: 0;
-  font-size: 12px;
-}
 </style>

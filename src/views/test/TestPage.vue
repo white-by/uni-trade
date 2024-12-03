@@ -1,130 +1,115 @@
-<template>
-  <UserNav />
-  <div class="content">
-    <br /><br />
-    <el-form :model="userInfo" label-width="40px" class="form" style="max-width: 600px">
-      <!-- 可更改头像的部分 -->
-      <div class="avatar-container">
-        <el-avatar :size="130" :src="userInfo.picture" class="avatar">
-          <!-- 点击头像触发上传 -->
-          <el-upload
-            class="avatar-uploader"
-            action="https://jsonplaceholder.typicode.com/posts/"
-            :show-file-list="false"
-            :on-success="handleAvatarSuccess"
-            :before-upload="beforeAvatarUpload"
-          >
-            <i class="el-icon-edit avatar-uploader-icon"></i>
-          </el-upload>
-        </el-avatar>
-      </div>
-
-      <el-form-item>
-        <el-button type="primary" @click="onSubmit" class="submit-button">保存</el-button>
-      </el-form-item>
-    </el-form>
-  </div>
-  <UserFooter />
-</template>
+<!-- sse测试未结束，请勿删除！ -->
+<!-- sse测试未结束，请勿删除！ -->
+<!-- sse测试未结束，请勿删除！ -->
 
 <script setup>
-import UserNav from '@/components/UserNav.vue'
-import { ref, onMounted } from 'vue'
-import UserFooter from '@/components/UserFooter.vue'
-import { ElMessage } from 'element-plus'
-import { getUserInfoAPI, editUserInfoAPI } from '@/api/profiles'
+import { ref, onMounted, onUnmounted } from 'vue'
+import { ElTimeline, ElTimelineItem, ElCard, ElDialog } from 'element-plus'
 
-// 从接口获取数据
-const userInfo = ref({})
-const getUserInfo = async () => {
-  const res = await getUserInfoAPI()
-  userInfo.value = res.data.data
+// 控制弹窗可见性
+const dialogTableVisible = ref(false)
+// 模拟是否有新公告
+const hasNewAnnouncement = ref(false)
+// 保存公告列表
+const announcements = ref([])
+
+// SSE 实例
+let eventSource = null
+
+// 打开弹窗的方法
+const openDialog = () => {
+  dialogTableVisible.value = true
+  markAsRead() // 打开弹窗时标记为已读
 }
 
-// 头像上传成功处理
-const handleAvatarSuccess = (response) => {
-  // 假设接口返回新头像的 URL
-  userInfo.value.picture = response.data.pictureUrl || userInfo.value.picture
-  ElMessage.success('头像上传成功')
+// 标记公告为已读
+const markAsRead = () => {
+  hasNewAnnouncement.value = false
+  localStorage.setItem('hasNewAnnouncement', 'false')
 }
 
-// 上传头像前的校验
-const beforeAvatarUpload = (file) => {
-  const isJpgOrPng = file.type === 'image/jpeg' || file.type === 'image/png'
-  const isLt2M = file.size / 1024 / 1024 < 2
+// 恢复新公告状态
+const checkNewAnnouncement = () => {
+  const storedAnnouncements = localStorage.getItem('announcements')
+  const storedStatus = localStorage.getItem('hasNewAnnouncement')
 
-  if (!isJpgOrPng) {
-    ElMessage.error('上传头像图片只能是 JPG 或 PNG 格式！')
-    return false
+  if (storedAnnouncements) {
+    announcements.value = JSON.parse(storedAnnouncements)
   }
-  if (!isLt2M) {
-    ElMessage.error('上传头像图片大小不能超过 2MB！')
-    return false
-  }
-  return true
-}
 
-// 提交修改
-const onSubmit = async () => {
-  const updatedData = {
-    picture: userInfo.value.picture
-  }
-  console.log('更新的数据：', updatedData)
-  const res = await editUserInfoAPI(updatedData)
-  if (res.data.code === 1) {
-    ElMessage({
-      type: 'success',
-      message: '修改成功'
-    })
-  } else ElMessage.error('修改失败')
+  hasNewAnnouncement.value = storedStatus === 'true'
 }
 
 onMounted(() => {
-  getUserInfo()
+  checkNewAnnouncement() // 页面加载时恢复公告和红点状态
+
+  // 连接到 SSE 服务端
+  eventSource = new EventSource('http://127.0.0.1:5000/sse/announcements')
+
+  // 接收新公告
+  eventSource.onmessage = (event) => {
+    try {
+      const data = JSON.parse(event.data)
+      if (Array.isArray(data)) {
+        announcements.value = data
+        localStorage.setItem('announcements', JSON.stringify(data)) // 持久化公告数据
+
+        // 只有当对话框未打开时，才显示红点
+        if (!dialogTableVisible.value && data.length > 0) {
+          hasNewAnnouncement.value = true
+          localStorage.setItem('hasNewAnnouncement', 'true') // 更新新公告状态
+        }
+      }
+    } catch (error) {
+      console.error('Error parsing SSE data:', error)
+    }
+  }
+
+  // 处理 SSE 错误
+  eventSource.onerror = () => {
+    console.error('SSE 连接出错，尝试重新连接...')
+    eventSource.close()
+  }
+})
+
+onUnmounted(() => {
+  if (eventSource) {
+    eventSource.close()
+  }
 })
 </script>
 
-<style scoped lang="scss">
-.content {
-  display: flex;
-  flex-direction: column;
-  align-items: center; /* 居中 */
-  background-image: url('/src/assets/images/background3.svg');
+<template>
+  <br /><br />
+
+  <!-- 公告图标，带红点提示 -->
+  <el-badge is-dot :hidden="!hasNewAnnouncement">
+    <a href="javascript:;" @click="openDialog">
+      <i class="iconfont icon-announcement" style="font-size: 24px"></i>
+    </a>
+  </el-badge>
+
+  <!-- 公告弹窗 -->
+  <el-dialog v-model="dialogTableVisible" title="公告栏" width="800px">
+    <div class="announcement-board">
+      <el-timeline>
+        <el-timeline-item v-for="item in announcements" :key="item.id" :timestamp="item.date" placement="top">
+          <el-card>
+            <h4>{{ item.title }}</h4>
+            <br />
+            <p>{{ item.content }}</p>
+          </el-card>
+        </el-timeline-item>
+      </el-timeline>
+    </div>
+  </el-dialog>
+</template>
+
+<style scoped>
+.announcement-board {
+  margin: 30px;
 }
-
-.avatar-container {
-  display: flex;
-  justify-content: center; /* 水平居中 */
-  margin-bottom: 10%; /* 调整头像和表单之间的间距 */
-  position: relative; /* 方便放置编辑图标 */
-}
-
-.avatar-uploader {
-  position: absolute;
-  bottom: 10;
-
+.iconfont {
   cursor: pointer;
-}
-
-.avatar-uploader-icon {
-  font-size: 54px;
-  color: #fff;
-  background: rgba(0, 0, 0, 0.6);
-  border-radius: 50%;
-  padding: 50px;
-}
-
-.form {
-  margin-top: 5%;
-  margin-bottom: 2%;
-  width: 30%;
-}
-
-.submit-button {
-  margin-top: 20px; /* 调整按钮和表单之间的间距 */
-  margin-left: auto;
-  margin-right: auto; /* 居中按钮 */
-  margin-bottom: 3%;
-  font-weight: 600;
 }
 </style>

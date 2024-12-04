@@ -1,4 +1,4 @@
-# 测试公告sse用，测试页在testPage
+# 测试公告sse用
 
 from flask import Flask, Response, stream_with_context
 from flask_cors import CORS  # 导入 CORS 库

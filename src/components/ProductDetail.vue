@@ -107,7 +107,7 @@
         </el-row>
       </div>
 
-      <div class="btn-group" v-if="product.isSold == 0 && userStore.userID != product.userID">
+      <div class="btn-group" v-if="product.isSold == 0 && userStore.userInfo.userID != product.userID">
         <el-button type="primary" size="large" style="font-size: 16px; width: 140px">购买</el-button>
         <el-button type="primary" plain size="large" circle style="margin-left: 300px" @click="toggleStarred">
           <i :class="isStarred ? 'iconfont icon-starred' : 'iconfont icon-star'"></i>
@@ -139,7 +139,9 @@ const getProducts = async () => {
   isStarred.value = product.value.isStarred
   // 将 product.image 按逗号分割成数组并赋值给 imageList
   imageList.value = product.value.image ? product.value.image.split(',') : []
-  console.log('测试imageList.value: ', imageList.value)
+
+  // console.log('userID', userStore.userInfo.userID, ' product.userID', product.value.userID)
+  // console.log('测试imageList.value: ', imageList.value)
 }
 onMounted(() => getProducts())
 

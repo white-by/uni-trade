@@ -1,10 +1,5 @@
-<!-- sse测试未结束，请勿删除！ -->
-<!-- sse测试未结束，请勿删除！ -->
-<!-- sse测试未结束，请勿删除！ -->
-
 <script setup>
 import { ref, onMounted, onUnmounted } from 'vue'
-import { ElTimeline, ElTimelineItem, ElCard, ElDialog } from 'element-plus'
 
 // 控制弹窗可见性
 const dialogTableVisible = ref(false)
@@ -108,8 +103,5 @@ onUnmounted(() => {
 <style scoped>
 .announcement-board {
   margin: 30px;
-}
-.iconfont {
-  cursor: pointer;
 }
 </style>

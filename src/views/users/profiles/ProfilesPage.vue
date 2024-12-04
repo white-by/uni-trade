@@ -10,13 +10,24 @@ import { useProfilesStore } from '@/store/profilesStore'
 const categoryStore = useCategoryStore()
 const profilesStore = useProfilesStore()
 
+const getIdFromUrl = () => {
+  const url = window.location.pathname // 获取路径部分
+  const segments = url.split('/') // 根据 / 分割路径
+  return segments[2] // 假设 ID 是路径的第二个部分
+}
+
 onMounted(() => {
-  categoryStore.getCategory(),
-    profilesStore.getIntroduction(),
-    profilesStore.getPublishedProducts(),
-    profilesStore.getFinishedProducts(),
-    profilesStore.getReceivedComments(),
-    profilesStore.getGivenComments()
+  const id = getIdFromUrl()
+  if (id) {
+    categoryStore.getCategory(),
+      profilesStore.getIntroduction(id),
+      profilesStore.getPublishedProducts(id),
+      profilesStore.getFinishedProducts(id),
+      profilesStore.getReceivedComments(id),
+      profilesStore.getGivenComments(id)
+  } else {
+    console.error('未找到 ID 参数')
+  }
 })
 </script>
 

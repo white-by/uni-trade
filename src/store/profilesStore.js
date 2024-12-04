@@ -13,28 +13,28 @@ export const useProfilesStore = defineStore('profiles', () => {
     const receivedComments = ref([])
     const givenComments = ref([])
 
-    const getIntroduction = async () => {
-        const res = await getIntroductionAPI()
+    const getIntroduction = async (id) => {
+        const res = await getIntroductionAPI(id)
         // console.log('getIntroductionAPI响应: ', res.data)
         introduction.value = res.data.data
     }
-    const getPublishedProducts = async () => {
-        const res = await getPublishedProductsAPI()
+    const getPublishedProducts = async (id) => {
+        const res = await getPublishedProductsAPI(id)
         // console.log('getPublishedProductsAPI响应: ', res.data)
         publishedProducts.value = res.data.data
     }
-    const getFinishedProducts = async () => {
-        const res = await getFinishedProductsAPI()
+    const getFinishedProducts = async (id) => {
+        const res = await getFinishedProductsAPI(id)
         // console.log('getFinishedProductsAPI响应: ', res.data)
         finishedProducts.value = res.data.data
     }
-    const getReceivedComments = async () => {
-        const res = await getReceivedCommentsAPI()
+    const getReceivedComments = async (id) => {
+        const res = await getReceivedCommentsAPI(id)
         // console.log('getReceivedCommentsAPI: ', res.data)
         receivedComments.value = res.data.data
     }
-      const getGivenComments = async () => {
-        const res = await getGivenCommentsAPI()
+      const getGivenComments = async (id) => {
+        const res = await getGivenCommentsAPI(id)
         // console.log('getGivenCommentsAPI: ', res.data)
         givenComments.value = res.data.data
     }

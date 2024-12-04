@@ -14,7 +14,11 @@
           <span class="item-desc" :title="product.description">{{ product.description }}</span>
         </div>
         <!-- 使用 v-model:item 绑定数据 -->
-        <EditBtn v-model:item="profilesStore.publishedProducts[index]" label="编辑" />
+        <EditBtn
+          v-show="userStore.userInfo.userID == getIdFromUrl()"
+          v-model:item="profilesStore.publishedProducts[index]"
+          label="编辑"
+        />
       </div>
     </div>
   </div>
@@ -24,8 +28,16 @@
 import EditBtn from './components/EditBtn.vue'
 import ProfilesNav from './components/ProfilesNav.vue'
 import { useProfilesStore } from '@/store/profilesStore'
+import { useUserStore } from '@/store/userStore'
 
 const profilesStore = useProfilesStore()
+const userStore = useUserStore()
+
+const getIdFromUrl = () => {
+  const url = window.location.pathname // 获取路径部分
+  const segments = url.split('/') // 根据 / 分割路径
+  return segments[2] // 假设 ID 是路径的第二个部分
+}
 
 // 获取第一张图片URL
 const getFirstImageURL = (imageURL) => {

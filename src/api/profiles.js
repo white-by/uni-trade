@@ -2,9 +2,10 @@ import httpInstance from "@/utils/https";
 
 
 // 顶栏个人简介
-export const getIntroductionAPI = () => {
+export const getIntroductionAPI = (id) => {
     return httpInstance({
         url: '/profiles/introduction',
+        params: {id},
         headers: {
             Authorization: `Bearer ${localStorage.getItem('token')}`, 
         }
@@ -12,9 +13,10 @@ export const getIntroductionAPI = () => {
 }
 
 // 已发布
-export const getPublishedProductsAPI = () => {
+export const getPublishedProductsAPI = (id) => {
     return httpInstance({
         url: '/profiles/published',
+        params: {id},
         headers: {
             Authorization: `Bearer ${localStorage.getItem('token')}`, 
         }
@@ -22,9 +24,10 @@ export const getPublishedProductsAPI = () => {
 }
 
 // 已完成
-export const getFinishedProductsAPI = () => {
+export const getFinishedProductsAPI = (id) => {
     return httpInstance({
         url: '/profiles/finished',
+        params: {id},
         headers: {
             Authorization: `Bearer ${localStorage.getItem('token')}`, 
         }
@@ -32,9 +35,10 @@ export const getFinishedProductsAPI = () => {
 }
 
 // 我收到的评价
-export const getReceivedCommentsAPI = () => {
+export const getReceivedCommentsAPI = (id) => {
     return httpInstance({
         url: '/profiles/comment/received',
+        params: {id},
         headers: {
             Authorization: `Bearer ${localStorage.getItem('token')}`, 
         }
@@ -42,9 +46,10 @@ export const getReceivedCommentsAPI = () => {
 }
 
 // 我发布的评价
-export const getGivenCommentsAPI = () => {
+export const getGivenCommentsAPI = (id) => {
     return httpInstance({
         url: '/profiles/comment/given',
+         params: {id},
         headers: {
             Authorization: `Bearer ${localStorage.getItem('token')}`, 
         }

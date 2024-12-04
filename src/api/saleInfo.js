@@ -35,3 +35,28 @@ export const deleteProductApi = (productID) => {
     method: 'DELETE'
   })
 }
+
+/**
+ * 获取售后列表
+ * @param params
+ * @returns
+ */
+export const getRefundListApi = (params) => {
+  return httpInstance({
+    url: '/admin/afterSale',
+    params
+  })
+}
+
+/**
+ * 处理售后
+ * @param params
+ * @returns
+ */
+export const operateRefundListApi = (params) => {
+  return httpInstance({
+    url: '/admin/afterSale',
+    method: 'POST',
+    data: params
+  })
+}

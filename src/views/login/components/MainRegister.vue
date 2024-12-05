@@ -4,7 +4,7 @@
       <el-row style="height: 80%">
         <el-col :span="12" class="welcome-text">
           <p>欢迎</p>
-          <p>广大师生</p>
+          <p>同学们</p>
           <p>使用<strong style="font-style: italic">校园二手交易站</strong></p>
         </el-col>
         <el-col :span="12" class="register-form">
@@ -14,12 +14,8 @@
             <el-form :model="form" :rules="rules" ref="formRef">
               <el-form-item prop="schoolName">
                 <el-select v-model="form.schoolName" placeholder="请选择学校" size="large">
-                  <el-option
-                    v-for="(school, index) in schoolList"
-                    :key="index"
-                    :label="school"
-                    :value="school"
-                  ></el-option>
+                  <el-option v-for="(school, index) in schoolList" :key="index" :label="school" :value="school">
+                  </el-option>
                 </el-select>
               </el-form-item>
               <el-form-item prop="mail">
@@ -64,12 +60,12 @@
               <el-form-item prop="confirmPassword">
                 <el-input
                   v-model="form.confirmPassword"
-                  :type="addPassFlag ? 'text' : 'password'"
+                  :type="addPassFlag1 ? 'text' : 'password'"
                   placeholder="请再次输入密码"
                 >
                   <template #suffix>
-                    <span @click="addPassFlag = !addPassFlag">
-                      <el-icon v-if="addPassFlag"><View /></el-icon>
+                    <span @click="addPassFlag1 = !addPassFlag1">
+                      <el-icon v-if="addPassFlag1"><View /></el-icon>
                       <el-icon v-else><Hide /></el-icon>
                     </span>
                   </template>
@@ -88,7 +84,7 @@
 </template>
 
 <script setup>
-import { ref, watch } from 'vue'
+import { ref, watch, onMounted } from 'vue'
 import { View, Hide } from '@element-plus/icons-vue'
 import { ElMessage, ElNotification } from 'element-plus'
 import schoolData from '@/../public/school.json'
@@ -131,8 +127,9 @@ watch(
 )
 
 const addPassFlag = ref(false)
+const addPassFlag1 = ref(false)
 const isCounting = ref(false)
-const countdown = ref(120)
+const countdown = ref(60)
 
 const rules = ref({
   schoolName: [{ required: true, message: '请选择学校', trigger: 'change' }],
@@ -143,9 +140,9 @@ const rules = ref({
   password: [
     { required: true, message: '请输入密码', trigger: 'blur' },
     {
-      min: 5,
+      min: 6,
       max: 20,
-      message: '长度应为 5 到 20 位',
+      message: '长度应为 6 到 20 位',
       trigger: 'blur'
     },
     {
@@ -176,20 +173,46 @@ const rules = ref({
   ]
 })
 
-const sendVerificationCode = () => {
-  // 这里添加发送验证码的逻辑
-  console.log('Sending verification code to:', form.value.mail)
-  // 启动倒计时
+const initializeCountdown = () => {
+  const savedTargetTime = localStorage.getItem('verificationCountdown')
+  if (savedTargetTime) {
+    const remainingTime = Math.floor((parseInt(savedTargetTime) - Date.now()) / 1000)
+    if (remainingTime > 0) {
+      countdown.value = remainingTime
+      startCountdown()
+    }
+  }
+}
+
+const startCountdown = () => {
+  const now = Date.now()
+  const targetTime = now + countdown.value * 1000
+  localStorage.setItem('verificationCountdown', targetTime.toString())
+
   isCounting.value = true
-  countdown.value = 60
   const timer = setInterval(() => {
-    countdown.value--
-    if (countdown.value <= 0) {
+    const remainingTime = Math.floor((targetTime - Date.now()) / 1000)
+    if (remainingTime <= 0) {
       clearInterval(timer)
       isCounting.value = false
+      countdown.value = 120
+      localStorage.removeItem('verificationCountdown')
+    } else {
+      countdown.value = remainingTime
     }
   }, 1000)
-  // 发送验证码的 API 调用
+}
+
+onMounted(() => {
+  initializeCountdown()
+})
+
+const sendVerificationCode = () => {
+  formRef.value.validateField(['schoolName', 'mail'], (valid) => {
+    if (valid) {
+      startCountdown()
+    }
+  })
 }
 
 const formRef = ref(null) // 引用表单

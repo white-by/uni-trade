@@ -4,15 +4,15 @@
       <el-row style="height: 80%">
         <el-col :span="12" class="welcome-text">
           <p>欢迎</p>
-          <p>广大师生</p>
+          <p>同学们</p>
           <p>使用<strong style="font-style: italic">校园二手交易站</strong></p>
         </el-col>
         <el-col :span="12" class="reset-password-form">
           <div class="frosted-glass">
             <br />
-            <el-form :model="form" :rules="rules">
-              <el-form-item prop="email">
-                <el-input placeholder="请输入邮箱" v-model="form.email" />
+            <el-form :model="form" :rules="rules" ref="formRef">
+              <el-form-item prop="mail">
+                <el-input placeholder="请输入邮箱" v-model="form.mail" />
               </el-form-item>
 
               <el-form-item prop="verificationCode">
@@ -51,12 +51,12 @@
               <el-form-item prop="confirmPassword">
                 <el-input
                   v-model="form.confirmPassword"
-                  :type="addPassFlag ? 'text' : 'password'"
+                  :type="addPassFlag1 ? 'text' : 'password'"
                   placeholder="请再次输入新密码"
                 >
                   <template #suffix>
-                    <span @click="addPassFlag = !addPassFlag">
-                      <el-icon v-if="addPassFlag"><View /></el-icon>
+                    <span @click="addPassFlag1 = !addPassFlag1">
+                      <el-icon v-if="addPassFlag1"><View /></el-icon>
                       <el-icon v-else><Hide /></el-icon>
                     </span>
                   </template>
@@ -64,9 +64,9 @@
               </el-form-item>
 
               <el-form-item>
-                <el-button type="primary" @click="handleResetPassword" class="reset-password-button"
-                  >重置密码</el-button
-                >
+                <el-button type="primary" @click="handleResetPassword" class="reset-password-button">
+                  重置密码
+                </el-button>
               </el-form-item>
             </el-form>
           </div>
@@ -77,22 +77,29 @@
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { ref, onMounted } from 'vue'
 import { View, Hide } from '@element-plus/icons-vue'
+import { ElMessage, ElNotification } from 'element-plus'
+import { useRouter } from 'vue-router'
+
+import 'element-plus/theme-chalk/el-notification.css'
+
+const router = useRouter()
 
 let form = ref({
-  email: '',
+  mail: '',
   verificationCode: '',
   password: '',
   confirmPassword: ''
 })
 
 const addPassFlag = ref(false)
+const addPassFlag1 = ref(false)
 const isCounting = ref(false)
-const countdown = ref(120)
+const countdown = ref(60)
 
 const rules = ref({
-  email: [
+  mail: [
     { required: true, message: '请输入邮箱', trigger: 'blur' },
     { type: 'email', message: '请输入有效的邮箱地址', trigger: ['blur', 'change'] },
     { min: 5, max: 50, message: '长度应为 5 到 50 位', trigger: 'blur' }
@@ -136,25 +143,83 @@ const rules = ref({
   ]
 })
 
-const sendVerificationCode = () => {
-  // 这里添加发送验证码的逻辑
-  console.log('Sending verification code to:', form.value.email)
-  // 启动倒计时
-  isCounting.value = true
-  countdown.value = 60
-  const timer = setInterval(() => {
-    countdown.value--
-    if (countdown.value <= 0) {
-      clearInterval(timer)
-      isCounting.value = false
+const initializeCountdown = () => {
+  const savedTargetTime = localStorage.getItem('verificationCountdownPsw')
+  if (savedTargetTime) {
+    const remainingTime = Math.floor((parseInt(savedTargetTime) - Date.now()) / 1000)
+    if (remainingTime > 0) {
+      countdown.value = remainingTime
+      startCountdown()
     }
-  }, 1000)
-  // 发送验证码的 API 调用
+  }
 }
 
-const handleResetPassword = async (formData) => {
-  // 这里放置你的重置密码逻辑
-  console.log('Resetting password with:', formData)
+const startCountdown = () => {
+  const now = Date.now()
+  const targetTime = now + countdown.value * 1000
+  localStorage.setItem('verificationCountdownPsw', targetTime.toString())
+
+  isCounting.value = true
+  const timer = setInterval(() => {
+    const remainingTime = Math.floor((targetTime - Date.now()) / 1000)
+    if (remainingTime <= 0) {
+      clearInterval(timer)
+      isCounting.value = false
+      countdown.value = 120
+      localStorage.removeItem('verificationCountdownPsw')
+    } else {
+      countdown.value = remainingTime
+    }
+  }, 1000)
+}
+
+onMounted(() => {
+  initializeCountdown()
+})
+
+const formRef = ref(null)
+
+const sendVerificationCode = () => {
+  formRef.value.validateField('mail', (valid) => {
+    if (valid) {
+      startCountdown()
+    }
+  })
+}
+
+const handleResetPassword = () => {
+  // 调用表单验证
+  formRef.value?.validate((valid) => {
+    if (valid) {
+      // 验证通过，执行重置密码逻辑
+
+      console.log('重置密码信息:', form.value)
+
+      const returnCode = 1 //test用
+      if (returnCode) {
+        // 显示成功消息
+        ElNotification({
+          title: '重置密码成功',
+          message: '3秒后返回登录页',
+          type: 'success',
+          duration: 3000 // 消息持续时间为3秒
+        })
+
+        // 3秒后跳转到登录页
+        setTimeout(() => {
+          // 使用 Vue Router 跳转
+          router.replace('/login')
+        }, 3000)
+      } else {
+        ElMessage({
+          message: '重置密码失败',
+          type: 'error'
+        })
+      }
+    } else {
+      console.log('表单验证失败')
+    }
+  })
 }
 </script>
 

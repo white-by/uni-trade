@@ -44,7 +44,7 @@ const router = createRouter({
     {
       path: '/profiles/:id',
       component: ProfilesPage,
-      redirect: '/profiles/published',
+      redirect: (to) => `/profiles/${to.params.id}/receivedComment`,
       children: [
         {
           path: 'published',

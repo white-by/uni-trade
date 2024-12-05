@@ -31,9 +31,9 @@
         <el-row :gutter="10">
           <el-col :span="10"
             ><el-form-item label="卖家">
-              <p>
+              <router-link class="seller" :to="`/profiles/${product.userID}`">
                 {{ product.userName }}
-              </p>
+              </router-link>
             </el-form-item></el-col
           >
           <el-col :span="10"
@@ -174,7 +174,7 @@ const toggleStarred = () => {
 }
 </script>
 
-<style scoped>
+<style scoped lang="scss">
 .custom-form {
   border-radius: 8px;
   background-color: white;
@@ -235,5 +235,9 @@ const toggleStarred = () => {
   font-size: 20px;
   width: 560px;
   height: auto;
+}
+
+.seller:hover {
+  color: $comColor;
 }
 </style>

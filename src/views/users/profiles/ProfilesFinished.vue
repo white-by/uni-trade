@@ -6,14 +6,15 @@
     <div class="published-container">
       <div v-for="item in profilesStore.finishedProducts" :key="item.id" class="published-item">
         <img :src="getFirstImageURL(item.imageUrl)" alt="商品图片" class="item-image" />
-        <router-link :to="`/detail/${item.id}`">
-          <div class="item-info">
-            <h3 class="item-title">{{ item.title }}</h3>
 
-            <p class="item-price">￥{{ item.price }}</p>
-            <span class="item-desc" :title="item.description">{{ item.description }}</span>
-          </div></router-link
-        >
+        <div class="item-info">
+          <router-link class="product-name" :to="`/detail/${item.id}`"
+            ><h3 class="item-title">{{ item.title }}</h3></router-link
+          >
+
+          <p class="item-price">￥{{ item.price }}</p>
+          <span class="item-desc" :title="item.description">{{ item.description }}</span>
+        </div>
       </div>
     </div>
   </div>
@@ -92,5 +93,9 @@ const getFirstImageURL = (imageURL) => {
 
 .published-container {
   padding: 20px; /* 内边距 */
+}
+
+.product-name:hover {
+  color: $comColor;
 }
 </style>

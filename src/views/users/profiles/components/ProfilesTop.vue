@@ -2,19 +2,29 @@
 import { computed, onMounted } from 'vue'
 import axios from 'axios'
 import { useUserStore } from '@/store/userStore'
+import { useProfilesStore } from '@/store/profilesStore'
 
 const userStore = useUserStore()
+const profilesStore = useProfilesStore()
 
 const genderText = computed(() => {
-  return userStore.userInfo.gender === 0 ? '女' : '男'
+  if (profilesStore.introduction.gender === 0) return '女'
+  else if (profilesStore.introduction.gender === 1) return '男'
+  else return null
 })
+
+const getIdFromUrl = () => {
+  const url = window.location.pathname // 获取路径部分
+  const segments = url.split('/') // 根据 / 分割路径
+  return segments[2] // 假设 ID 是路径的第二个部分
+}
 
 async function fetchAvatar() {
   try {
     const response = await axios.get('https://dog.ceo/api/breeds/image/random')
-    userStore.userInfo.picture = response.data.message // 更新头像 URL
+    profilesStore.introduction.avatarUrl = response.data.message // 更新头像 URL
   } catch (error) {
-    userStore.userInfo.picture = 'https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png'
+    profilesStore.introduction.avatarUrl = 'https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png'
     console.error('获取头像失败:', error)
   }
 }
@@ -26,13 +36,13 @@ onMounted(() => {
 
 <template>
   <div class="profile-container">
-    <el-avatar :size="120" :src="userStore.userInfo.picture" class="avatar" />
+    <el-avatar :size="120" :src="profilesStore.introduction.avatarUrl" class="avatar" />
     <div class="info-column">
-      <span>{{ userStore.userInfo.userName }}</span>
+      <span>{{ profilesStore.introduction.userName }}</span>
       <span>{{ genderText }}</span>
-      <span>{{ userStore.userInfo.schoolName }}</span>
+      <span>{{ profilesStore.introduction.school }}</span>
     </div>
-    <div class="profile-link">
+    <div class="profile-link" v-show="userStore.userInfo.userID == getIdFromUrl()">
       <router-link to="/user">
         <span>个人资料 >></span>
       </router-link>

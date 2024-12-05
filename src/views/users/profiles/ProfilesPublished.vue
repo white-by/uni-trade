@@ -7,7 +7,7 @@
       <div v-for="(product, index) in profilesStore.publishedProducts" :key="product.id" class="published-item">
         <img :src="getFirstImageURL(product.imageURL)" alt="商品图片" class="item-image" />
         <div class="item-info">
-          <router-link :to="`/detail/${product.id}`"
+          <router-link class="product-name" :to="`/detail/${product.id}`"
             ><h3 class="item-title">{{ product.title }}</h3></router-link
           >
           <p class="item-price">￥{{ product.price }}</p>
@@ -106,5 +106,9 @@ const getFirstImageURL = (imageURL) => {
 
 .published-container {
   padding: 20px; /* 内边距 */
+}
+
+.product-name:hover {
+  color: $comColor;
 }
 </style>

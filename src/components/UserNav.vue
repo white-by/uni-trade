@@ -97,6 +97,16 @@ const confirmLogout = async () => {
     console.log('取消了登出操作', error)
   }
 }
+
+const navigateToProfile = () => {
+  const userID = userStore.userInfo.userID
+  const targetUrl = `/profiles/${userID}/receivedComment`
+
+  router.push(targetUrl).then(() => {
+    // 强制刷新页面
+    window.location.reload()
+  })
+}
 </script>
 
 <template>
@@ -144,9 +154,7 @@ const confirmLogout = async () => {
               </span>
               <template #dropdown>
                 <el-dropdown-menu>
-                  <router-link :to="`/profiles/${userStore.userInfo.userID}/receivedComment`"
-                    ><el-dropdown-item>个人中心</el-dropdown-item></router-link
-                  >
+                  <el-dropdown-item @click="navigateToProfile">个人中心</el-dropdown-item>
                   <router-link to="/user/order"><el-dropdown-item>我的订单</el-dropdown-item></router-link>
                   <router-link :to="`/profiles/${userStore.userInfo.userID}/published`"
                     ><el-dropdown-item>我的商品</el-dropdown-item></router-link

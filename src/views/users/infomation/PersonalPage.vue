@@ -108,19 +108,43 @@ async function fetchAvatar() {
   }
 }
 
-function onFileChange(event) {
+// 头像上传
+const fileInput = ref(null)
+
+// 点击文件输入框
+function selectAvatar() {
+  fileInput.value.click()
+}
+
+// 上传至图床
+async function onFileChange(event) {
   const file = event.target.files[0]
   if (file) {
-    const reader = new FileReader()
-    reader.onload = (e) => {
-      userStore.userInfo.picture = e.target.result // 更新头像 URL
+    const formData = new FormData()
+    formData.append('smfile', file)
+
+    try {
+      const response = await fetch('/api/v2/upload', {
+        method: 'POST',
+        headers: {
+          Authorization: 'OeXXrpbZISBaCBiL2g74WNPweSZkwODK'
+        },
+        body: formData
+      })
+
+      const result = await response.json()
+
+      if (result.success) {
+        // 上传成功，更新头像 URL
+        userStore.userInfo.picture = result.data.url
+        console.log('头像上传成功:', result.data.url)
+      } else {
+        console.error('头像上传失败:', result.message)
+      }
+    } catch (error) {
+      console.error('头像上传出错:', error)
     }
-    reader.readAsDataURL(file) // 将文件转换为 Data URL
   }
-}
-const fileInput = ref(null)
-function selectAvatar() {
-  fileInput.value.click() // 点击文件输入框
 }
 
 // 提交修改

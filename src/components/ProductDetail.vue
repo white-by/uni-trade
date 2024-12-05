@@ -23,7 +23,7 @@
 
       <!-- 商品描述 -->
       <p class="description" style="padding-left: 50px; padding-top: 10px">
-        {{ product.describe }}
+        {{ product.description }}
       </p>
 
       <div class="product-detail">
@@ -48,9 +48,7 @@
         <el-row :gutter="10">
           <el-col :span="10">
             <el-form-item label="地址">
-              <p class="address">
-                {{ product.address }}
-              </p>
+              <p class="address">{{ product.province }}{{ product.city }}{{ product.area }}{{ product.detailArea }}</p>
             </el-form-item>
           </el-col>
           <el-col :span="14">
@@ -108,7 +106,9 @@
       </div>
 
       <div class="btn-group" v-if="product.isSold == 0 && userStore.userInfo.userID != product.userID">
-        <el-button type="primary" size="large" style="font-size: 16px; width: 140px">购买</el-button>
+        <el-button type="primary" size="large" style="font-size: 16px; width: 140px" @click="goToCheckout()"
+          >购买</el-button
+        >
         <el-button type="primary" plain size="large" circle style="margin-left: 300px" @click="toggleStarred">
           <i :class="isStarred ? 'iconfont icon-starred' : 'iconfont icon-star'"></i>
         </el-button>
@@ -126,6 +126,11 @@ import { useRoute } from 'vue-router'
 import 'element-plus/theme-chalk/el-message.css'
 import { ElMessage } from 'element-plus'
 import { useUserStore } from '@/store/userStore'
+import { useCartStore } from '@/store/cartStore'
+import { useRouter } from 'vue-router'
+
+const cartStore = useCartStore()
+const router = useRouter()
 
 const userStore = useUserStore()
 
@@ -138,10 +143,7 @@ const getProducts = async () => {
   product.value = res.data.data
   isStarred.value = product.value.isStarred
   // 将 product.image 按逗号分割成数组并赋值给 imageList
-  imageList.value = product.value.image ? product.value.image.split(',') : []
-
-  // console.log('userID', userStore.userInfo.userID, ' product.userID', product.value.userID)
-  // console.log('测试imageList.value: ', imageList.value)
+  imageList.value = product.value.imageUrl ? product.value.imageUrl.split(',') : []
 }
 onMounted(() => getProducts())
 
@@ -171,6 +173,13 @@ const toggleStarred = () => {
   setTimeout(() => {
     isThrottled = false // 一秒后解除节流状态
   }, 1000)
+}
+
+// 点击“购买”按钮时保存数据并跳转
+const goToCheckout = () => {
+  cartStore.setSelectedProduct(product)
+  console.log('商品详情：', cartStore.selectedProduct.value)
+  router.push('/checkout')
 }
 </script>
 

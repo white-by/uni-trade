@@ -25,6 +25,8 @@ import CategoryInfo from '@/views/admins/contents/CategoryInfo.vue'
 import CommentInfo from '@/views/admins/contents/CommentInfo.vue'
 import AdminProfiles from '@/views/admins/AdminProfiles.vue'
 import ProductsInfo from '@/views/admins/sales/ProductsInfo.vue'
+import PayPage from '@/views/buy/PayPage.vue'
+import CheckOut from '@/views/buy/CheckOut.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -96,6 +98,14 @@ const router = createRouter({
       path: '/',
       component: LayoutPage
     },
+    {
+      path: '/pay',
+      component: PayPage
+    },
+    {
+      path: '/checkout',
+      component: CheckOut
+    },
     // admin
     {
       path: '/admin',
@@ -137,7 +147,7 @@ const router = createRouter({
         {
           path: 'profiles',
           component: AdminProfiles
-        }
+        },
       ]
     }
   ]

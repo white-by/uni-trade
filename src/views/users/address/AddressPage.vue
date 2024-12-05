@@ -116,7 +116,7 @@ import { ElMessage, ElMessageBox } from 'element-plus'
 const addressData = ref([])
 const getAddressList = async () => {
   const res = await getAddressListAPI()
-  console.log('getAddressListAPI响应', res.data)
+  // console.log('getAddressListAPI响应', res.data)
   addressData.value = res.data.data
   defaultAddressId.value = addressData.value.find((address) => address.isDefault === 1)?.id || null
 }

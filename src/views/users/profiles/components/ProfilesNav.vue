@@ -11,8 +11,12 @@ const activeIndex = ref('')
 
 // 根据当前路径设置激活的导航项
 const setActiveIndex = (path) => {
-  const userIdPattern = new RegExp(`/profiles/${profilesStore.introduction.userID}/(\\w+)$`)
+  const userIdPattern = new RegExp(`/profiles/\\d+/(\\w+)$`)
+  console.log('userIdPattern', userIdPattern)
+
   const match = path.match(userIdPattern)
+  console.log('match', match)
+
   if (match) {
     const subPath = match[1] // 提取路径的最后部分
     if (subPath === 'published') {

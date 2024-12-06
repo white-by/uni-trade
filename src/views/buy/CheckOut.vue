@@ -10,7 +10,8 @@
         <div class="box-body">
           <div class="address">
             <div class="text">
-              <div class="none" v-if="!curAddress">您需要先添加收货地址才可提交订单。</div>
+              <div class="none" v-if="cartStore.selectedProduct.value.deliveryMethod == '无需快递'">该商品无需快递</div>
+              <div class="none" v-else-if="!curAddress">您需要先添加收货地址才可提交订单。</div>
               <ul v-else>
                 <li>
                   <span>收<i />货<i />人：</span>{{ curAddress.name }}
@@ -22,7 +23,7 @@
                 </li>
               </ul>
             </div>
-            <div class="action">
+            <div class="action" v-show="cartStore.selectedProduct.value.deliveryMethod != '无需快递'">
               <el-button type="primary" plain size="large" @click="openSelectAddressDialog">切换地址</el-button>
               <el-button type="primary" plain size="large" @click="openAddDialog()">添加地址</el-button>
             </div>
@@ -66,7 +67,7 @@
         </div>
         <!-- 提交订单 -->
         <div class="submit">
-          <el-button type="primary" size="large">提交订单</el-button>
+          <el-button type="primary" size="large" @click="createOrder()">提交订单</el-button>
         </div>
       </div>
     </div>
@@ -137,6 +138,7 @@ import UserNav from '@/components/UserNav.vue'
 import UserFooter from '@/components/UserFooter.vue'
 import { ref, onMounted } from 'vue'
 import { getAddressListAPI, addAddressAPI } from '@/api/address'
+import { createOrderAPI } from '@/api/pay'
 import { ElMessage } from 'element-plus'
 import { useCartStore } from '@/store/cartStore'
 import { useRouter } from 'vue-router'
@@ -149,6 +151,36 @@ const curAddress = ref(null) // 当前显示的地址
 const tempActiveAddress = ref({}) // 临时选中的地址
 const cartStore = useCartStore()
 const router = useRouter()
+
+// 地址是否使用地址ID？电话号码怎么办？
+const createOrder = async () => {
+  const orderData = ref({
+    sellerID: cartStore.selectedProduct.value.userName,
+    goodsID: cartStore.selectedProduct.value.id,
+    price: cartStore.selectedProduct.value.price,
+    deliveryMethod: cartStore.selectedProduct.value.deliveryMethod,
+    shippingCost: cartStore.selectedProduct.value.shippingCost,
+    SenderAddress: {
+      province: cartStore.selectedProduct.value.province,
+      city: cartStore.selectedProduct.value.city,
+      area: cartStore.selectedProduct.value.area,
+      detailArea: cartStore.selectedProduct.value.detailArea
+    },
+    shippingAddress: {
+      province: curAddress.value.province,
+      city: curAddress.value.city,
+      area: curAddress.value.area,
+      detailArea: curAddress.value.detailArea,
+      name: curAddress.value.name,
+      tel: curAddress.value.tel
+    }
+  })
+  console.log('orderData:', orderData.value)
+  const res = await createOrderAPI(orderData.value)
+  if (res.data.code === 1) {
+    // 正常生成逻辑
+  }
+}
 
 // 获取第一张图片URL
 const getFirstImageURL = (imageURL) => {

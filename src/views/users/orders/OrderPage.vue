@@ -7,16 +7,15 @@
     <el-card>
       <el-row style="margin-bottom: 20px; color: dimgray"><h3>我买到的</h3></el-row
       ><el-table :data="purchasedData" stripe border>
-        <el-table-column prop="tradeID" label="订单号"></el-table-column>
+        <el-table-column prop="tradeID" label="订单号" width="80"></el-table-column>
 
         <el-table-column prop="goodsName" label="商品名称" width="150"></el-table-column>
-        <el-table-column label="实付"
+        <el-table-column label="实付" width="80"
           ><template #default="{ row }"> {{ row.price + row.shippingCost }}元 </template></el-table-column
         >
-        <el-table-column prop="sellerName" label="卖家" width="100"></el-table-column>
-        <!-- 发货方式 -->
         <el-table-column prop="deliveryMethod" label="发货方式" width="100"> </el-table-column>
-
+        <el-table-column prop="shippingAddress.name" label="联系人" width="80"></el-table-column>
+        <el-table-column prop="shippingAddress.tel" label="联系电话" width="130"></el-table-column>
         <!-- 用户自己的收货地址 -->
         <el-table-column label="我的地址" width="200">
           <template #default="{ row }">
@@ -28,7 +27,7 @@
         </el-table-column>
 
         <!-- 查看详情 -->
-        <el-table-column label="更多"
+        <el-table-column label="更多" width="80"
           ><template #default="scope">
             <el-popover effect="light" trigger="hover" placement="top" width="auto">
               <template #default>
@@ -40,6 +39,7 @@
                   {{ scope.row.SenderAddress.area }}
                   {{ scope.row.SenderAddress.detailArea }}
                 </div>
+                <div>卖家: {{ scope.row.sellerName }}</div>
                 <div>下单时间: {{ scope.row.orderTime }}</div>
                 <div>支付时间: {{ scope.row.payTime }}</div>
                 <div v-if="scope.row.shippingTime">发货时间: {{ scope.row.shippingTime }}</div>
@@ -177,15 +177,15 @@
     <el-card
       ><el-row style="margin-bottom: 20px; color: dimgray"><h3>我卖出的</h3></el-row
       ><el-table :data="selledData" stripe border>
-        <el-table-column prop="tradeID" label="订单号"></el-table-column>
+        <el-table-column prop="tradeID" label="订单号" width="80"></el-table-column>
 
         <el-table-column prop="goodsName" label="商品名称" width="150"></el-table-column>
-        <el-table-column label="实收"
+        <el-table-column label="实收" width="80"
           ><template #default="{ row }"> {{ row.price + row.shippingCost }}元 </template></el-table-column
         >
-        <el-table-column prop="sellerName" label="买家" width="100"></el-table-column>
-        <!-- 发货方式 -->
         <el-table-column prop="deliveryMethod" label="发货方式" width="100"> </el-table-column>
+        <el-table-column prop="shippingAddress.name" label="联系人" width="80"></el-table-column>
+        <el-table-column prop="shippingAddress.tel" label="联系电话" width="130"></el-table-column>
 
         <!-- 买家的收货地址 -->
         <el-table-column label="收货地址" width="200">
@@ -198,7 +198,7 @@
         </el-table-column>
 
         <!-- 详细信息 -->
-        <el-table-column label="更多"
+        <el-table-column label="更多" width="80"
           ><template #default="scope">
             <el-popover effect="light" trigger="hover" placement="top" width="auto">
               <template #default>
@@ -210,6 +210,7 @@
                   {{ scope.row.SenderAddress.area }}
                   {{ scope.row.SenderAddress.detailArea }}
                 </div>
+                <div>买家: {{ scope.row.sellerName }}</div>
                 <div>下单时间: {{ scope.row.orderTime }}</div>
                 <div>支付时间: {{ scope.row.payTime }}</div>
                 <div v-if="scope.row.shippingTime">发货时间: {{ scope.row.shippingTime }}</div>

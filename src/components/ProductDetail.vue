@@ -18,7 +18,7 @@
         <p class="product-price">
           <span>{{ product.price }}</span>
         </p>
-        <h3 class="product-title" style="padding-top: 5px">{{ product.name }}</h3>
+        <h3 class="product-title" style="padding-top: 5px">{{ product.title }}</h3>
       </div>
 
       <!-- 商品描述 -->

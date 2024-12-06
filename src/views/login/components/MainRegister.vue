@@ -24,14 +24,10 @@
                 </el-input>
               </el-form-item>
 
-              <el-form-item prop="verificationCode">
+              <el-form-item prop="code">
                 <el-row :gutter="8">
                   <el-col :span="16">
-                    <el-input
-                      placeholder="请输入邮箱验证码"
-                      v-model="form.verificationCode"
-                      class="verification-code-input"
-                    />
+                    <el-input placeholder="请输入邮箱验证码" v-model="form.code" class="verification-code-input" />
                   </el-col>
                   <el-col :span="8">
                     <el-button
@@ -89,6 +85,7 @@ import { View, Hide } from '@element-plus/icons-vue'
 import { ElMessage, ElNotification } from 'element-plus'
 import schoolData from '@/../public/school.json'
 import { useRouter } from 'vue-router'
+import { getCode, register } from '@/api/register'
 
 import 'element-plus/theme-chalk/el-notification.css'
 
@@ -97,7 +94,7 @@ const router = useRouter()
 let form = ref({
   schoolName: '',
   mail: '',
-  verificationCode: '',
+  code: '',
   password: '',
   confirmPassword: ''
 })
@@ -135,7 +132,7 @@ const rules = ref({
   schoolName: [{ required: true, message: '请选择学校', trigger: 'change' }],
   mail: [{ required: true, message: '请输入邮箱前缀', trigger: 'blur' }],
 
-  verificationCode: [{ required: true, message: '请输入验证码', trigger: 'blur' }],
+  code: [{ required: true, message: '请输入验证码', trigger: 'blur' }],
 
   password: [
     { required: true, message: '请输入密码', trigger: 'blur' },
@@ -195,7 +192,6 @@ const startCountdown = () => {
     if (remainingTime <= 0) {
       clearInterval(timer)
       isCounting.value = false
-      countdown.value = 120
       localStorage.removeItem('verificationCountdown')
     } else {
       countdown.value = remainingTime
@@ -207,19 +203,26 @@ onMounted(() => {
   initializeCountdown()
 })
 
-const sendVerificationCode = () => {
-  formRef.value.validateField(['schoolName', 'mail'], (valid) => {
+const sendVerificationCode = async () => {
+  formRef.value.validateField(['schoolName', 'mail'], async (valid) => {
     if (valid) {
       startCountdown()
+      const res = await getCode(form.value.mail)
+      console.log(res.data.code)
+      if (res.data.code === 1) {
+        ElMessage.success('发送成功')
+      } else {
+        ElMessage.error('发送失败，请稍后重试')
+      }
     }
   })
 }
 
 const formRef = ref(null) // 引用表单
 
-const handleRegister = () => {
+const handleRegister = async () => {
   // 调用表单验证
-  formRef.value?.validate((valid) => {
+  formRef.value?.validate(async (valid) => {
     if (valid) {
       // 验证通过，执行注册逻辑
       const updatedMail = `${mailPrefix.value}${schoolEmailSuffix.value}`
@@ -227,14 +230,16 @@ const handleRegister = () => {
       const newForm = ref({
         schoolName: form.value.schoolName,
         mail: form.value.mail,
-        code: form.value.verificationCode,
+        code: form.value.code,
         password: form.value.password
       })
 
-      console.log('注册信息:', newForm.value)
+      // console.log('注册信息:', newForm.value)
 
-      const returnCode = 1 //test用
-      if (returnCode) {
+      const res = await register(newForm.value)
+      // console.log("register's res:", res.data)
+
+      if (res.data.code === 1) {
         // 显示成功消息
         ElNotification({
           title: '注册成功',
@@ -249,10 +254,7 @@ const handleRegister = () => {
           router.replace('/login')
         }, 3000)
       } else {
-        ElMessage({
-          message: '注册失败',
-          type: 'error'
-        })
+        ElMessage.error('注册失败')
       }
     } else {
       console.log('表单验证失败')

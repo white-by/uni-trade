@@ -274,7 +274,9 @@ const resetAddForm = () => {
 
   .wrapper {
     background: #fff;
-    padding: 0 20px;
+    padding: 0 3px;
+    border-radius: 3px;
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.1);
     .box-title {
       font-size: 16px;
       font-weight: normal;

@@ -81,6 +81,7 @@ import { ref, onMounted } from 'vue'
 import { View, Hide } from '@element-plus/icons-vue'
 import { ElMessage, ElNotification } from 'element-plus'
 import { useRouter } from 'vue-router'
+import { getCode, resetPsw } from '@/api/register'
 
 import 'element-plus/theme-chalk/el-notification.css'
 
@@ -179,24 +180,37 @@ onMounted(() => {
 
 const formRef = ref(null)
 
-const sendVerificationCode = () => {
-  formRef.value.validateField('mail', (valid) => {
+const sendVerificationCode = async () => {
+  formRef.value.validateField('mail', async (valid) => {
     if (valid) {
       startCountdown()
+      const res = await getCode(form.value.mail)
+      console.log(res.data.code)
+      if (res.data.code === 1) {
+        ElMessage.success('发送成功')
+      } else {
+        ElMessage.error('发送失败，请稍后重试')
+      }
     }
   })
 }
 
-const handleResetPassword = () => {
+const handleResetPassword = async () => {
   // 调用表单验证
-  formRef.value?.validate((valid) => {
+  formRef.value?.validate(async (valid) => {
     if (valid) {
       // 验证通过，执行重置密码逻辑
+      const newForm = ref({
+        mail: form.value.mail,
+        code: form.value.verificationCode,
+        password: form.value.password
+      })
+      // console.log('重置密码信息:', newForm.value)
 
-      console.log('重置密码信息:', form.value)
+      const res = await resetPsw(newForm.value)
+      // console.log("resetPsw's res:", res.data)
 
-      const returnCode = 1 //test用
-      if (returnCode) {
+      if (res.data.code === 1) {
         // 显示成功消息
         ElNotification({
           title: '重置密码成功',
@@ -211,10 +225,7 @@ const handleResetPassword = () => {
           router.replace('/login')
         }, 3000)
       } else {
-        ElMessage({
-          message: '重置密码失败',
-          type: 'error'
-        })
+        ElMessage.error('重置密码失败')
       }
     } else {
       console.log('表单验证失败')

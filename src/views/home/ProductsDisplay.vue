@@ -2,13 +2,23 @@
 import { ref, onMounted, watch } from 'vue'
 import { getProductsListAPI } from '@/api/products.js'
 import { useCategoryStore } from '@/store/sortCategory'
+import { useSearchStore } from '@/store/searchStore'
 
-const productsList = ref([])
-const categoryStore = useCategoryStore()
+const productsList = ref([]) // 商品列表
+const categoryStore = useCategoryStore() // 分类状态
+const searchStore = useSearchStore() // 搜索状态
+
 const currentPage = ref(1) // 当前页码
 const pageSize = ref(12) // 每页条数
-const isLoading = ref(false) // 控制加载状态
+const isLoading = ref(false) // 是否正在加载
 const hasMoreData = ref(true) // 是否还有更多数据
+
+// 重置列表状态
+const resetListState = () => {
+  productsList.value = []
+  currentPage.value = 1
+  hasMoreData.value = true
+}
 
 // 获取商品列表
 const getProductsList = async () => {
@@ -16,16 +26,19 @@ const getProductsList = async () => {
 
   isLoading.value = true
   try {
-    // console.log('发送了请求, cid: ', categoryStore.categoryID, 'page: ', currentPage.value, 'limit: ', pageSize.value)
-
-    const res = await getProductsListAPI(categoryStore.categoryID, currentPage.value, pageSize.value)
-    // console.log('API响应:', res.data)
+    const res = await getProductsListAPI(
+      categoryStore.categoryID,
+      currentPage.value,
+      pageSize.value,
+      searchStore.searchQuery
+    )
 
     if (res.data.data.length < pageSize.value) {
       hasMoreData.value = false // 没有更多数据了
     }
+
     productsList.value.push(...res.data.data) // 追加新数据
-    currentPage.value += 1 // 下一页
+    currentPage.value += 1 // 加载下一页
   } catch (error) {
     console.error('获取商品列表失败:', error)
   } finally {
@@ -33,16 +46,25 @@ const getProductsList = async () => {
   }
 }
 
+// 监听分类变化
 watch(
   () => categoryStore.categoryID,
   () => {
-    productsList.value = []
-    currentPage.value = 1
-    hasMoreData.value = true
+    resetListState()
     getProductsList()
   }
 )
 
+// 监听搜索内容变化
+watch(
+  () => searchStore.searchQuery,
+  () => {
+    resetListState() // 重置列表状态（例如清空已有数据、重置分页等）
+    getProductsList() // 重新获取商品列表
+  }
+)
+
+// 初始化加载
 onMounted(() => {
   getProductsList()
 })

@@ -5,22 +5,25 @@ import { useRouter } from 'vue-router'
 import { ref, onMounted, onUnmounted } from 'vue'
 import { useUserStore } from '@/store/userStore'
 import useThrottle from '@/hooks/useThrottle.js'
+import { useSearchStore } from '@/store/searchStore'
 
 const userStore = useUserStore()
 const userName = userStore.userInfo.userName
 
-let input = ref('')
+const searchStore = useSearchStore()
+const searchInput = ref('')
 
 const router = useRouter()
 
 const { throttled } = useThrottle()
 // 搜索功能
 const handleSearch = () => {
-  const trimmedInput = input.value.trim()
+  const trimmedInput = searchInput.value.trim()
   if (trimmedInput) {
     // 搜索逻辑，例如跳转到搜索结果页
-    console.log('搜索内容：', trimmedInput)
-    router.push({ path: '/search', query: { searchInput: trimmedInput } })
+    // console.log('搜索内容：', trimmedInput)
+    // router.push({ path: '/search', query: { searchInput: trimmedInput } })
+    searchStore.searchQuery = trimmedInput
   } else {
     // 空输入提示
     ElMessage.warning('请输入商品名称进行搜索')
@@ -138,7 +141,7 @@ const navigateToProfile = () => {
         <div class="search">
           <el-input
             v-if="$route.path === '/'"
-            v-model="input"
+            v-model="searchInput"
             style="width: 440px"
             placeholder="请输入商品名称"
             :prefix-icon="Search"

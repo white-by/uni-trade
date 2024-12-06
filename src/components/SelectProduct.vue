@@ -110,10 +110,13 @@ import { ElMessageBox, ElMessage } from 'element-plus'
 import { getFilteredProductsAPI } from '@/api/products'
 import { useCategoryStore } from '@/store/sortCategory'
 import AreaComponets from '@/components/AreaComponets.vue'
+import { useSearchStore } from '@/store/searchStore'
 
 const categoryStore = useCategoryStore()
 const selector = ref(false)
 const areaComponentRef = ref(null)
+
+const searchStore = useSearchStore() // 搜索
 
 let form = reactive({
   category: '',
@@ -161,6 +164,16 @@ watch(
   }
 )
 
+// // 监听搜索内容变化
+// watch(
+//   () => searchStore.searchQuery,
+//   (newQuery, oldQuery) => {
+//     if (newQuery !== oldQuery) {
+//       applyFilter()
+//     }
+//   }
+// )
+
 //处理筛选
 const dialog = ref(false)
 const loading = ref(false)
@@ -181,7 +194,8 @@ const applyFilter = async () => {
       publishDate: form.publishDate,
       shippingCost: form.shippingCost,
       page: 1,
-      limit: 12
+      limit: 12,
+      searchQuery: searchStore.searchQuery
     })
     console.log('成功发送请求')
     // 处理成功响应

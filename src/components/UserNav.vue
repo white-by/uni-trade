@@ -6,16 +6,25 @@ import { ref, onMounted, onUnmounted } from 'vue'
 import { useUserStore } from '@/store/userStore'
 import useThrottle from '@/hooks/useThrottle.js'
 import { useSearchStore } from '@/store/searchStore'
+// import { useCategoryStore } from '@/store/sortCategory'
 
 const userStore = useUserStore()
 const userName = userStore.userInfo.userName
 
 const searchStore = useSearchStore()
+// const categoryStore = useCategoryStore()
 const searchInput = ref('')
 
 const router = useRouter()
 
 const { throttled } = useThrottle()
+
+const toHome = () => {
+  searchStore.searchQuery = ''
+  searchInput.value = ''
+  // categoryStore.categoryID = 0
+}
+
 // 搜索功能
 const handleSearch = () => {
   const trimmedInput = searchInput.value.trim()
@@ -134,7 +143,7 @@ const navigateToProfile = () => {
   <nav class="app-topnav">
     <div class="container">
       <ul>
-        <h1 class="logo">
+        <h1 class="logo" @click="toHome">
           <RouterLink to="/">校园二手交易站</RouterLink>
         </h1>
         <div class="site-name">校园二手交易站</div>

@@ -306,7 +306,7 @@ import UserFooter from '@/components/UserFooter.vue'
 import { onMounted, ref, reactive, nextTick } from 'vue'
 import AreaComponets from '@/components/AreaComponets.vue'
 import { getPurchasedDataAPI, getSelledDataAPI, operateOrderAPI, editAddressAPI } from '@/api/order.js'
-import { ElMessage } from 'element-plus'
+import { ElMessage, ElMessageBox } from 'element-plus'
 
 // 从接口拿取“我买到的”订单信息
 let purchasedPageNum = ref(1) //表格页码
@@ -444,81 +444,121 @@ const handleRefund = async () => {
 
 // 确认收货
 const handleReceiving = async (index, row) => {
-  const res = await operateOrderAPI({
-    id: row.tradeID,
-    status: '交易完成'
-  })
-  if (res.data.code === 1) {
-    ElMessage.success('收货成功！')
-    // 最新状态
-    const currentStatus = res.data.data.status
-    row.status = currentStatus
-  } else {
-    ElMessage.error('网络请求失败')
+  try {
+    await ElMessageBox.confirm('您确定要确认收货吗？', '提示', {
+      confirmButtonText: '确定',
+      cancelButtonText: '取消',
+      type: 'warning'
+    })
+    const res = await operateOrderAPI({
+      id: row.tradeID,
+      status: '交易完成'
+    })
+    if (res.data.code === 1) {
+      ElMessage.success('收货成功！')
+      const currentStatus = res.data.data.status
+      row.status = currentStatus
+    } else {
+      ElMessage.error('网络请求失败')
+    }
+  } catch {
+    ElMessage.info('操作已取消')
   }
 }
 
 // 取消退款
 const handleCancelRefund = async (index, row) => {
-  const res = await operateOrderAPI({
-    id: row.tradeID, // 使用订单ID
-    status: '退款的上一个状态' // 操作的目标状态
-  })
-  if (res.data.code === 1) {
-    ElMessage.success('取消退款成功！')
-    // 最新状态
-    const currentStatus = res.data.data.status
-    row.status = currentStatus
-  } else {
-    ElMessage.error('网络请求失败')
+  try {
+    await ElMessageBox.confirm('您确定要取消退款吗？', '提示', {
+      confirmButtonText: '确定',
+      cancelButtonText: '取消',
+      type: 'warning'
+    })
+    const res = await operateOrderAPI({
+      id: row.tradeID,
+      status: '退款的上一个状态'
+    })
+    if (res.data.code === 1) {
+      ElMessage.success('取消退款成功！')
+      const currentStatus = res.data.data.status
+      row.status = currentStatus
+    } else {
+      ElMessage.error('网络请求失败')
+    }
+  } catch {
+    ElMessage.info('操作已取消')
   }
 }
 
 // 去发货
 const handleDispatch = async (row) => {
-  const res = await operateOrderAPI({
-    id: row.tradeID,
-    status: '已发货'
-  })
-  if (res.data.code === 1) {
-    ElMessage.success('发货成功！')
-    // 最新状态
-    const currentStatus = res.data.data.status
-    row.status = currentStatus
-  } else {
-    ElMessage.error('网络请求失败')
+  try {
+    await ElMessageBox.confirm('您确定要发货吗？', '提示', {
+      confirmButtonText: '确定',
+      cancelButtonText: '取消',
+      type: 'warning'
+    })
+    const res = await operateOrderAPI({
+      id: row.tradeID,
+      status: '已发货'
+    })
+    if (res.data.code === 1) {
+      ElMessage.success('发货成功！')
+      const currentStatus = res.data.data.status
+      row.status = currentStatus
+    } else {
+      ElMessage.error('网络请求失败')
+    }
+  } catch {
+    ElMessage.info('操作已取消')
   }
 }
 
 // 取消订单
 const handleCancelOrder = async (index, row) => {
-  const res = await operateOrderAPI({
-    id: row.tradeID,
-    status: '已取消'
-  })
-  if (res.data.code === 1) {
-    ElMessage.success('取消订单成功！')
-    // 最新状态
-    const currentStatus = res.data.data.status
-    row.status = currentStatus
-  } else {
-    ElMessage.error('网络请求失败')
+  try {
+    await ElMessageBox.confirm('您确定要取消订单吗？', '提示', {
+      confirmButtonText: '确定',
+      cancelButtonText: '取消',
+      type: 'warning'
+    })
+    const res = await operateOrderAPI({
+      id: row.tradeID,
+      status: '已取消'
+    })
+    if (res.data.code === 1) {
+      ElMessage.success('取消订单成功！')
+      const currentStatus = res.data.data.status
+      row.status = currentStatus
+    } else {
+      ElMessage.error('网络请求失败')
+    }
+  } catch {
+    ElMessage.info('操作已取消')
   }
 }
 
 // 同意退款
 const handleAcceptRefund = async (index, row) => {
-  const res = await operateOrderAPI({
-    id: row.tradeID,
-    status: '已退款'
-  })
-  if (res.data.code === 1) {
-    ElMessage.success('已同意退款')
-    // 最新状态
-    const currentStatus = res.data.data.status
-    row.status = currentStatus
-  } else {
-    ElMessage.error('网络请求失败')
+  try {
+    await ElMessageBox.confirm('您确定要同意退款吗？', '提示', {
+      confirmButtonText: '确定',
+      cancelButtonText: '取消',
+      type: 'warning'
+    })
+    const res = await operateOrderAPI({
+      id: row.tradeID,
+      status: '已退款'
+    })
+    if (res.data.code === 1) {
+      ElMessage.success('已同意退款')
+      const currentStatus = res.data.data.status
+      row.status = currentStatus
+    } else {
+      ElMessage.error('网络请求失败')
+    }
+  } catch {
+    ElMessage.info('操作已取消')
   }
 }
 

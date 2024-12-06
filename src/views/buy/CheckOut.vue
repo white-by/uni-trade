@@ -306,7 +306,7 @@ const resetAddForm = () => {
 
   .wrapper {
     background: #fff;
-    padding: 0 3px;
+    padding: 20px 30px;
     border-radius: 3px;
     box-shadow: 0 2px 12px rgba(0, 0, 0, 0.1);
     .box-title {
@@ -481,7 +481,7 @@ const resetAddForm = () => {
     border: 1px solid #f5f5f5;
     margin-bottom: 10px;
     cursor: pointer;
-    border-radius: 8px; // 添加圆角
+    border-radius: 5px; // 添加圆角
     transition: border-color 0.3s, background-color 0.3s; // 增加平滑过渡效果
 
     &.active,

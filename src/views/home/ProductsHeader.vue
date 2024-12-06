@@ -24,8 +24,9 @@ const handleCategoryClick = (categoryID) => {
           round
           :class="{ active: selectedCategoryID === 0 }"
           @click="handleCategoryClick(0)"
-          >全部</el-button
         >
+          全部
+        </el-button>
         <el-button
           v-for="category in categoryStore.categoryList.data"
           :key="category.categoryID"

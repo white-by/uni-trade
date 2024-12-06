@@ -1,9 +1,10 @@
 <script setup>
 import { ArrowDown, Search } from '@element-plus/icons-vue'
-import { ElMessageBox } from 'element-plus'
+import { ElMessage, ElMessageBox } from 'element-plus'
 import { useRouter } from 'vue-router'
 import { ref, onMounted, onUnmounted } from 'vue'
 import { useUserStore } from '@/store/userStore'
+import useThrottle from '@/hooks/useThrottle.js'
 
 const userStore = useUserStore()
 const userName = userStore.userInfo.userName
@@ -11,6 +12,23 @@ const userName = userStore.userInfo.userName
 let input = ref('')
 
 const router = useRouter()
+
+const { throttled } = useThrottle()
+// 搜索功能
+const handleSearch = () => {
+  const trimmedInput = input.value.trim()
+  if (trimmedInput) {
+    // 搜索逻辑，例如跳转到搜索结果页
+    console.log('搜索内容：', trimmedInput)
+    router.push({ path: '/search', query: { searchInput: trimmedInput } })
+  } else {
+    // 空输入提示
+    ElMessage.warning('请输入商品名称进行搜索')
+  }
+}
+
+// 节流处理：限制每秒响应一次
+const throttledSearch = throttled(handleSearch, 1000)
 
 // 控制公告弹窗可见性
 const dialogTableVisible = ref(false)
@@ -124,6 +142,7 @@ const navigateToProfile = () => {
             style="width: 440px"
             placeholder="请输入商品名称"
             :prefix-icon="Search"
+            @keydown.enter="throttledSearch"
           />
         </div>
         <template v-if="true">

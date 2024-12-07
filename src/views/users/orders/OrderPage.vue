@@ -139,7 +139,7 @@
       </el-form-item>
 
       <span class="dialog-footer" style="display: flex; justify-content: center">
-        <el-button type="primary" @click="confirmAddressEdit">确认修改</el-button>
+        <el-button type="primary" @click="throttledConfirmAddressEdit">确认修改</el-button>
       </span>
     </el-dialog>
 
@@ -153,7 +153,7 @@
         style="margin-bottom: 10px"
       ></el-input>
       <span class="dialog-footer" style="display: flex; justify-content: center">
-        <el-button type="primary" @click="handleComment">确 定</el-button>
+        <el-button type="primary" @click="throttledHandleComment">确 定</el-button>
       </span>
     </el-dialog>
 
@@ -167,7 +167,7 @@
         style="margin-bottom: 10px"
       ></el-input>
       <span class="dialog-footer" style="display: flex; justify-content: center">
-        <el-button type="primary" @click="handleRefund">确 定</el-button>
+        <el-button type="primary" @click="throttledHandleRefund">确 定</el-button>
       </span>
     </el-dialog>
   </div>
@@ -279,7 +279,7 @@
           style="margin-bottom: 10px"
         ></el-input>
         <span class="dialog-footer" style="display: flex; justify-content: center">
-          <el-button type="primary" @click="handleRejectRefund">确 定</el-button>
+          <el-button type="primary" @click="throttledHandleRejectRefund">确 定</el-button>
         </span>
       </el-dialog>
 
@@ -307,6 +307,9 @@ import { onMounted, ref, reactive, nextTick } from 'vue'
 import AreaComponets from '@/components/AreaComponets.vue'
 import { getPurchasedDataAPI, getSelledDataAPI, operateOrderAPI, editAddressAPI } from '@/api/order.js'
 import { ElMessage, ElMessageBox } from 'element-plus'
+import useThrottle from '@/hooks/useThrottle'
+
+const { throttled } = useThrottle() // 节流
 
 // 从接口拿取“我买到的”订单信息
 let purchasedPageNum = ref(1) //表格页码
@@ -414,6 +417,8 @@ const handleComment = async () => {
   }
   commentDialogVisible.value = false
 }
+// 节流处理：限制每秒响应一次
+const throttledHandleComment = throttled(handleComment, 1000)
 
 // 退款
 const handleRefund = async () => {
@@ -441,6 +446,8 @@ const handleRefund = async () => {
   }
   refundDialogVisible.value = false
 }
+// 节流处理：限制每秒响应一次
+const throttledHandleRefund = throttled(handleRefund, 1000)
 
 // 确认收货
 const handleReceiving = async (index, row) => {
@@ -588,6 +595,8 @@ const handleRejectRefund = async () => {
   }
   rejectRefundDialogVisible.value = false
 }
+// 节流处理：限制每秒响应一次
+const throttledHandleRejectRefund = throttled(handleRejectRefund, 1000)
 
 onMounted(() => {
   getPurchasedData(), getSelledData()
@@ -639,6 +648,8 @@ const confirmAddressEdit = async () => {
   dialogVisible.value = false
   resetForm()
 }
+// 节流处理：限制每秒响应一次
+const throttledConfirmAddressEdit = throttled(confirmAddressEdit, 1000)
 
 const resetForm = () => {
   //重置表单数据

@@ -54,7 +54,7 @@
       </el-form-item>
 
       <el-form-item>
-        <el-button type="primary" @click="onSubmit" class="submit-button">保存</el-button>
+        <el-button type="primary" @click="throttledOnSubmit" class="submit-button">保存</el-button>
       </el-form-item>
     </el-form>
   </div>
@@ -71,10 +71,12 @@ import { ElMessage } from 'element-plus'
 import { editUserInfoAPI } from '@/api/profiles'
 import { useUserStore } from '@/store/userStore'
 import useASE from '@/hooks/useASE'
+import useThrottle from '@/hooks/useThrottle.js'
 
 const userStore = useUserStore()
 
 const { encrypt } = useASE()
+const { throttled } = useThrottle()
 
 // 表单引用
 const formRef = ref(null)
@@ -173,6 +175,8 @@ const onSubmit = async () => {
     }
   })
 }
+// 节流处理：限制每秒响应一次
+const throttledOnSubmit = throttled(onSubmit, 1000)
 </script>
 
 <style scoped lang="scss">

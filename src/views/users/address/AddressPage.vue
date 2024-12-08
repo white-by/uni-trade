@@ -122,9 +122,16 @@ const getAddressList = async () => {
 }
 
 // 当前默认地址的 ID
-const defaultAddressId = ref(addressData.value.find((address) => address.isDefault === 1)?.id || null)
+const defaultAddressId = ref(null)
 let oldAddressId = defaultAddressId.value
 let isThrottling = false // 控制节流状态
+
+// 确保地址数据加载后初始化
+const initDefaultAddress = () => {
+  const defaultAddress = addressData.value.find((address) => address.isDefault === 1)
+  defaultAddressId.value = defaultAddress?.id || null
+  oldAddressId = defaultAddressId.value
+}
 
 // 设置默认地址
 const setDefaultAddress = async (newAddressId) => {
@@ -187,8 +194,7 @@ const submitAddressForm = () => {
     if (valid) {
       const res = await addAddressAPI(newAddress.value)
       if (res.data.code === 1) {
-        const newAddressWithID = { ...newAddress.value, id: res.data.data.id }
-        addressData.value.push(newAddressWithID)
+        await getAddressList()
         addDialogVisible.value = false
         resetAddForm()
         ElMessage.success('添加成功')
@@ -295,7 +301,10 @@ const handleDelete = async (id) => {
   }
 }
 
-onMounted(() => {
-  getAddressList()
+onMounted(async () => {
+  await getAddressList()
+  if (addressData.value.length > 0) {
+    initDefaultAddress()
+  }
 })
 </script>

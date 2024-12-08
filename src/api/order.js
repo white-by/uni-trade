@@ -1,5 +1,6 @@
 // 订单相关api
 import httpInstance from '@/utils/https'
+import { useUserStore } from '@/store/userStore'
 
 /**
  * 获取“我买到的”订单列表
@@ -9,6 +10,7 @@ import httpInstance from '@/utils/https'
  * @returns 
  */
 export function getPurchasedDataAPI(page, pageSize){
+    const userStore = useUserStore() 
     return httpInstance({
         url: '/orders/purchased',
         params : {
@@ -16,7 +18,7 @@ export function getPurchasedDataAPI(page, pageSize){
             pageSize
         },
         headers: {
-            Authorization: `Bearer ${localStorage.getItem('token')}`, 
+             Authorization: `${userStore.userInfo.token}`
         }
     })
 }
@@ -29,6 +31,7 @@ export function getPurchasedDataAPI(page, pageSize){
  * @returns 
  */
 export const getSelledDataAPI = (page, pageSize) => {
+    const userStore = useUserStore() 
     return httpInstance({
         url: '/orders/selled',
         params : {
@@ -36,31 +39,33 @@ export const getSelledDataAPI = (page, pageSize) => {
             pageSize
         },
         headers: {
-            Authorization: `Bearer ${localStorage.getItem('token')}`, 
+            Authorization: `${userStore.userInfo.token}`
         }
     })
 }
 
 // 订单操作
 export const operateOrderAPI = (Data) => {
+    const userStore = useUserStore() 
     return httpInstance({
         url: `/orders/operate/${Data.id}`,
         method: 'post',
         data: Data,
          headers: {
-            Authorization: `Bearer ${localStorage.getItem('token')}`, 
+            Authorization: `${userStore.userInfo.token}`, 
         }
     })
 }
 
 // 订单操作
 export const editAddressAPI = (Data) => {
+    const userStore = useUserStore() 
     return httpInstance({
         url: `/orders/address/${Data.id}`,
         method: 'post',
         data: Data,
          headers: {
-            Authorization: `Bearer ${localStorage.getItem('token')}`, 
+            Authorization: `${userStore.userInfo.token}`, 
         }
     })
 }

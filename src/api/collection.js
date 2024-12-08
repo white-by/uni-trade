@@ -1,6 +1,8 @@
 import httpInstance from '@/utils/https'
+import { useUserStore } from '@/store/userStore'
 
 export const getCollectionListAPI  = (page, pageSize) => {
+    const userStore = useUserStore() 
     return httpInstance({
         url: '/collection',
          params : {
@@ -8,7 +10,7 @@ export const getCollectionListAPI  = (page, pageSize) => {
             pageSize
         },
         headers: {
-            Authorization: `Bearer ${localStorage.getItem('token')}`, 
+            Authorization: `${userStore.userInfo.token}`
         }
     })
 }

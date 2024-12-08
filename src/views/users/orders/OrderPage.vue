@@ -607,6 +607,7 @@ const areaComponentRef = ref(null)
 const dialogVisible = ref(false)
 const editForm = ref({
   tradeID: '',
+  addrID: '',
   province: '',
   city: '',
   area: '',
@@ -617,6 +618,7 @@ const openAddressEditDialog = (row) => {
   dialogVisible.value = true
   editForm.value = {
     tradeID: row.tradeID,
+    addrID: row.shippingAddress.addrID,
     province: row.shippingAddress.province,
     city: row.shippingAddress.city,
     area: row.shippingAddress.area,
@@ -630,7 +632,12 @@ const openAddressEditDialog = (row) => {
 }
 
 const confirmAddressEdit = async () => {
-  const res = await editAddressAPI(editForm.value)
+  const params = {
+    id: editForm.value.tradeID,
+    addrID: editForm.value.addrID
+  }
+  // console.log('params:', params)
+  const res = await editAddressAPI(params)
   if (res.data.code === 1) {
     ElMessage.success('修改成功')
     // 更新订单数据中的地址信息

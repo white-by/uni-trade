@@ -56,15 +56,9 @@ export const operateOrderAPI = (Data) => {
 // 订单操作
 export const editAddressAPI = (Data) => {
     return httpInstance({
-        url: `/orders/address/${Data.tradeID}`,
+        url: `/orders/address/${Data.id}`,
         method: 'post',
-        data: {
-            id: Data.tradeID,
-            province: Data.province,
-            city: Data.city,
-            area: Data.area,
-            detailArea: Data.detailArea
-        },
+        data: Data,
          headers: {
             Authorization: `Bearer ${localStorage.getItem('token')}`, 
         }

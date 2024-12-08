@@ -6,7 +6,8 @@ const profilesStore = useProfilesStore()
 
 const timeAgo = (time) => {
   // 解析时间字符串为 Date 对象
-  const targetTime = new Date(time.replace(/-/g, '/')) // 替换“-”为“/”，确保跨浏览器兼容
+  // const targetTime = new Date(time.replace(/-/g, '/')) // 替换“-”为“/”，确保跨浏览器兼容
+  const targetTime = new Date(time)
 
   const now = new Date()
   const seconds = Math.floor((now - targetTime) / 1000)

@@ -2,9 +2,11 @@
 import { ref, nextTick, onMounted, watch } from 'vue'
 import { ElMessage, ElMessageBox } from 'element-plus'
 import { Search } from '@element-plus/icons-vue'
-
 import { getUsersListApi, addUserApi, editUserApi, deleteUserApi } from '@/api/usersInfo'
 import schoolData from '@/../public/school.json'
+import useASE from '@/hooks/useASE'
+
+const { encrypt } = useASE()
 
 const queryForm = ref({
   searchQuery: '',
@@ -38,7 +40,8 @@ const userForm = ref({
   tel: '',
   schoolName: '',
   gender: null,
-  status: null
+  status: null,
+  password: '123456' // 默认密码
 })
 
 // 表单验证规则
@@ -91,7 +94,8 @@ const openAddUserForm = () => {
     tel: '',
     schoolName: '',
     gender: null,
-    status: null
+    status: null,
+    password: '123456' // 默认密码
   }
   mailPrefix.value = ''
   schoolEmailSuffix.value = '@edu.cn'
@@ -110,7 +114,8 @@ const closeDialog = () => {
     tel: '',
     schoolName: '',
     gender: null,
-    status: null
+    status: null,
+    password: '123456' // 默认密码
   }
   formRef.value?.clearValidate()
 }
@@ -143,6 +148,10 @@ const handleConfirm = async () => {
         if (res.data.code === 1) ElMessage.success('用户信息已更新')
         else ElMessage.error('更新失败')
       } else {
+        // 新增用户时移除 userID 字段
+        delete userForm.value.userID
+        // 默认加密密码123456
+        userForm.value.password = encrypt(userForm.value.password)
         const res = await addUserApi(userForm.value)
         if (res.data.code === 1) ElMessage.success('用户信息已添加')
         else ElMessage.error('添加失败')
@@ -211,7 +220,7 @@ const deleteUser = async (userID) => {
         </template>
       </el-table-column>
       <el-table-column label="学校" prop="schoolName" align="center"></el-table-column>
-      <el-table-column label="邮箱" prop="mail" align="center"></el-table-column>
+      <el-table-column label="邮箱" prop="mail" align="center" width="250"></el-table-column>
       <el-table-column label="电话" prop="tel" align="center"></el-table-column>
       <el-table-column label="用户状态" prop="status" align="center">
         <template #default="{ row }">
@@ -246,6 +255,10 @@ const deleteUser = async (userID) => {
       <el-form :model="userForm" :rules="rules" ref="formRef" label-width="100px">
         <el-form-item label="用户名" prop="userName">
           <el-input v-model="userForm.userName" placeholder="请输入用户名"></el-input>
+        </el-form-item>
+        <!-- 根据弹窗状态显示密码框 -->
+        <el-form-item label="密码" v-if="dialogTitle === '新增用户'">
+          <el-input v-model="userForm.password" disabled />
         </el-form-item>
         <el-form-item label="性别" prop="gender">
           <el-radio-group v-model="userForm.gender">

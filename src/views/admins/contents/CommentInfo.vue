@@ -4,8 +4,10 @@
 import { ref, onMounted } from 'vue'
 import { ElMessage, ElMessageBox } from 'element-plus'
 import { Search } from '@element-plus/icons-vue'
-
 import { getCommentListApi, deleteCommentApi } from '@/api/commentInfo'
+import useFormatTime from '@/hooks/useFormatTime'
+
+const { formatTime } = useFormatTime()
 
 const queryForm = ref({
   searchQuery: '',
@@ -18,8 +20,13 @@ const CommentList = ref([])
 const getCommentList = async () => {
   const res = await getCommentListApi(queryForm.value)
   if (res.data.code === 1) {
-    CommentList.value = res.data.data.commentList
-    console.log('返回：', CommentList.value)
+    // 格式化评论时间
+    CommentList.value = res.data.data.commentList.map((comment) => ({
+      ...comment,
+      commentTime: formatTime(comment.commentTime) // 格式化时间
+    }))
+
+    // console.log('返回：', CommentList.value)
     total.value = res.data.data.total
   } else ElMessage.error(res.data.msg)
 }

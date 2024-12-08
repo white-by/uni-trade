@@ -13,7 +13,14 @@
         <el-table-column label="实付" width="80"
           ><template #default="{ row }"> {{ row.price + row.shippingCost }}元 </template></el-table-column
         >
-        <el-table-column prop="deliveryMethod" label="发货方式" width="100"> </el-table-column>
+        <el-table-column prop="deliveryMethod" label="发货方式" width="100">
+          <template #default="{ row }">
+            <span v-if="row.deliveryMethod == '0'">无需快递</span>
+            <span v-else-if="row.deliveryMethod == '1'">自提</span>
+            <span v-else-if="row.deliveryMethod == '2'">邮寄</span>
+            <span v-else>未知方式</span>
+          </template></el-table-column
+        >
         <el-table-column prop="shippingAddress.name" label="联系人" width="80"></el-table-column>
         <el-table-column prop="shippingAddress.tel" label="联系电话" width="130"></el-table-column>
         <!-- 用户自己的收货地址 -->
@@ -34,10 +41,10 @@
                 <div>商品金额: {{ scope.row.price }}元</div>
                 <div v-if="scope.row.shippingCost != 0">运费: {{ scope.row.shippingCost }}元</div>
                 <div>
-                  发货地址: {{ scope.row.SenderAddress.province }}
-                  {{ scope.row.SenderAddress.city }}
-                  {{ scope.row.SenderAddress.area }}
-                  {{ scope.row.SenderAddress.detailArea }}
+                  发货地址: {{ scope.row.senderAddress.province }}
+                  {{ scope.row.senderAddress.city }}
+                  {{ scope.row.senderAddress.area }}
+                  {{ scope.row.senderAddress.detailArea }}
                 </div>
                 <div>卖家: {{ scope.row.sellerName }}</div>
                 <div>下单时间: {{ scope.row.orderTime }}</div>
@@ -183,7 +190,14 @@
         <el-table-column label="实收" width="80"
           ><template #default="{ row }"> {{ row.price + row.shippingCost }}元 </template></el-table-column
         >
-        <el-table-column prop="deliveryMethod" label="发货方式" width="100"> </el-table-column>
+        <el-table-column prop="deliveryMethod" label="发货方式" width="100">
+          <template #default="{ row }">
+            <span v-if="row.deliveryMethod == '0'">无需快递</span>
+            <span v-else-if="row.deliveryMethod == '1'">自提</span>
+            <span v-else-if="row.deliveryMethod == '2'">邮寄</span>
+            <span v-else>未知方式</span>
+          </template>
+        </el-table-column>
         <el-table-column prop="shippingAddress.name" label="联系人" width="80"></el-table-column>
         <el-table-column prop="shippingAddress.tel" label="联系电话" width="130"></el-table-column>
 
@@ -205,10 +219,10 @@
                 <div>商品金额: {{ scope.row.price }}元</div>
                 <div v-if="scope.row.shippingCost != 0">运费: {{ scope.row.shippingCost }}元</div>
                 <div>
-                  发货地址: {{ scope.row.SenderAddress.province }}
-                  {{ scope.row.SenderAddress.city }}
-                  {{ scope.row.SenderAddress.area }}
-                  {{ scope.row.SenderAddress.detailArea }}
+                  发货地址: {{ scope.row.senderAddress.province }}
+                  {{ scope.row.senderAddress.city }}
+                  {{ scope.row.senderAddress.area }}
+                  {{ scope.row.senderAddress.detailArea }}
                 </div>
                 <div>买家: {{ scope.row.sellerName }}</div>
                 <div>下单时间: {{ scope.row.orderTime }}</div>
@@ -579,7 +593,7 @@ const handleRejectRefund = async () => {
   const res = await operateOrderAPI({
     id: currentOrder.id,
     status: '处理中',
-    refundReason: refundReason.value
+    rejectReason: refundReason.value
   })
   if (res.data.code === 1) {
     ElMessage.success('拒绝退款，移交管理员处理')

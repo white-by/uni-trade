@@ -62,7 +62,14 @@ onMounted(() => {
       >
       <el-table-column prop="sellerName" label="卖家" align="center"></el-table-column>
       <el-table-column prop="buyerName" label="买家" align="center"></el-table-column>
-      <el-table-column prop="deliveryMethod" label="发货方式" align="center"> </el-table-column>
+      <el-table-column prop="deliveryMethod" label="发货方式" align="center"
+        ><template #default="{ row }">
+          <span v-if="row.deliveryMethod == '0'">无需快递</span>
+          <span v-else-if="row.deliveryMethod == '1'">自提</span>
+          <span v-else-if="row.deliveryMethod == '2'">邮寄</span>
+          <span v-else>未知方式</span>
+        </template>
+      </el-table-column>
       <el-table-column label="收货地址" align="center">
         <template #default="{ row }">
           {{ row.shippingAddress.province }}
@@ -73,10 +80,10 @@ onMounted(() => {
       </el-table-column>
       <el-table-column label="发货地址" align="center">
         <template #default="{ row }">
-          {{ row.SenderAddress.province }}
-          {{ row.SenderAddress.city }}
-          {{ row.SenderAddress.area }}
-          {{ row.SenderAddress.detailArea }}
+          {{ row.senderAddress.province }}
+          {{ row.senderAddress.city }}
+          {{ row.senderAddress.area }}
+          {{ row.senderAddress.detailArea }}
         </template>
       </el-table-column>
 

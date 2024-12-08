@@ -119,7 +119,7 @@ onMounted(() => {
       <el-table-column label="操作" align="center">
         <template #default="{ row }">
           <el-row type="flex" justify="center" :gutter="10">
-            <el-button @click="deleteProduct(row.productID)" type="danger">删除</el-button>
+            <el-button @click="deleteProduct(row.id)" type="danger">删除</el-button>
           </el-row>
         </template>
       </el-table-column>

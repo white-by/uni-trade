@@ -31,17 +31,16 @@ export const addAdminApi = (adminData) => {
  */
 export const editAdminApi = (adminData) => {
   return httpInstance({
-    url: `/admin/adminInfo/${adminData.userID}`,
+    url: `/admin/adminInfo/${adminData.adminID}`,
     method: 'PUT',
     data: adminData
   })
 }
 
-
 // 删除管理员
-export const deleteAdminApi = (adaminID) => {
+export const deleteAdminApi = (adminID) => {
   return httpInstance({
-    url: `/admin/adminInfo/${adaminID}`,
+    url: `/admin/adminInfo/${adminID}`,
     method: 'DELETE'
   })
 }

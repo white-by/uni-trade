@@ -34,7 +34,8 @@ const adminForm = ref({
   adminName: '',
   mail: '',
   tel: '',
-  gender: null
+  gender: null,
+  age: ''
 })
 
 // 表单验证规则
@@ -48,7 +49,21 @@ const rules = {
     { required: true, message: '请输入电话', trigger: 'blur' },
     { pattern: /^[0-9]{11}$/, message: '请输入有效的电话号码', trigger: 'blur' }
   ],
-  gender: [{ required: true, message: '请选择性别', trigger: 'change' }]
+  gender: [{ required: true, message: '请选择性别', trigger: 'change' }],
+  age: [
+    { required: true, message: '年龄不能为空', trigger: 'blur' },
+    {
+      validator: (rule, value, callback) => {
+        const age = Number(value) // 将输入转换为数字
+        if (isNaN(age) || age < 0) {
+          callback(new Error('年龄必须为大于等于 0 的数字'))
+        } else {
+          callback()
+        }
+      },
+      trigger: 'blur'
+    }
+  ]
 }
 
 // 表单引用
@@ -62,7 +77,8 @@ const openAddAdminForm = () => {
     adminName: '',
     mail: '',
     tel: '',
-    gender: null
+    gender: null,
+    age: ''
   }
   dialogVisible.value = true
   nextTick(() => formRef.value?.clearValidate())
@@ -77,7 +93,8 @@ const closeDialog = () => {
     adminName: '',
     mail: '',
     tel: '',
-    gender: null
+    gender: null,
+    age: ''
   }
   formRef.value?.clearValidate()
 }
@@ -172,6 +189,7 @@ const deleteAdmin = async (adminID) => {
           <span>{{ row.gender === 0 ? '女' : '男' }}</span>
         </template>
       </el-table-column>
+      <el-table-column label="年龄" prop="age" align="center"></el-table-column>
       <el-table-column label="邮箱" prop="mail" align="center"></el-table-column>
       <el-table-column label="电话" prop="tel" align="center"></el-table-column>
       <el-table-column label="操作" align="center">
@@ -207,6 +225,11 @@ const deleteAdmin = async (adminID) => {
             <el-radio :value="1">男</el-radio>
           </el-radio-group>
         </el-form-item>
+
+        <el-form-item label="年龄" prop="age">
+          <el-input v-model="adminForm.age" placeholder="请输入年龄" type="number" min="0"></el-input>
+        </el-form-item>
+
         <el-form-item label="邮箱" prop="mail">
           <el-input v-model="adminForm.mail" placeholder="请输入邮箱"></el-input>
         </el-form-item>

@@ -1,20 +1,20 @@
 <template>
   <div class="content">
     <h1>个人信息</h1>
-    <el-form :model="admin" label-width="100px" class="form" style="max-width: 600px" :rules="rules" ref="formRef">
+    <el-form :model="tempAdmin" label-width="100px" class="form" style="max-width: 600px" :rules="rules" ref="formRef">
       <!-- 管理员ID -->
       <el-form-item label="管理员ID">
-        <el-input v-model="admin.adminID" disabled />
+        <el-input v-model="tempAdmin.adminID" disabled />
       </el-form-item>
 
       <!-- 姓名/昵称 -->
       <el-form-item label="昵称" prop="adminName">
-        <el-input v-model="admin.adminName" />
+        <el-input v-model="tempAdmin.adminName" />
       </el-form-item>
 
       <!-- 密码 -->
       <el-form-item label="密码" prop="password">
-        <el-input v-model="admin.password" :type="addPassFlag ? 'text' : 'password'">
+        <el-input v-model="tempAdmin.password" :type="addPassFlag ? 'text' : 'password'">
           <template #suffix>
             <span @click="addPassFlag = !addPassFlag">
               <el-icon v-if="addPassFlag"><View /></el-icon>
@@ -26,7 +26,7 @@
 
       <!-- 性别 -->
       <el-form-item label="性别">
-        <el-select v-model="admin.gender" size="large">
+        <el-select v-model="tempAdmin.gender" size="large">
           <el-option label="女" :value="0" />
           <el-option label="男" :value="1" />
         </el-select>
@@ -34,17 +34,17 @@
 
       <!-- 年龄 -->
       <el-form-item label="年龄" prop="age">
-        <el-input v-model="admin.age" type="number" min="0" />
+        <el-input v-model="tempAdmin.age" type="number" min="0" />
       </el-form-item>
 
       <!-- 邮箱 -->
       <el-form-item label="邮箱">
-        <el-input v-model="admin.mail" disabled />
+        <el-input v-model="tempAdmin.mail" disabled />
       </el-form-item>
 
       <!-- 电话 -->
       <el-form-item label="电话" prop="tel">
-        <el-input v-model="admin.tel" />
+        <el-input v-model="tempAdmin.tel" />
       </el-form-item>
 
       <el-form-item>
@@ -55,21 +55,31 @@
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { ref, reactive, watchEffect } from 'vue'
 import { View, Hide } from '@element-plus/icons-vue'
 import { ElMessage } from 'element-plus'
 import { useAdminStore } from '@/store/adminStore'
 import { editAdminApi } from '@/api/adminInfo'
 import useThrottle from '@/hooks/useThrottle'
+import useASE from '@/hooks/useASE'
 
 const { throttled } = useThrottle() // 节流
+const { encrypt, decrypt } = useASE()
 
 const adminStore = useAdminStore()
-const admin = adminStore.adminInfo.data
+// 创建一个临时变量来存储修改后的数据
+const tempAdmin = reactive({ ...adminStore.adminInfo.data })
 
 const addPassFlag = ref(false)
 
 const formRef = ref(null)
+
+// 解密密码字段，渲染时显示明文密码
+watchEffect(() => {
+  if (adminStore.adminInfo.data.password) {
+    tempAdmin.password = decrypt(adminStore.adminInfo.data.password)
+  }
+})
 
 // 表单验证规则
 const rules = {
@@ -107,13 +117,15 @@ const rules = {
 const onSubmit = async () => {
   formRef.value.validate(async (valid) => {
     if (valid) {
-      console.log('提交的表单数据:', admin)
-      console.log('提交的表单数据id:', admin.adminID)
-      const res = await editAdminApi(admin)
+      // 提交之前对密码进行加密
+      tempAdmin.password = encrypt(tempAdmin.password)
+
+      const res = await editAdminApi(tempAdmin)
       if (res.data.code === 1) {
         // 成功更新后台数据后，弹出提示
         ElMessage.success('管理员信息已更新')
-        // 刷新页面
+        // 更新 Pinia 中的数据
+        adminStore.adminInfo.data = { ...tempAdmin }
       } else {
         ElMessage.error('更新失败')
       }

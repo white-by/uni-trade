@@ -152,7 +152,6 @@ const tempActiveAddress = ref({}) // 临时选中的地址
 const cartStore = useCartStore()
 const router = useRouter()
 
-// 地址是否使用地址ID？电话号码怎么办？
 const createOrder = async () => {
   const orderData = ref({
     sellerID: cartStore.selectedProduct.value.userName,
@@ -160,20 +159,8 @@ const createOrder = async () => {
     price: cartStore.selectedProduct.value.price,
     deliveryMethod: cartStore.selectedProduct.value.deliveryMethod,
     shippingCost: cartStore.selectedProduct.value.shippingCost,
-    SenderAddress: {
-      province: cartStore.selectedProduct.value.province,
-      city: cartStore.selectedProduct.value.city,
-      area: cartStore.selectedProduct.value.area,
-      detailArea: cartStore.selectedProduct.value.detailArea
-    },
-    shippingAddress: {
-      province: curAddress.value.province,
-      city: curAddress.value.city,
-      area: curAddress.value.area,
-      detailArea: curAddress.value.detailArea,
-      name: curAddress.value.name,
-      tel: curAddress.value.tel
-    }
+    SenderAddrID: cartStore.selectedProduct.value.addrID,
+    shippingAddrID: curAddress.value.id
   })
   console.log('orderData:', orderData.value)
   const res = await createOrderAPI(orderData.value)
@@ -198,6 +185,7 @@ const getAddressList = async () => {
     defaultAddressId.value = defaultAddr.id
     activeAddress.value = defaultAddr
     curAddress.value = defaultAddr
+    console.log('默认地址：', curAddress.value)
   }
 }
 

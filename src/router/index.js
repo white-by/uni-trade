@@ -27,6 +27,7 @@ import AdminProfiles from '@/views/admins/AdminProfiles.vue'
 import ProductsInfo from '@/views/admins/sales/ProductsInfo.vue'
 import PayPage from '@/views/buy/PayPage.vue'
 import CheckOut from '@/views/buy/CheckOut.vue'
+import PayBack from '@/views/buy/PayBack.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -101,6 +102,10 @@ const router = createRouter({
     {
       path: '/pay',
       component: PayPage
+    },
+    {
+      path: '/paycallback', // 注意路径，必须是paycallback
+      component: PayBack
     },
     {
       path: '/checkout',

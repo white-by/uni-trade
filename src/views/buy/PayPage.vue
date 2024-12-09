@@ -7,7 +7,7 @@ import { getOrderApi } from '@/api/pay'
 import { onMounted, ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { config } from '@/config/config'
-import { useCountDown } from '@/components/useCountDown'
+import { useCountDown } from '@/hooks/useCountDown'
 import { ElMessage } from 'element-plus'
 const { formatTime, start, onEnd } = useCountDown()
 
@@ -79,7 +79,7 @@ const payUrl = `${baseURL}/pay/aliPay?orderId=${route.query.id}&redirect=${redir
       </div>
       <!-- 付款方式 -->
       <div class="pay-type">
-        <p class="head">请选择以下支付方式付款</p>
+        <p class="head">请选择支付方式</p>
         <div class="item">
           <p>支付平台</p>
           <a class="btn alipay" :href="payUrl"></a>
@@ -156,6 +156,7 @@ const payUrl = `${baseURL}/pay/aliPay?orderId=${route.query.id}&redirect=${redir
     height: 70px;
     padding-left: 30px;
     font-size: 16px;
+    padding-left: 35px;
 
     &.head {
       border-bottom: 1px solid #f5f5f5;
@@ -171,6 +172,7 @@ const payUrl = `${baseURL}/pay/aliPay?orderId=${route.query.id}&redirect=${redir
     margin-left: 30px;
     color: #666666;
     display: inline-block;
+    margin-left: 35px;
 
     &.active,
     &:hover {
@@ -181,5 +183,9 @@ const payUrl = `${baseURL}/pay/aliPay?orderId=${route.query.id}&redirect=${redir
       background: url('@/assets/images/alipay.png') no-repeat center / contain;
     }
   }
+}
+
+.item {
+  margin-left: 20px;
 }
 </style>

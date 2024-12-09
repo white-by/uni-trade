@@ -166,6 +166,13 @@ const createOrder = async () => {
   const res = await createOrderAPI(orderData.value)
   if (res.data.code === 1) {
     // 正常生成逻辑
+    const orderId = res.data.data.tradeID
+    router.push({
+      path: '/pay',
+      query: {
+        id: orderId
+      }
+    })
   }
 }
 

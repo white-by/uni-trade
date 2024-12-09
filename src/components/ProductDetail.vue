@@ -49,6 +49,7 @@
           <el-col :span="10">
             <el-form-item label="地址">
               <p class="address">{{ product.province }}{{ product.city }}{{ product.area }}{{ product.detailArea }}</p>
+              <p v-if="!product.province">暂无地址信息</p>
             </el-form-item>
           </el-col>
           <el-col :span="14">
@@ -91,7 +92,7 @@
 
         <el-form-item label="邮费">
           <p>
-            <span style="margin-left: 5px">￥{{ product.shippingCost }}</span>
+            <span style="margin-left: 0px">￥{{ product.shippingCost }}</span>
           </p>
         </el-form-item>
 

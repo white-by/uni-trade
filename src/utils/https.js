@@ -2,16 +2,11 @@
 import axios from 'axios'
 import { ElMessage } from 'element-plus'
 import { useAdminStore } from '@/store/adminStore'
+import { config } from '@/config/config'
 
 const httpInstance = axios.create({
-  //apifox云端MOCK
-  // baseURL: 'https://apifoxmock.com/m1/5227100-4893915-default',
-
-  //apifox本地MOCK
-  baseURL: 'http://127.0.0.1:4523/m1/5227100-4893915-default',
-
-  // baseURL: 'http://127.0.0.1:5001',
-  timeout: 5000
+  baseURL: config.baseURL,
+  timeout: config.timeout
 })
 
 //拦截器

@@ -91,7 +91,11 @@ const handleConfirm = async () => {
         if (res.data.code === 1) ElMessage.success('分类信息已更新')
         else ElMessage.error('更新失败')
       } else {
-        const res = await addCategoryApi(categoryForm.value)
+        const parma = {
+          categoryName: categoryForm.value.categoryName,
+          description: categoryForm.value.description
+        }
+        const res = await addCategoryApi(parma)
         if (res.data.code === 1) ElMessage.success('分类信息已添加')
         else ElMessage.error('添加失败')
       }

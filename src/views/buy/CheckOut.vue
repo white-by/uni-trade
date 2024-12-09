@@ -7,7 +7,7 @@
       <div class="wrapper">
         <!-- 收货地址 -->
         <h3 class="box-title">收货地址</h3>
-        <div class="box-body">
+        <div>
           <div class="address">
             <div class="text">
               <div class="none" v-if="cartStore.selectedProduct.value.deliveryMethod == '无需快递'">该商品无需快递</div>

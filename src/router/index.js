@@ -120,7 +120,7 @@ const router = createRouter({
           path: 'usersInfo',
           component: UsersInfo
         },
-         {
+        {
           path: 'productsInfo',
           component: ProductsInfo
         },
@@ -147,7 +147,7 @@ const router = createRouter({
         {
           path: 'profiles',
           component: AdminProfiles
-        },
+        }
       ]
     }
   ]

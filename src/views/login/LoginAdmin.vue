@@ -27,14 +27,15 @@
 <script setup>
 import { ref } from 'vue'
 import { Edit, Lock } from '@element-plus/icons-vue'
-import { ElMessage } from 'element-plus'
 import { useRouter } from 'vue-router'
 import { useAdminStore } from '@/store/adminStore'
 import useASE from '@/hooks/useASE'
+import { loginApi } from '@/api/admin'
+import { ElMessage } from 'element-plus'
 
 const adminStore = useAdminStore()
 
-let form = ref({
+const form = ref({
   mail: '',
   password: ''
 })
@@ -75,18 +76,21 @@ const { encrypt } = useASE()
 const formRef = ref(null)
 const handleLogin = () => {
   formRef.value.validate(async (valid, fields) => {
-    console.log('加密前：', form.value.password)
     const password = encrypt(form.value.password)
-    console.log('加密后：', password)
+    // console.log('加密后：', password)
     // 添加 fields 参数
     const { mail } = form.value
     if (valid) {
-      await adminStore.getAdminInfo({ mail, password })
-      ElMessage({
-        type: 'success',
-        message: '登录成功'
-      })
-      router.replace('/admin')
+      const res = await loginApi({ mail, password })
+      console.log('res', res)
+
+      if (res.data.code === 1) {
+        ElMessage.success('登录成功')
+        adminStore.adminInfo = res.data.data
+        router.replace('/admin')
+      } else {
+        ElMessage.error('邮箱或密码错误')
+      }
     } else {
       console.log('error submit!', fields)
       return false

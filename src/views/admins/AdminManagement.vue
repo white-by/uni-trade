@@ -24,7 +24,7 @@ const route = useRoute()
 const activeIndex = ref('')
 
 const adminStore = useAdminStore()
-const adminName = adminStore.adminInfo.data.adminName
+const adminName = ref(adminStore.adminInfo.adminName)
 
 const confirmLogout = async () => {
   try {
@@ -39,6 +39,14 @@ const confirmLogout = async () => {
     console.log('取消了登出操作', error)
   }
 }
+
+// 实时改名
+watch(
+  () => adminStore.adminInfo.adminName,
+  (newName) => {
+    adminName.value = newName
+  }
+)
 
 // 根据当前路径设置激活的导航项
 watch(

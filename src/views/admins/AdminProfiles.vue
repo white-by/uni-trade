@@ -68,7 +68,7 @@ const { encrypt, decrypt } = useASE()
 
 const adminStore = useAdminStore()
 // 创建一个临时变量来存储修改后的数据
-const tempAdmin = reactive({ ...adminStore.adminInfo.data })
+const tempAdmin = reactive({ ...adminStore.adminInfo })
 
 const addPassFlag = ref(false)
 
@@ -76,8 +76,8 @@ const formRef = ref(null)
 
 // 解密密码字段，渲染时显示明文密码
 watchEffect(() => {
-  if (adminStore.adminInfo.data.password) {
-    tempAdmin.password = decrypt(adminStore.adminInfo.data.password)
+  if (adminStore.adminInfo.password) {
+    tempAdmin.password = decrypt(adminStore.adminInfo.password)
   }
 })
 
@@ -119,13 +119,14 @@ const onSubmit = async () => {
     if (valid) {
       // 提交之前对密码进行加密
       tempAdmin.password = encrypt(tempAdmin.password)
-
+      // 显式将 age 转换为数字
+      tempAdmin.age = Number(tempAdmin.age)
       const res = await editAdminApi(tempAdmin)
       if (res.data.code === 1) {
         // 成功更新后台数据后，弹出提示
         ElMessage.success('管理员信息已更新')
         // 更新 Pinia 中的数据
-        adminStore.adminInfo.data = { ...tempAdmin }
+        adminStore.adminInfo = { ...tempAdmin }
       } else {
         ElMessage.error('更新失败')
       }

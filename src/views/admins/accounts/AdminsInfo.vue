@@ -2,8 +2,13 @@
 import { ref, nextTick, onMounted } from 'vue'
 import { ElMessage, ElMessageBox } from 'element-plus'
 import { Search } from '@element-plus/icons-vue'
-
 import { getAdminListApi, addAdminApi, editAdminApi, deleteAdminApi } from '@/api/adminInfo'
+import { useAdminStore } from '@/store/adminStore'
+import useASE from '@/hooks/useASE'
+
+const { encrypt } = useASE()
+
+const adminStore = useAdminStore()
 
 const queryForm = ref({
   searchQuery: '',
@@ -35,7 +40,8 @@ const adminForm = ref({
   mail: '',
   tel: '',
   gender: null,
-  age: ''
+  age: null,
+  password: '123456' // 默认密码
 })
 
 // 表单验证规则
@@ -78,7 +84,8 @@ const openAddAdminForm = () => {
     mail: '',
     tel: '',
     gender: null,
-    age: ''
+    age: null,
+    password: '123456' // 默认密码
   }
   dialogVisible.value = true
   nextTick(() => formRef.value?.clearValidate())
@@ -94,7 +101,8 @@ const closeDialog = () => {
     mail: '',
     tel: '',
     gender: null,
-    age: ''
+    age: null,
+    password: '123456' // 默认密码
   }
   formRef.value?.clearValidate()
 }
@@ -115,6 +123,8 @@ const handlePageChange = (pageNum) => {
 const handleConfirm = async () => {
   formRef.value.validate(async (valid) => {
     if (valid) {
+      // 显式将 age 转换为数字
+      adminForm.value.age = Number(adminForm.value.age)
       console.log('提交的表单数据:', adminForm.value)
 
       if (adminForm.value.adminID) {
@@ -122,6 +132,10 @@ const handleConfirm = async () => {
         if (res.data.code === 1) ElMessage.success('管理员信息已更新')
         else ElMessage.error('更新失败')
       } else {
+        // 新增用户时移除 adminID 字段
+        delete adminForm.value.adminID
+        // 默认加密密码123456
+        adminForm.value.password = encrypt(adminForm.value.password)
         const res = await addAdminApi(adminForm.value)
         if (res.data.code === 1) ElMessage.success('管理员信息已添加')
         else ElMessage.error('添加失败')
@@ -195,8 +209,18 @@ const deleteAdmin = async (adminID) => {
       <el-table-column label="操作" align="center">
         <template #default="{ row }">
           <el-row type="flex" justify="center" :gutter="10">
-            <el-button @click="editAdmin(row)" type="primary">编辑</el-button>
-            <el-button @click="deleteAdmin(row.adminID)" type="danger">删除</el-button>
+            <el-button @click="editAdmin(row)" type="primary" v-if="row.adminID !== adminStore.adminInfo.adminID">
+              编辑
+            </el-button>
+            <el-button
+              @click="deleteAdmin(row.adminID)"
+              type="danger"
+              v-if="row.adminID !== adminStore.adminInfo.adminID"
+            >
+              删除
+            </el-button>
+            <!-- 如果是当前管理员，显示禁止操作的按钮 -->
+            <span v-else type="text"> 此管理员为您自己 </span>
           </el-row>
         </template>
       </el-table-column>
@@ -218,6 +242,10 @@ const deleteAdmin = async (adminID) => {
       <el-form :model="adminForm" :rules="rules" ref="formRef" label-width="120px">
         <el-form-item label="管理员名" prop="adminName">
           <el-input v-model="adminForm.adminName" placeholder="请输入管理员名"></el-input>
+        </el-form-item>
+        <!-- 根据弹窗状态显示密码框 -->
+        <el-form-item label="密码" v-if="dialogTitle === '新增管理员'">
+          <el-input v-model="adminForm.password" disabled />
         </el-form-item>
         <el-form-item label="性别" prop="gender">
           <el-radio-group v-model="adminForm.gender">

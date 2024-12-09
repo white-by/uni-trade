@@ -14,7 +14,7 @@ router.beforeEach((to, from, next) => {
 
   if (isAdminPath) {
     const adminStore = useAdminStore()
-    const token = adminStore.adminInfo?.data?.token
+    const token = adminStore.adminInfo?.token
     if (token) {
       // 已登录管理员用户尝试访问登录页面，重定向到管理员首页
       if (to.path === '/admin/login') return next('/admin')

@@ -82,10 +82,11 @@ import { View, Hide } from '@element-plus/icons-vue'
 import { ElMessage, ElNotification } from 'element-plus'
 import { useRouter } from 'vue-router'
 import { getCode, resetPsw } from '@/api/register'
-
+import useASE from '@/hooks/useASE'
 import 'element-plus/theme-chalk/el-notification.css'
 
 const router = useRouter()
+const { encrypt } = useASE()
 
 let form = ref({
   mail: '',
@@ -203,7 +204,7 @@ const handleResetPassword = async () => {
       const newForm = ref({
         mail: form.value.mail,
         code: form.value.verificationCode,
-        password: form.value.password
+        password: encrypt(form.value.password)
       })
       // console.log('重置密码信息:', newForm.value)
 

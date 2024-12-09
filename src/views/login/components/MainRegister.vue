@@ -86,10 +86,11 @@ import { ElMessage, ElNotification } from 'element-plus'
 import schoolData from '@/../public/school.json'
 import { useRouter } from 'vue-router'
 import { getCode, register } from '@/api/register'
-
+import useASE from '@/hooks/useASE'
 import 'element-plus/theme-chalk/el-notification.css'
 
 const router = useRouter()
+const { encrypt } = useASE()
 
 let form = ref({
   schoolName: '',
@@ -231,7 +232,7 @@ const handleRegister = async () => {
         schoolName: form.value.schoolName,
         mail: form.value.mail,
         code: form.value.code,
-        password: form.value.password
+        password: encrypt(form.value.password)
       })
 
       // console.log('注册信息:', newForm.value)

@@ -4,7 +4,6 @@ import { useUserStore } from '@/store/userStore'
 //获取地址列表
 export const getAddressListAPI = () => {
   const userStore = useUserStore()
-  console.log('token:', userStore.userInfo.token)
   return httpInstance({
     url: '/address',
     method: 'get',

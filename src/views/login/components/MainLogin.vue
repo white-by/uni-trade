@@ -61,7 +61,6 @@
 import { ref } from 'vue'
 import { View, Hide } from '@element-plus/icons-vue'
 import { useRouter } from 'vue-router'
-import { ElMessage } from 'element-plus'
 import { useUserStore } from '@/store/userStore'
 import useASE from '@/hooks/useASE'
 
@@ -113,10 +112,6 @@ const handleLogin = () => {
     const { mail } = form.value
     if (valid) {
       await userStore.getUserInfo({ mail, password })
-      ElMessage({
-        type: 'success',
-        message: '登录成功'
-      })
       router.replace('/')
     } else {
       console.log('error submit!', fields)

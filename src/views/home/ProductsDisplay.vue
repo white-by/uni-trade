@@ -3,6 +3,7 @@ import { ref, onMounted, watch } from 'vue'
 import { getProductsListAPI } from '@/api/products.js'
 import { useCategoryStore } from '@/store/sortCategory'
 import { useSearchStore } from '@/store/searchStore'
+import { ElMessage } from 'element-plus'
 
 const productsList = ref([]) // 商品列表
 const categoryStore = useCategoryStore() // 分类状态
@@ -32,6 +33,10 @@ const getProductsList = async () => {
       pageSize.value,
       searchStore.searchQuery
     )
+
+    if (res.data.code === 1 && searchStore.searchQuery) {
+      ElMessage.success('搜索成功')
+    }
 
     if (res.data.data.length < pageSize.value) {
       hasMoreData.value = false // 没有更多数据了

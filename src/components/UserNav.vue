@@ -2,14 +2,14 @@
 import { ArrowDown, Search } from '@element-plus/icons-vue'
 import { ElMessage, ElMessageBox } from 'element-plus'
 import { useRouter } from 'vue-router'
-import { ref, onMounted, onUnmounted } from 'vue'
+import { ref, onMounted, onUnmounted, watch } from 'vue'
 import { useUserStore } from '@/store/userStore'
 import useThrottle from '@/hooks/useThrottle.js'
 import { useSearchStore } from '@/store/searchStore'
 // import { useCategoryStore } from '@/store/sortCategory'
 
 const userStore = useUserStore()
-const userName = userStore.userInfo.userName
+const userName = ref(userStore.userInfo.userName)
 
 const searchStore = useSearchStore()
 // const categoryStore = useCategoryStore()
@@ -35,7 +35,11 @@ const handleSearch = () => {
     searchStore.searchQuery = trimmedInput
   } else {
     // 空输入提示
-    ElMessage.warning('请输入商品名称进行搜索')
+    ElMessage({
+      message: '请输入商品名称进行搜索',
+      type: 'warning',
+      plain: true
+    })
   }
 }
 
@@ -51,6 +55,14 @@ const announcements = ref([])
 
 // SSE 实例
 let eventSource = null
+
+// 实时改名
+watch(
+  () => userStore.userInfo.userName,
+  (newName) => {
+    userName.value = newName
+  }
+)
 
 // 打开弹窗的方法
 const openDialog = () => {

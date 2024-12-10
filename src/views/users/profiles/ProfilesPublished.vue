@@ -5,7 +5,7 @@
     </div>
     <div class="published-container">
       <div v-for="(product, index) in profilesStore.publishedProducts" :key="product.id" class="published-item">
-        <img :src="getFirstImageURL(product.imageURL)" alt="商品图片" class="item-image" />
+        <img :src="getFirstImageURL(product.imageUrl)" alt="商品图片" class="item-image" />
         <div class="item-info">
           <router-link class="product-name" :to="`/detail/${product.id}`"
             ><h3 class="item-title">{{ product.title }}</h3></router-link
@@ -40,8 +40,8 @@ const getIdFromUrl = () => {
 }
 
 // 获取第一张图片URL
-const getFirstImageURL = (imageURL) => {
-  return imageURL ? imageURL.split(',')[0] : ''
+const getFirstImageURL = (imageUrl) => {
+  return imageUrl ? imageUrl.split(',')[0] : ''
 }
 </script>
 

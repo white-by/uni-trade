@@ -238,9 +238,9 @@ watch(
   (newVal) => {
     Object.assign(form, newVal)
     Object.assign(originalData, newVal)
-    // 如果 imageURL 存在，将图片 URL 分割成数组并赋值给 imageList
-    if (newVal.imageURL) {
-      imageList.value = newVal.imageURL.split(',').map((url) => ({ url }))
+    // 如果 imageUrl 存在，将图片 URL 分割成数组并赋值给 imageList
+    if (newVal.imageUrl) {
+      imageList.value = newVal.imageUrl.split(',').map((url) => ({ url }))
     }
     // 根据 addrID 查找地址并设置 curAddress
     if (newVal.addrID && addressData.value.length > 0) {
@@ -447,7 +447,7 @@ function openDialog() {
 // 提交表单并触发更新事件
 function submitForm() {
   // 更新图片URL，将文件列表的图片合并成逗号分隔的字符串
-  form.imageURL = imageList.value.map((item) => item.url).join(',')
+  form.imageUrl = imageList.value.map((item) => item.url).join(',')
   emit('update:item', form) // 将更新的数据传递给父组件
   closeDialog() // 关闭对话框
 }
@@ -460,7 +460,7 @@ function closeDialog() {
 // 重置表单数据
 function resetForm() {
   Object.assign(form, originalData) // 恢复到打开对话框前的初始数据
-  imageList.value = originalData.imageURL ? originalData.imageURL.split(',').map((url) => ({ url })) : []
+  imageList.value = originalData.imageUrl ? originalData.imageUrl.split(',').map((url) => ({ url })) : []
 }
 
 const isShippingDisabled = ref(false)

@@ -70,6 +70,9 @@ const adminStore = useAdminStore()
 // 创建一个临时变量来存储修改后的数据
 const tempAdmin = reactive({ ...adminStore.adminInfo })
 
+// 创建原始数据备份
+const originalAdmin = reactive({ ...adminStore.adminInfo })
+
 const addPassFlag = ref(false)
 
 const formRef = ref(null)
@@ -78,6 +81,7 @@ const formRef = ref(null)
 watchEffect(() => {
   if (adminStore.adminInfo.password) {
     tempAdmin.password = decrypt(adminStore.adminInfo.password)
+    originalAdmin.password = decrypt(adminStore.adminInfo.password) // 同步解密到备份
   }
 })
 
@@ -121,14 +125,20 @@ const onSubmit = async () => {
       tempAdmin.password = encrypt(tempAdmin.password)
       // 显式将 age 转换为数字
       tempAdmin.age = Number(tempAdmin.age)
+
       const res = await editAdminApi(tempAdmin)
       if (res.data.code === 1) {
         // 成功更新后台数据后，弹出提示
         ElMessage.success('管理员信息已更新')
         // 更新 Pinia 中的数据
         adminStore.adminInfo = { ...tempAdmin }
+
+        Object.assign(originalAdmin, tempAdmin) // 更新备份数据
       } else {
-        ElMessage.error('更新失败')
+        // 提交失败
+        ElMessage.error('管理员昵称已存在')
+
+        Object.assign(tempAdmin, originalAdmin) // 回滚所有数据
       }
     } else {
       console.log('表单校验失败')

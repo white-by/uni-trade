@@ -57,10 +57,8 @@
 <script setup>
 import UserNav from '@/components/UserNav.vue'
 import { ref, reactive, watchEffect } from 'vue'
-// import { onMounted } from 'vue'
 import { View, Hide } from '@element-plus/icons-vue'
 import UserFooter from '@/components/UserFooter.vue'
-// import axios from 'axios'
 import { ElMessage } from 'element-plus'
 import { editUserInfoAPI } from '@/api/profiles'
 import { useUserStore } from '@/store/userStore'
@@ -74,6 +72,9 @@ const userStore = useUserStore()
 // 创建一个临时变量来存储修改后的数据
 const tempUser = reactive({ ...userStore.userInfo })
 
+// 创建原始数据备份
+const originalUser = reactive({ ...userStore.userInfo })
+
 // 表单引用
 const formRef = ref(null)
 
@@ -81,6 +82,7 @@ const formRef = ref(null)
 watchEffect(() => {
   if (userStore.userInfo.password) {
     tempUser.password = decrypt(userStore.userInfo.password)
+    originalUser.password = decrypt(userStore.userInfo.password) // 同步解密到备份
   }
 })
 
@@ -97,21 +99,7 @@ const rules = {
   ]
 }
 
-// onMounted(() => {
-//   fetchAvatar()
-// })
-
 const addPassFlag = ref(false)
-
-// async function fetchAvatar() {
-//   try {
-//     const response = await axios.get('https://api.thecatapi.com/v1/images/search')
-//     userStore.userInfo.picture = response.data[0].url // 更新头像 URL
-//   } catch (error) {
-//     userStore.userInfo.picture = 'https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png'
-//     console.error('获取头像失败:', error)
-//   }
-// }
 
 // 头像上传
 const fileInput = ref(null)
@@ -166,15 +154,20 @@ const onSubmit = async () => {
       // 提交之前对密码进行加密
       tempUser.password = encrypt(tempUser.password)
 
-      console.log('修改后的数据：', tempUser)
+      // console.log('修改后的数据：', tempUser)
+
       const res = await editUserInfoAPI(tempUser)
       if (res.data.code === 1) {
-        // await userStore.fetchUserInfo() // 更新数据
         ElMessage.success('修改成功')
         // 更新 Pinia 中的数据
         userStore.userInfo = { ...tempUser }
+
+        Object.assign(originalUser, tempUser) // 更新备份数据
       } else {
-        ElMessage.error('修改失败')
+        // 提交失败
+        ElMessage.error('用户昵称已存在')
+
+        Object.assign(tempUser, originalUser) // 回滚所有数据
       }
     } else {
       console.log('表单校验失败')
@@ -182,6 +175,7 @@ const onSubmit = async () => {
     }
   })
 }
+
 // 节流处理：限制每秒响应一次
 const throttledOnSubmit = throttled(onSubmit, 1000)
 </script>

@@ -2,6 +2,7 @@
 import axios from 'axios'
 import { ElMessage } from 'element-plus'
 import { useAdminStore } from '@/store/adminStore'
+import { useUserStore } from '@/store/userStore'
 import { config } from '@/config/config'
 
 const httpInstance = axios.create({
@@ -9,15 +10,27 @@ const httpInstance = axios.create({
   timeout: config.timeout
 })
 
-//拦截器
 // 添加请求拦截器
 httpInstance.interceptors.request.use(
   (config) => {
     const adminStore = useAdminStore()
-    const token = adminStore.adminInfo.token
-    if (token) {
-      config.headers.Authorization = `${token}`
+    const userStore = useUserStore()
+
+    // 判断请求路径是否以 '/admin' 开头
+    if (config.url && config.url.startsWith('/admin')) {
+      // 管理员端，使用管理员token
+      const adminToken = adminStore.adminInfo.token
+      if (adminToken) {
+        config.headers.Authorization = `${adminToken}`
+      }
+    } else {
+      // 用户端，使用用户token
+      const userToken = userStore.userInfo.token
+      if (userToken) {
+        config.headers.Authorization = `${userToken}`
+      }
     }
+
     return config
   },
   (e) => Promise.reject(e)

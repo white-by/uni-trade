@@ -1,4 +1,5 @@
 import httpInstance from '@/utils/https'
+import { useUserStore } from '@/store/userStore'
 
 /**
  * 获取分类
@@ -65,12 +66,13 @@ export function getFilteredProductsAPI({
 
 // 发布闲置
 export const postProductAPI = (data) => {
+    const userStore = useUserStore()
   return httpInstance({
     url: '/postProduct',
     method: 'post',
     headers: {
-      Authorization: `Bearer ${localStorage.getItem('token')}`
-    },
+           Authorization: `${userStore.userInfo.token}`
+          },
     data: data
   })
 }

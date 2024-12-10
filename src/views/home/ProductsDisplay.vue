@@ -104,6 +104,7 @@ onMounted(() => {
   padding-right: 60px;
   /* height: 700px; */
   overflow-y: auto;
+  min-height: 600px;
 }
 
 .product-card {

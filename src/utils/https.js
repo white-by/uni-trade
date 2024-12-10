@@ -16,7 +16,7 @@ httpInstance.interceptors.request.use(
     const adminStore = useAdminStore()
     const token = adminStore.adminInfo.token
     if (token) {
-      config.headers.Authorization = `Bearer ${token}`
+      config.headers.Authorization = `${token}`
     }
     return config
   },

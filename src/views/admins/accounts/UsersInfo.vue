@@ -146,7 +146,8 @@ const handleConfirm = async () => {
       if (userForm.value.userID) {
         const res = await editUserApi(userForm.value)
         if (res.data.code === 1) ElMessage.success('用户信息已更新')
-        else ElMessage.error('更新失败')
+        // else ElMessage.error('更新失败')
+        else ElMessage.error(res.data.msg)
       } else {
         // 新增用户时移除 userID 字段
         delete userForm.value.userID
@@ -154,7 +155,8 @@ const handleConfirm = async () => {
         userForm.value.password = encrypt(userForm.value.password)
         const res = await addUserApi(userForm.value)
         if (res.data.code === 1) ElMessage.success('用户信息已添加')
-        else ElMessage.error('添加失败')
+        // else ElMessage.error('添加失败')
+        else ElMessage.error(res.data.msg)
       }
 
       dialogVisible.value = false

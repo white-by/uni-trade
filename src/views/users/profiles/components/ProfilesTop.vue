@@ -1,6 +1,6 @@
 <script setup>
-import { computed, onMounted } from 'vue'
-import axios from 'axios'
+import { computed } from 'vue'
+// import axios from 'axios'
 import { useUserStore } from '@/store/userStore'
 import { useProfilesStore } from '@/store/profilesStore'
 
@@ -19,19 +19,19 @@ const getIdFromUrl = () => {
   return segments[2] // 假设 ID 是路径的第二个部分
 }
 
-async function fetchAvatar() {
-  try {
-    const response = await axios.get('https://dog.ceo/api/breeds/image/random')
-    profilesStore.introduction.avatarUrl = response.data.message // 更新头像 URL
-  } catch (error) {
-    profilesStore.introduction.avatarUrl = 'https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png'
-    console.error('获取头像失败:', error)
-  }
-}
+// async function fetchAvatar() {
+//   try {
+//     const response = await axios.get('https://dog.ceo/api/breeds/image/random')
+//     profilesStore.introduction.avatarUrl = response.data.message // 更新头像 URL
+//   } catch (error) {
+//     profilesStore.introduction.avatarUrl = 'https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png'
+//     console.error('获取头像失败:', error)
+//   }
+// }
 
-onMounted(() => {
-  fetchAvatar() // 在组件挂载后获取头像
-})
+// onMounted(() => {
+//   fetchAvatar() // 在组件挂载后获取头像
+// })
 </script>
 
 <template>

@@ -3,7 +3,7 @@
     <div class="nav">
       <ProfilesNav />
     </div>
-    <div class="published-container">
+    <div class="published-container" v-if="profilesStore.publishedProducts != null">
       <div v-for="(product, index) in profilesStore.publishedProducts" :key="product.id" class="published-item">
         <img :src="getFirstImageURL(product.imageUrl)" alt="商品图片" class="item-image" />
         <div class="item-info">
@@ -20,6 +20,9 @@
           label="编辑"
         />
       </div>
+    </div>
+    <div v-else class="no-product-container">
+      <img src="@/assets/images/none/暂无订单.png" alt="暂无订单" class="no-product-image" />
     </div>
   </div>
 </template>
@@ -110,5 +113,17 @@ const getFirstImageURL = (imageUrl) => {
 
 .product-name:hover {
   color: $comColor;
+}
+
+.no-product-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 320px;
+}
+
+.no-product-image {
+  max-width: 100%;
+  max-height: 100%;
 }
 </style>

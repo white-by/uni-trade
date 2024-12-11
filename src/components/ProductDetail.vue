@@ -164,8 +164,10 @@ const toggleStarred = async () => {
   if (res.data.code === 1) {
     if (isStarred.value) {
       ElMessage.success('已收藏')
+      product.value.stars++
     } else {
       ElMessage.success('取消收藏')
+      product.value.stars--
     }
   } else {
     if (isStarred.value) {

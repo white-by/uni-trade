@@ -2,28 +2,33 @@
   <UserNav />
   <el-card class="collection-contain">
     <el-row style="margin-bottom: 50px; color: dimgray"><h3>我的收藏</h3></el-row>
-    <div v-for="item in collectionList" :key="item.id" class="published-item">
-      <img :src="item.imageUrl" alt="商品图片" class="item-image" />
-      <router-link :to="`/detail/${item.id}`">
-        <div class="item-info">
-          <h3 class="item-title">{{ item.title }}</h3>
+    <div v-if="collectionList != null">
+      <div v-for="item in collectionList" :key="item.id" class="published-item">
+        <img :src="item.imageUrl" alt="商品图片" class="item-image" />
 
+        <div class="item-info">
+          <router-link class="product-name" :to="`/detail/${item.id}`">
+            <h3 class="item-title">{{ item.title }}</h3>
+          </router-link>
           <p class="item-price">￥{{ item.price }}</p>
           <span class="item-desc" :title="item.description">{{ item.description }}</span>
-        </div></router-link
-      >
+        </div>
+      </div>
+      <!-- 分页 -->
+      <div>
+        <el-pagination
+          size="small"
+          style="justify-content: center; margin-top: 20px"
+          layout="prev, pager, next"
+          :current-page="pageNum"
+          :page-size="pageSize"
+          :total="total"
+          @current-change="handlePageChange"
+        />
+      </div>
     </div>
-    <!-- 分页 -->
-    <div>
-      <el-pagination
-        size="small"
-        style="justify-content: center; margin-top: 20px"
-        layout="prev, pager, next"
-        :current-page="pageNum"
-        :page-size="pageSize"
-        :total="total"
-        @current-change="handlePageChange"
-      />
+    <div v-else class="no-product-container">
+      <img src="@/assets/images/none/暂无数据.png" alt="暂无数据" />
     </div>
   </el-card>
 
@@ -42,7 +47,7 @@ const total = ref(0)
 const collectionList = ref([])
 const getCollectionList = async () => {
   const res = await getCollectionListAPI(pageNum.value, pageSize.value)
-  console.log('API返回数据', res)
+  // console.log('getCollectionListAPI返回数据', res.data.data)
   collectionList.value = res.data.data.collectionList
   total.value = res.data.data.total
 }
@@ -59,6 +64,17 @@ onMounted(() => {
 </script>
 
 <style scoped lang="scss">
+.no-product-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 450px;
+}
+
+.product-name:hover {
+  color: $comColor;
+}
+
 .collection-contain {
   width: 70%;
   margin: 0 auto;

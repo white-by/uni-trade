@@ -6,7 +6,7 @@
   <div style="display: flex; justify-content: center; margin: 50px">
     <el-card>
       <el-row style="margin-bottom: 20px; color: dimgray"><h3>我买到的</h3></el-row
-      ><el-table :data="purchasedData" stripe border>
+      ><el-table :data="purchasedData" stripe border empty-text="暂无买到的订单">
         <el-table-column prop="tradeID" label="订单号" width="80"></el-table-column>
 
         <el-table-column prop="goodsName" label="商品名称" width="150"></el-table-column>
@@ -183,7 +183,7 @@
   <div style="display: flex; justify-content: center; margin: 50px">
     <el-card
       ><el-row style="margin-bottom: 20px; color: dimgray"><h3>我卖出的</h3></el-row
-      ><el-table :data="selledData" stripe border>
+      ><el-table :data="selledData" stripe border empty-text="暂无卖出的订单">
         <el-table-column prop="tradeID" label="订单号" width="80"></el-table-column>
 
         <el-table-column prop="goodsName" label="商品名称" width="150"></el-table-column>

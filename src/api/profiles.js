@@ -25,6 +25,19 @@ export const getPublishedProductsAPI = (id) => {
     })
 }
 
+// 已发布
+export const editPublishedProductsAPI = (data) => {
+    const userStore = useUserStore() 
+    return httpInstance({
+        url: '/profiles/published',
+        method: 'POST',
+        data: data, 
+        headers: {
+           Authorization: `${userStore.userInfo.token}`
+        }
+    })
+}
+
 // 已完成
 export const getFinishedProductsAPI = (id) => {
     const userStore = useUserStore() 

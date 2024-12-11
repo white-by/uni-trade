@@ -199,6 +199,7 @@ import { ref, reactive, watch, onMounted } from 'vue'
 import { useCategoryStore } from '@/store/sortCategory'
 import axios from 'axios'
 import { getAddressListAPI, addAddressAPI } from '@/api/address'
+import { editPublishedProductsAPI } from '@/api/profiles'
 import { ElMessage } from 'element-plus'
 
 onMounted(() => {
@@ -445,11 +446,31 @@ function openDialog() {
 }
 
 // 提交表单并触发更新事件
-function submitForm() {
+const submitForm = async () => {
   // 更新图片URL，将文件列表的图片合并成逗号分隔的字符串
   form.imageUrl = imageList.value.map((item) => item.url).join(',')
   emit('update:item', form) // 将更新的数据传递给父组件
-  closeDialog() // 关闭对话框
+
+  const data = {
+    id: form.id,
+    title: form.title,
+    price: form.price,
+    category: form.category,
+    description: form.description,
+    imageUrl: form.imageUrl,
+    shippingCost: form.shippingCost,
+    userName: form.userName,
+    addrID: form.addrID,
+    deliveryMethod: form.deliveryMethod
+  }
+
+  // console.log('更改后的数据：', data)
+
+  const res = await editPublishedProductsAPI(data)
+  if (res.data.code === 1) {
+    ElMessage.success('编辑成功')
+    closeDialog() // 关闭对话框
+  } else ElMessage.error('编辑失败')
 }
 
 // 关闭对话框

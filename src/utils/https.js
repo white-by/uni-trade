@@ -4,6 +4,7 @@ import { ElMessage } from 'element-plus'
 import { useAdminStore } from '@/store/adminStore'
 import { useUserStore } from '@/store/userStore'
 import { config } from '@/config/config'
+import router from '@/router'
 
 const httpInstance = axios.create({
   baseURL: config.baseURL,
@@ -44,12 +45,33 @@ httpInstance.interceptors.response.use(
     return response
   },
   function (error) {
-    // 超出 2xx 范围的状态码都会触发该函数。
-    // 对响应错误做点什么
-    ElMessage({
-      type: 'error',
-      message: error.response.data.msg
-    })
+    const adminStore = useAdminStore() // 获取 adminStore 实例
+    const userStore = useUserStore() // 获取 userStore 实例
+
+    // 如果 code 为 2，表示 token 过期
+    if (error.response.data.code === 2) {
+      // 判断是管理员端还是用户端
+      const isAdmin = error.config.url.startsWith('/admin')
+
+      if (isAdmin) {
+        // 管理员端操作：清空管理员信息并跳转到管理员登录页
+        adminStore.clearAdminInfo() // 清空管理员信息
+        router.push('/admin/login') // 跳转到管理员登录页
+      } else {
+        // 用户端操作：清空用户信息并跳转到用户登录页
+        console.log("清空用户信息")
+        userStore.clearUserInfo() // 清空用户信息
+        router.push('/login') // 跳转到用户登录页
+      }
+      
+      ElMessage.error("登录已过期，请重新登录")
+
+    } else {
+      ElMessage({
+        type: 'error',
+        message: error.response.data.msg
+      })
+    }
     return Promise.reject(error)
   }
 )

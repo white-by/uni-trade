@@ -79,7 +79,7 @@
           <!-- 售价 -->
           <el-col :span="8">
             <el-form-item label="售价 " prop="price">
-              <el-input-number v-model="form.price" :precision="2" :step="1" :min="0" :max="99">
+              <el-input-number v-model="form.price" :precision="2" :step="1" :min="0" :max="99999">
                 <template #prefix>
                   <span>￥</span>
                 </template>
@@ -451,7 +451,6 @@ function openDialog() {
 const submitForm = async () => {
   // 更新图片URL，将文件列表的图片合并成逗号分隔的字符串
   form.imageUrl = imageList.value.map((item) => item.url).join(',')
-  emit('update:item', form) // 将更新的数据传递给父组件
 
   const data = {
     id: form.id,
@@ -471,6 +470,7 @@ const submitForm = async () => {
   const res = await editPublishedProductsAPI(data)
   if (res.data.code === 1) {
     ElMessage.success('编辑成功')
+    emit('update:item', form) // 将更新的数据传递给父组件
     closeDialog() // 关闭对话框
   } else ElMessage.error('编辑失败')
 }

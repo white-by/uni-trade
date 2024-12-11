@@ -1,32 +1,34 @@
 <template>
   <UserNav />
-  <el-card class="collection-contain">
-    <el-row style="margin-bottom: 50px; color: dimgray"><h3>我的收藏</h3></el-row>
-    <div v-for="item in collectionList" :key="item.id" class="published-item">
-      <img :src="item.imageUrl" alt="商品图片" class="item-image" />
-      <router-link :to="`/detail/${item.id}`">
-        <div class="item-info">
-          <h3 class="item-title">{{ item.title }}</h3>
+  <div class="contain">
+    <el-card class="collection-contain">
+      <el-row style="margin-bottom: 50px; color: dimgray"><h3>我的收藏</h3></el-row>
+      <h1 v-if="collectionList == null">暂无收藏</h1>
+      <div v-for="item in collectionList" :key="item.id" class="published-item">
+        <img :src="item.imageUrl" alt="商品图片" class="item-image" />
+        <router-link :to="`/detail/${item.id}`">
+          <div class="item-info">
+            <h3 class="item-title">{{ item.title }}</h3>
 
-          <p class="item-price">￥{{ item.price }}</p>
-          <span class="item-desc" :title="item.description">{{ item.description }}</span>
-        </div></router-link
-      >
-    </div>
-    <!-- 分页 -->
-    <div>
-      <el-pagination
-        size="small"
-        style="justify-content: center; margin-top: 20px"
-        layout="prev, pager, next"
-        :current-page="pageNum"
-        :page-size="pageSize"
-        :total="total"
-        @current-change="handlePageChange"
-      />
-    </div>
-  </el-card>
-
+            <p class="item-price">￥{{ item.price }}</p>
+            <span class="item-desc" :title="item.description">{{ item.description }}</span>
+          </div></router-link
+        >
+      </div>
+      <!-- 分页 -->
+      <div>
+        <el-pagination
+          size="small"
+          style="justify-content: center; margin-top: 20px"
+          layout="prev, pager, next"
+          :current-page="pageNum"
+          :page-size="pageSize"
+          :total="total"
+          @current-change="handlePageChange"
+        />
+      </div>
+    </el-card>
+  </div>
   <UserFooter />
 </template>
 
@@ -59,11 +61,23 @@ onMounted(() => {
 </script>
 
 <style scoped lang="scss">
+.contain {
+  min-height: 500px;
+}
+
 .collection-contain {
   width: 70%;
   margin: 0 auto;
   margin-top: 3%;
   margin-bottom: 3%;
+
+  h1 {
+    margin: 50px 0;
+    text-align: center;
+    color: dimgray;
+    font-size: 24px;
+    font-weight: 400;
+  }
 }
 
 .published-item {

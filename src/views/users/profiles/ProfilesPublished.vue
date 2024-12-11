@@ -4,6 +4,7 @@
       <ProfilesNav />
     </div>
     <div class="published-container">
+      <h1>暂无商品</h1>
       <div v-for="(product, index) in profilesStore.publishedProducts" :key="product.id" class="published-item">
         <img :src="getFirstImageURL(product.imageUrl)" alt="商品图片" class="item-image" />
         <div class="item-info">
@@ -106,6 +107,14 @@ const getFirstImageURL = (imageUrl) => {
 
 .published-container {
   padding: 20px; /* 内边距 */
+
+  h1 {
+    margin: 50px 0;
+    text-align: center;
+    color: dimgray;
+    font-size: 24px;
+    font-weight: 400;
+  }
 }
 
 .product-name:hover {

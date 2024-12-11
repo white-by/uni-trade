@@ -32,6 +32,7 @@ const timeAgo = (time) => {
       <ProfilesNav />
     </div>
     <div class="comment-container">
+      <h1>暂无评价</h1>
       <div v-for="comment in profilesStore.receivedComments" :key="comment.commentID" class="comment-item">
         <el-avatar :src="comment.commentatorAvatar" class="avatar" />
         <div class="comment-details">
@@ -61,6 +62,14 @@ const timeAgo = (time) => {
 }
 .comment-container {
   padding: 20px; /* 内边距 */
+
+  h1 {
+    margin: 50px 0;
+    text-align: center;
+    color: dimgray;
+    font-size: 24px;
+    font-weight: 400;
+  }
 }
 
 .comment-item {

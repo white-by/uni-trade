@@ -41,37 +41,35 @@ httpInstance.interceptors.request.use(
 httpInstance.interceptors.response.use(
   function (response) {
     // 2xx 范围内的状态码都会触发该函数。
-    // 对响应数据做点什么
-    return response
-  },
-  function (error) {
-    const adminStore = useAdminStore() // 获取 adminStore 实例
-    const userStore = useUserStore() // 获取 userStore 实例
+    
+    const adminStore = useAdminStore() 
+    const userStore = useUserStore() 
 
-    // 如果 code 为 2，表示 token 过期
-    if (error.response.data.code === 2) {
+     if (response.data.code == 2){
       // 判断是管理员端还是用户端
-      const isAdmin = error.config.url.startsWith('/admin')
+      const configUrl = response.config?.url; 
+      const isAdmin = configUrl?.startsWith('/admin');
 
       if (isAdmin) {
         // 管理员端操作：清空管理员信息并跳转到管理员登录页
-        adminStore.clearAdminInfo() // 清空管理员信息
-        router.push('/admin/login') // 跳转到管理员登录页
+        adminStore.clearAdminInfo() 
+        router.push('/admin/login') 
       } else {
         // 用户端操作：清空用户信息并跳转到用户登录页
-        console.log("清空用户信息")
-        userStore.clearUserInfo() // 清空用户信息
-        router.push('/login') // 跳转到用户登录页
+        userStore.clearUserInfo() 
+        router.push('/login') 
       }
       
       ElMessage.error("登录已过期，请重新登录")
-
-    } else {
+     }
+    
+    return response
+  },
+  function (error) {
       ElMessage({
         type: 'error',
         message: error.response.data.msg
       })
-    }
     return Promise.reject(error)
   }
 )

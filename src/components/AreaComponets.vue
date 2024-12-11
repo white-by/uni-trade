@@ -11,13 +11,13 @@
       </el-col>
       <!-- 城市 -->
       <el-col :span="8">
-        <el-select v-model="selectedCity" placeholder="选择城市" style="width: 230%">
+        <el-select v-model="selectedCity" placeholder="选择城市" style="width: 230%" no-data-text="请先选择省份">
           <el-option v-for="item in cityArr" :key="item" :label="item" :value="item"></el-option>
         </el-select>
       </el-col>
       <!-- 地区 -->
       <el-col :span="8">
-        <el-select v-model="selectedArea" placeholder="选择地区" style="width: 230%">
+        <el-select v-model="selectedArea" placeholder="选择地区" style="width: 230%" no-data-text="请先选择城市">
           <el-option v-for="item in areaArr" :key="item" :label="item" :value="item"></el-option>
         </el-select>
       </el-col>

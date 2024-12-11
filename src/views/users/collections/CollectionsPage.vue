@@ -1,19 +1,18 @@
 <template>
   <UserNav />
-  <div class="contain">
-    <el-card class="collection-contain">
-      <el-row style="margin-bottom: 50px; color: dimgray"><h3>我的收藏</h3></el-row>
-      <h1 v-if="collectionList == null">暂无收藏</h1>
+  <el-card class="collection-contain">
+    <el-row style="margin-bottom: 50px; color: dimgray"><h3>我的收藏</h3></el-row>
+    <div v-if="collectionList != null">
       <div v-for="item in collectionList" :key="item.id" class="published-item">
         <img :src="item.imageUrl" alt="商品图片" class="item-image" />
-        <router-link :to="`/detail/${item.id}`">
-          <div class="item-info">
-            <h3 class="item-title">{{ item.title }}</h3>
 
-            <p class="item-price">￥{{ item.price }}</p>
-            <span class="item-desc" :title="item.description">{{ item.description }}</span>
-          </div></router-link
-        >
+        <div class="item-info">
+          <router-link class="product-name" :to="`/detail/${item.id}`">
+            <h3 class="item-title">{{ item.title }}</h3>
+          </router-link>
+          <p class="item-price">￥{{ item.price }}</p>
+          <span class="item-desc" :title="item.description">{{ item.description }}</span>
+        </div>
       </div>
       <!-- 分页 -->
       <div>
@@ -27,8 +26,12 @@
           @current-change="handlePageChange"
         />
       </div>
-    </el-card>
-  </div>
+    </div>
+    <div v-else class="no-product-container">
+      <img src="@/assets/images/none/暂无数据.png" alt="暂无数据" />
+    </div>
+  </el-card>
+
   <UserFooter />
 </template>
 
@@ -44,7 +47,7 @@ const total = ref(0)
 const collectionList = ref([])
 const getCollectionList = async () => {
   const res = await getCollectionListAPI(pageNum.value, pageSize.value)
-  console.log('API返回数据', res)
+  // console.log('getCollectionListAPI返回数据', res.data.data)
   collectionList.value = res.data.data.collectionList
   total.value = res.data.data.total
 }
@@ -61,8 +64,15 @@ onMounted(() => {
 </script>
 
 <style scoped lang="scss">
-.contain {
-  min-height: 500px;
+.no-product-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 450px;
+}
+
+.product-name:hover {
+  color: $comColor;
 }
 
 .collection-contain {

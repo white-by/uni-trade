@@ -105,10 +105,10 @@ const { encrypt } = useASE()
 const formRef = ref(null)
 const handleLogin = () => {
   formRef.value.validate(async (valid, fields) => {
-    console.log('加密前：', form.value.password)
+    // console.log('加密前：', form.value.password)
     const password = encrypt(form.value.password)
-    console.log('加密后：', password)
-    // 添加 fields 参数
+    // console.log('加密后：', password)
+
     const { mail } = form.value
     if (valid) {
       await userStore.getUserInfo({ mail, password })

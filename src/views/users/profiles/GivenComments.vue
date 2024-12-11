@@ -33,8 +33,7 @@ const timeAgo = (time) => {
     <div class="nav">
       <ProfilesNav />
     </div>
-    <div class="comment-container">
-      <h1>暂无评价</h1>
+    <div class="comment-container" v-if="profilesStore.givenComments.length != 0">
       <div v-for="comment in profilesStore.givenComments" :key="comment.commentID" class="comment-item">
         <el-avatar :src="comment.commentatorAvatar" class="avatar" />
         <div class="comment-details">
@@ -47,6 +46,9 @@ const timeAgo = (time) => {
           <!-- <el-divider class="div" /> -->
         </div>
       </div>
+    </div>
+    <div v-else class="no-product-container">
+      <img src="@/assets/images/none/暂无订单.png" alt="暂无订单" class="no-product-image" />
     </div>
   </div>
 </template>
@@ -129,5 +131,17 @@ const timeAgo = (time) => {
 .div {
   width: 100%; /* 设置宽度为100% */
   margin: 20px 0; /* 可选：设置上下边距 */
+}
+
+.no-product-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 320px;
+}
+
+.no-product-image {
+  max-width: 100%;
+  max-height: 100%;
 }
 </style>

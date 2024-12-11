@@ -224,7 +224,7 @@ const getAddressList = async () => {
     defaultAddressId.value = defaultAddr.id
     activeAddress.value = defaultAddr
     curAddress.value = defaultAddr
-    console.log('默认地址：', curAddress.value)
+    // console.log('默认地址：', curAddress.value)
   }
 }
 

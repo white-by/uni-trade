@@ -3,7 +3,7 @@
   <div style="display: flex; justify-content: center; margin: 50px; min-height: 68vh">
     <el-card>
       <el-row style="margin-bottom: 20px; color: dimgray"><h3>我的地址</h3></el-row>
-      <el-table :data="addressData" stripe border>
+      <el-table :data="addressData" stripe border empty-text="暂无地址">
         <el-table-column label="联系地址" width="380px">
           <el-table-column prop="province" label="省" width="100" />
           <el-table-column prop="city" label="市" width="100" />

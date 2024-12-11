@@ -195,6 +195,16 @@ const submitAddressForm = () => {
       const res = await addAddressAPI(newAddress.value)
       if (res.data.code === 1) {
         await getAddressList()
+
+        // 检查剩余地址数量
+        if (addressData.value.length === 1) {
+          const newAddressId = addressData.value[0].id
+
+          // 调用设置默认地址的 API
+          await setDefaultAddressAPI({ oldAddressId: null, newAddressId })
+          defaultAddressId.value = newAddressId
+        }
+
         addDialogVisible.value = false
         resetAddForm()
         ElMessage.success('添加成功')
@@ -295,6 +305,17 @@ const handleDelete = async (id) => {
   const res = await deleteAddressAPI(id)
   if (res.data.code === 1) {
     addressData.value = addressData.value.filter((address) => address.id !== id)
+    await getAddressList()
+
+    // 检查剩余地址数量
+    if (addressData.value.length === 1) {
+      const newAddressId = addressData.value[0].id
+
+      // 调用设置默认地址的 API
+      await setDefaultAddressAPI({ oldAddressId: null, newAddressId })
+      defaultAddressId.value = newAddressId
+    }
+
     ElMessage.success('删除成功')
   } else {
     ElMessage.error('删除失败')

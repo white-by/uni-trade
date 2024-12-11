@@ -39,7 +39,7 @@
           <el-col :span="10"
             ><el-form-item label="发布时间">
               <p>
-                {{ product.postTime }}
+                {{ formatTime(product.postTime) }}
               </p>
             </el-form-item></el-col
           >
@@ -129,6 +129,12 @@ import { ElMessage } from 'element-plus'
 import { useUserStore } from '@/store/userStore'
 import { useCartStore } from '@/store/cartStore'
 import { useRouter } from 'vue-router'
+import dayjs from 'dayjs'
+
+function formatTime(isoTime) {
+  if (!isoTime) return '-'
+  return dayjs(isoTime).format('YYYY-MM-DD HH:mm:ss')
+}
 
 const cartStore = useCartStore()
 const router = useRouter()

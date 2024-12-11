@@ -6,9 +6,11 @@ import { onMounted } from 'vue'
 import UserFooter from '@/components/UserFooter.vue'
 import { useCategoryStore } from '@/store/sortCategory'
 import { useProfilesStore } from '@/store/profilesStore'
+import { useAddressStore } from '@/store/addressStore'
 
 const categoryStore = useCategoryStore()
 const profilesStore = useProfilesStore()
+const addressStore = useAddressStore()
 
 const getIdFromUrl = () => {
   const url = window.location.pathname // 获取路径部分
@@ -24,7 +26,8 @@ onMounted(() => {
       profilesStore.getPublishedProducts(id),
       profilesStore.getFinishedProducts(id),
       profilesStore.getReceivedComments(id),
-      profilesStore.getGivenComments(id)
+      profilesStore.getGivenComments(id),
+      addressStore.getAddressList()
   } else {
     console.error('未找到 ID 参数')
   }

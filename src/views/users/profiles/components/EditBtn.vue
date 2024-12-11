@@ -198,14 +198,16 @@
 import { ref, reactive, watch, onMounted } from 'vue'
 import { useCategoryStore } from '@/store/sortCategory'
 import axios from 'axios'
-import { getAddressListAPI, addAddressAPI } from '@/api/address'
+import { addAddressAPI } from '@/api/address'
 import { editPublishedProductsAPI } from '@/api/profiles'
 import { ElMessage } from 'element-plus'
+import { useAddressStore } from '@/store/addressStore'
 
 onMounted(() => {
   getAddressList()
 })
 
+const addressStore = useAddressStore()
 const categoryStore = useCategoryStore()
 const showSelectAddrDialog = ref(false)
 const addressData = ref([]) // 地址列表
@@ -254,8 +256,7 @@ watch(
 
 // 获取地址列表
 const getAddressList = async () => {
-  const res = await getAddressListAPI()
-  addressData.value = res.data.data
+  addressData.value = addressStore.addressData
   // 初始化 curAddress
   if (props.item.addrID) {
     const matchedAddress = addressData.value.find((item) => item.id === props.item.addrID)
@@ -327,6 +328,7 @@ const submitAddressForm = () => {
         curAddress.value = { ...newAddressWithID }
         addDialogVisible.value = false
         resetAddForm()
+        addressStore.getAddressList()
         ElMessage.success('添加成功')
       } else {
         ElMessage.error(`新增地址失败: ${res.msg}`)

@@ -41,8 +41,8 @@
               <p>
                 {{ formatTime(product.postTime) }}
               </p>
-            </el-form-item></el-col
-          >
+            </el-form-item>
+          </el-col>
         </el-row>
 
         <el-row :gutter="10">
@@ -110,7 +110,7 @@
         <el-button type="primary" size="large" style="font-size: 16px; width: 140px" @click="goToCheckout()"
           >购买</el-button
         >
-        <el-button type="primary" plain size="large" circle style="margin-left: 300px" @click="toggleStarred">
+        <el-button type="primary" plain size="large" circle style="margin-left: 300px" @click="throttleToggleStarred">
           <i :class="isStarred ? 'iconfont icon-starred' : 'iconfont icon-star'"></i>
         </el-button>
         <el-button type="primary" plain size="large" circle><i class="iconfont icon-chat"></i></el-button>
@@ -121,7 +121,7 @@
 </template>
 
 <script setup>
-import { getDetail } from '@/api/detail'
+import { getDetail, updateIsStarred } from '@/api/detail'
 import { onMounted, ref } from 'vue'
 import { useRoute } from 'vue-router'
 import 'element-plus/theme-chalk/el-message.css'
@@ -135,10 +135,11 @@ function formatTime(isoTime) {
   if (!isoTime) return '-'
   return dayjs(isoTime).format('YYYY-MM-DD HH:mm:ss')
 }
+import useThrottle from '@/hooks/useThrottle'
 
 const cartStore = useCartStore()
 const router = useRouter()
-
+const { throttled } = useThrottle()
 const userStore = useUserStore()
 
 const product = ref({})
@@ -154,33 +155,28 @@ const getProducts = async () => {
 }
 onMounted(() => getProducts())
 
-// 收藏
-let isThrottled = false // 用于控制节流状态
-
-const toggleStarred = () => {
-  if (isThrottled) return // 如果正在节流，直接返回
-
-  isThrottled = true
+const toggleStarred = async () => {
   isStarred.value = !isStarred.value
   product.value.isStarred = isStarred.value
   console.log('product.value.isStarred:', product.value.isStarred)
+  const res = await updateIsStarred(product.value.id, { isStarred: isStarred.value })
 
-  if (isStarred.value) {
-    ElMessage({
-      type: 'success',
-      message: '已收藏'
-    })
+  if (res.data.code === 1) {
+    if (isStarred.value) {
+      ElMessage.success('已收藏')
+    } else {
+      ElMessage.success('取消收藏')
+    }
   } else {
-    ElMessage({
-      type: 'success',
-      message: '取消收藏'
-    })
+    if (isStarred.value) {
+      ElMessage.success('收藏失败')
+    } else {
+      ElMessage.success('取消收藏失败')
+    }
   }
-
-  setTimeout(() => {
-    isThrottled = false // 一秒后解除节流状态
-  }, 1000)
 }
+// 节流
+const throttleToggleStarred = throttled(toggleStarred, 1000)
 
 // 点击“购买”按钮时保存数据并跳转
 const goToCheckout = () => {

@@ -7,14 +7,22 @@ import { useUserStore } from '@/store/userStore'
  * @returns
  */
 export const getDetail = (id) => {
-     const userStore = useUserStore() 
+  const userStore = useUserStore()
   return request({
     url: '/detail',
     params: {
       id
     },
-     headers: {
-             Authorization: `${userStore.userInfo.token}`
-        }
+    headers: {
+      Authorization: `${userStore.userInfo.token}`
+    }
+  })
+}
+
+export const updateIsStarred = (id, data) => {
+  return request({
+    url: `/detail/${id}`,
+    method: 'PUT',
+    data
   })
 }

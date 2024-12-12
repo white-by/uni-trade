@@ -77,7 +77,7 @@ const getFirstImageURL = (imageURL) => {
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
-    max-width: 400px; // 你可以根据实际需要调整宽度
+    max-width: 500px; // 你可以根据实际需要调整宽度
   }
   .item-price {
     font-size: 1em;

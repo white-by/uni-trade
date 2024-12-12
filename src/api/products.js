@@ -56,7 +56,7 @@ export function getFilteredProductsAPI({
       priceMin: priceMin > 0 ? priceMin : undefined,
       province: province || undefined,
       publishDate: publishDate || undefined,
-      shippingCost: shippingCost > 0 ? priceMax : undefined,
+      shippingCost: shippingCost > 0 ? shippingCost : undefined,
       page,
       limit,
       searchQuery: searchQuery || undefined

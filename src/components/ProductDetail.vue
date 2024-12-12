@@ -208,7 +208,7 @@ const goToCheckout = () => {
   justify-content: flex-start;
   margin-left: 60px;
   margin-right: 60px;
-  margin-top: auto;
+  margin-top: 20px;
   margin-bottom: 50px;
 }
 
@@ -235,10 +235,10 @@ const goToCheckout = () => {
   font-size: 28px;
   font-weight: bold;
   margin: 0;
-  white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  width: 200%;
+  width: 100%;
+  max-width: 550px;
 }
 .no-disabled-style.el-button:disabled {
   color: inherit !important;
@@ -247,7 +247,7 @@ const goToCheckout = () => {
 
 .description {
   font-size: 20px;
-  width: 560px;
+  width: 600px;
   height: auto;
 }
 

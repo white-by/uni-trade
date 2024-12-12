@@ -138,7 +138,7 @@
 
     <!-- 切换地址 -->
     <el-dialog v-model="showSelectAddrDialog" title="切换发货地址" width="470px">
-      <div class="addressWrapper">
+      <div class="addressWrapper" v-if="addressData != null">
         <div
           class="text item"
           v-for="item in addressData"
@@ -155,6 +155,7 @@
           </ul>
         </div>
       </div>
+      <div v-else>暂无地址数据，请先添加地址</div>
       <template #footer>
         <span class="dialog-footer" style="display: flex; justify-content: center">
           <el-button @click="cancelSwitchAddress">取消</el-button>
@@ -219,12 +220,14 @@ const getAddressList = async () => {
   addressData.value = res.data.data
 
   // 找到默认地址并设置为激活状态
-  const defaultAddr = addressData.value.find((address) => address.isDefault === 1)
-  if (defaultAddr) {
-    defaultAddressId.value = defaultAddr.id
-    activeAddress.value = defaultAddr
-    curAddress.value = defaultAddr
-    // console.log('默认地址：', curAddress.value)
+  if (addressData.value != null) {
+    const defaultAddr = addressData.value.find((address) => address.isDefault === 1)
+    if (defaultAddr) {
+      defaultAddressId.value = defaultAddr.id
+      activeAddress.value = defaultAddr
+      curAddress.value = defaultAddr
+      // console.log('默认地址：', curAddress.value)
+    }
   }
 }
 
@@ -236,8 +239,10 @@ const openSelectAddressDialog = () => {
 
 // 确认切换地址
 const confirmSwitchAddress = () => {
-  activeAddress.value = { ...tempActiveAddress.value } // 更新激活状态
-  curAddress.value = { ...tempActiveAddress.value } // 更新显示的地址
+  if (addressData.value != null) {
+    activeAddress.value = { ...tempActiveAddress.value } // 更新激活状态
+    curAddress.value = { ...tempActiveAddress.value } // 更新显示的地址
+  }
   showSelectAddrDialog.value = false
 }
 
@@ -289,6 +294,7 @@ const submitAddressForm = () => {
         curAddress.value = { ...newAddressWithID }
         addDialogVisible.value = false
         resetAddForm()
+        getAddressList()
         ElMessage.success('添加成功')
       } else {
         ElMessage.error(`新增地址失败: ${res.msg}`)

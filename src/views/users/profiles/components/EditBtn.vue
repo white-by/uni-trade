@@ -486,7 +486,7 @@ function resetForm() {
   imageList.value = originalData.imageUrl ? originalData.imageUrl.split(',').map((url) => ({ url })) : []
 }
 
-const isShippingDisabled = ref(false)
+const isShippingDisabled = ref(form.deliveryMethod == '邮寄' ? false : true)
 watch(
   () => form.deliveryMethod,
   (newValue) => {

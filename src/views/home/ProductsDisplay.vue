@@ -14,6 +14,11 @@ const pageSize = ref(12) // 每页条数
 const isLoading = ref(false) // 是否正在加载
 const hasMoreData = ref(true) // 是否还有更多数据
 
+// 获取第一张图片URL
+const getFirstImageURL = (imageURL) => {
+  return imageURL ? imageURL.split(',')[0] : ''
+}
+
 // 重置列表状态
 const resetListState = () => {
   productsList.value = []
@@ -87,7 +92,7 @@ onMounted(() => {
       <el-col :span="4" v-for="product in productsList" :key="product.id">
         <el-card shadow="hover" class="product-card">
           <RouterLink :to="`/detail/${product.id}`">
-            <img :src="product.picture" class="product-image" />
+            <img :src="getFirstImageURL(product.picture)" class="product-image" />
             <div class="product-info">
               <h3 class="product-title">{{ product.name }}</h3>
               <p class="product-price">￥{{ product.price }}</p>
@@ -133,6 +138,9 @@ onMounted(() => {
 
 .product-title {
   font-size: 16px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
   margin: 5px 0;
 }
 

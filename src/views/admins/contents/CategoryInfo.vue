@@ -122,6 +122,7 @@ const deleteCategory = async (categoryID) => {
     if (res.data.code === 1) {
       CategoryList.value = CategoryList.value.filter((category) => category.categoryID !== categoryID)
       ElMessage.success('分类已删除')
+      getCategoryList()
     }
     // getCategoryList()
   } catch (error) {

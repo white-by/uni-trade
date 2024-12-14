@@ -97,12 +97,16 @@ const handleConfirm = async () => {
 
       if (announcementForm.value.announcementID) {
         const res = await editAnnouncementApi(announcementForm.value)
-        if (res.data.code === 1) ElMessage.success('公告信息已更新')
-        else ElMessage.error('更新失败')
+        if (res.data.code === 1) {
+          ElMessage.success('公告信息已更新')
+          getAnnouncementList()
+        } else ElMessage.error('更新失败')
       } else {
         const res = await addAnnouncementApi(announcementForm.value)
-        if (res.data.code === 1) ElMessage.success('公告信息已添加')
-        else ElMessage.error('添加失败')
+        if (res.data.code === 1) {
+          ElMessage.success('公告信息已添加')
+          getAnnouncementList()
+        } else ElMessage.error('添加失败')
       }
 
       dialogVisible.value = false
@@ -129,6 +133,7 @@ const deleteAnnouncement = async (announcementID) => {
         (announcement) => announcement.announcementID !== announcementID
       )
       ElMessage.success('公告已删除')
+      getAnnouncementList()
     }
     // getAnnouncementList()
   } catch (error) {
@@ -200,9 +205,9 @@ const deleteAnnouncement = async (announcementID) => {
             style="padding-right: 10%"
           ></el-input>
         </el-form-item>
-        <el-form-item label="公告发布时间" prop="anTime">
+        <!-- <el-form-item label="公告发布时间" prop="anTime">
           <el-input v-model="announcementForm.anTime" placeholder="请输入公告发布时间"></el-input>
-        </el-form-item>
+        </el-form-item> -->
         <span style="display: flex; justify-content: center">
           <el-button type="primary" @click="handleConfirm">提交</el-button>
           <el-button @click="dialogVisible = false">取消</el-button>

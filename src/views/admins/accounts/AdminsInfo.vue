@@ -138,7 +138,7 @@ const handleConfirm = async () => {
         adminForm.value.password = encrypt(adminForm.value.password)
         const res = await addAdminApi(adminForm.value)
         if (res.data.code === 1) ElMessage.success('管理员信息已添加')
-        else ElMessage.error('添加失败')
+        else ElMessage.error(res.data.data)
       }
 
       dialogVisible.value = false
@@ -163,6 +163,7 @@ const deleteAdmin = async (adminID) => {
     if (res.data.code === 1) {
       AdminList.value = AdminList.value.filter((admin) => admin.adminID !== adminID)
       ElMessage.success('管理员已删除')
+      getAdminList()
     }
     // getAdminList()
   } catch (error) {

@@ -30,45 +30,6 @@ const handlePageChange = (pageNum) => {
   getRefundList()
 }
 
-// const refundList = ref([
-//   {
-//     tradeID: '202312010001',
-//     goodsName: '二手笔记本电脑',
-//     price: 4500,
-//     shippingCost: 20,
-//     sellerName: '张三',
-//     sellerReason: '买家无理由退货',
-//     buyerName: '李四',
-//     buyerReason: '商品有明显划痕',
-//     sellerID: 'SELLER123',
-//     buyerID: 'BUYER456',
-//     orderTime: '2023-12-01 14:30:00',
-//     payTime: '2023-12-01 14:45:00',
-//     refundTime: '2023-12-02 10:00:00',
-//     shippingTime: '2023-12-01 16:00:00',
-//     turnoverTime: '2023-12-02 11:00:00',
-//     status: '未处理'
-//   },
-//   {
-//     tradeID: '202312010002',
-//     goodsName: 'Java编程书籍',
-//     price: 80,
-//     shippingCost: 10,
-//     sellerName: '王五',
-//     sellerReason: '商品无质量问题',
-//     buyerName: '赵六',
-//     buyerReason: '买错了，不需要了',
-//     sellerID: 'SELLER789',
-//     buyerID: 'BUYER101',
-//     orderTime: '2023-12-01 15:00:00',
-//     payTime: '2023-12-01 15:10:00',
-//     refundTime: '2023-12-02 09:00:00',
-//     shippingTime: '2023-12-01 18:00:00',
-//     turnoverTime: null,
-//     status: '未处理'
-//   }
-// ])
-
 const handleAction = (row, action) => {
   const message = action === '同意退货' ? '确定同意退货吗？' : '确定拒绝退货吗？'
   ElMessageBox.confirm(message, '提示', {
@@ -170,8 +131,8 @@ const handleAction = (row, action) => {
       <el-table-column label="操作" align="center" width="230">
         <template #default="{ row }">
           <el-row type="flex" justify="center" :gutter="10" v-if="row.status == '未处理'">
-            <el-button type="primary" @click="handleAction(row, '同意退货')">同意退货</el-button>
-            <el-button type="danger" @click="handleAction(row, '拒绝退货')">拒绝退货</el-button>
+            <el-button type="primary" @click="handleAction(row, '1')">同意退货</el-button>
+            <el-button type="danger" @click="handleAction(row, '2')">拒绝退货</el-button>
           </el-row>
         </template>
       </el-table-column>

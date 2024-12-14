@@ -201,6 +201,7 @@ import axios from 'axios'
 import { postProductAPI } from '@/api/products'
 import { getAddressListAPI, addAddressAPI } from '@/api/address'
 import { ElMessage } from 'element-plus'
+import { useRouter } from 'vue-router'
 
 onMounted(() => {
   getAddressList()
@@ -213,6 +214,7 @@ const defaultAddressId = ref(null) // 默认地址 ID
 const curAddress = ref(null) // 当前显示的地址
 const activeAddress = ref({}) // 激活的地址
 const tempActiveAddress = ref({}) // 临时选中的地址
+const router = useRouter()
 
 // 获取地址列表
 const getAddressList = async () => {
@@ -452,7 +454,24 @@ const rules = {
   description: [{ required: true, message: '请输入物品描述', trigger: 'blur' }],
   category: [{ required: true, message: '请选择物品类别', trigger: 'change' }],
   deliveryMethod: [{ required: true, message: '请选择配送方式', trigger: 'change' }],
-  price: [{ required: true, type: 'number', message: '请输入售价', trigger: 'blur' }],
+  price: [
+    {
+      required: true,
+      type: 'number',
+      message: '请输入售价',
+      trigger: 'blur'
+    },
+    {
+      validator: (rule, value, callback) => {
+        if (value <= 0) {
+          callback(new Error('售价必须大于 0 元'))
+        } else {
+          callback() // 校验通过
+        }
+      },
+      trigger: 'blur'
+    }
+  ],
   imageUrl: [{ required: true, message: '请上传图片或等待上传完成', trigger: 'blur' }]
 }
 
@@ -488,8 +507,10 @@ function submitForm() {
       }
       const res = await postProductAPI(data)
       if (res.data.code === 1) {
-        // const id = res.data.data.id //数据库返回的商品id
+        const id = res.data.data.id //数据库返回的商品id
         ElMessage.success('发布成功')
+
+        router.push(`/detail/${id}`)
       } else {
         ElMessage.error('发布失败')
       }

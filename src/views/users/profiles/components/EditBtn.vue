@@ -504,7 +504,24 @@ const rules = {
   description: [{ required: true, message: '请输入物品描述', trigger: 'blur' }],
   category: [{ required: true, message: '请选择物品类别', trigger: 'change' }],
   deliveryMethod: [{ required: true, message: '请选择配送方式', trigger: 'change' }],
-  price: [{ required: true, type: 'number', message: '请输入售价', trigger: 'blur' }]
+  price: [
+    {
+      required: true,
+      type: 'number',
+      message: '请输入售价',
+      trigger: 'blur'
+    },
+    {
+      validator: (rule, value, callback) => {
+        if (value <= 0) {
+          callback(new Error('售价必须大于 0 元'))
+        } else {
+          callback() // 校验通过
+        }
+      },
+      trigger: 'blur'
+    }
+  ]
 }
 </script>
 

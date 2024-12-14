@@ -115,17 +115,26 @@
         </el-button>
         <el-button type="primary" plain size="large" circle><i class="iconfont icon-chat"></i></el-button>
       </div>
+      <div v-else-if="product.isSold == 0 && userStore.userInfo.userID == product.userID" class="user-btn-group">
+        <el-button
+          type="danger"
+          size="large"
+          style="font-size: 16px; width: 140px"
+          @click="confirmDeleteProduct(product.id)"
+          >删除商品</el-button
+        >
+      </div>
       <div v-else style="height: 50px"></div>
     </el-form>
   </div>
 </template>
 
 <script setup>
-import { getDetail, updateIsStarred } from '@/api/detail'
+import { getDetail, updateIsStarred, deleteProduct } from '@/api/detail'
 import { onMounted, ref } from 'vue'
 import { useRoute } from 'vue-router'
 import 'element-plus/theme-chalk/el-message.css'
-import { ElMessage } from 'element-plus'
+import { ElMessage, ElMessageBox } from 'element-plus'
 import { useUserStore } from '@/store/userStore'
 import { useCartStore } from '@/store/cartStore'
 import { useRouter } from 'vue-router'
@@ -186,6 +195,25 @@ const goToCheckout = () => {
   console.log('商品详情：', cartStore.selectedProduct.value)
   router.push('/checkout')
 }
+
+// 删除商品
+const confirmDeleteProduct = async (id) => {
+  console.log(id)
+  try {
+    await ElMessageBox.confirm('确定要删除此商品吗？', '提示', {
+      confirmButtonText: '确认',
+      cancelButtonText: '取消',
+      type: 'warning'
+    })
+    const res = await deleteProduct(id)
+    if (res.data.code === 1) {
+      ElMessage.success('商品已删除')
+      router.push('/')
+    }
+  } catch (error) {
+    console.log('已取消删除', error)
+  }
+}
 </script>
 
 <style scoped lang="scss">
@@ -204,6 +232,15 @@ const goToCheckout = () => {
 }
 
 .btn-group {
+  display: flex;
+  justify-content: flex-start;
+  margin-left: 60px;
+  margin-right: 60px;
+  margin-top: 20px;
+  margin-bottom: 50px;
+}
+
+.user-btn-group {
   display: flex;
   justify-content: flex-start;
   margin-left: 60px;

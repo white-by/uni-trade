@@ -1,5 +1,3 @@
-//config.js
-
 // config.js
 export const config = {
   //apifox云端MOCK

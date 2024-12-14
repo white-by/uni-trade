@@ -4,7 +4,7 @@
     <el-row style="margin-bottom: 50px; color: dimgray"><h3>我的收藏</h3></el-row>
     <div v-if="collectionList != null">
       <div v-for="item in collectionList" :key="item.id" class="published-item">
-        <img :src="item.imageUrl" alt="商品图片" class="item-image" />
+        <img :src="getFirstImageURL(item.imageUrl)" alt="商品图片" class="item-image" />
 
         <div class="item-info">
           <router-link class="product-name" :to="`/detail/${item.id}`">
@@ -56,6 +56,11 @@ const getCollectionList = async () => {
 const handlePageChange = (pageNum) => {
   pageNum.value = pageNum
   getCollectionList() // 页码变化时重新获取数据
+}
+
+// 获取第一张图片URL
+const getFirstImageURL = (imageURL) => {
+  return imageURL ? imageURL.split(',')[0] : ''
 }
 
 onMounted(() => {

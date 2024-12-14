@@ -19,6 +19,13 @@ export const getDetail = (id) => {
   })
 }
 
+export const deleteProduct = (id) => {
+  return request({
+    url: `/product/delete/${id}`,
+    method: 'DELETE'
+  })
+}
+
 export const updateIsStarred = (id, data) => {
   return request({
     url: `/detail/${id}`,

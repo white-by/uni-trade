@@ -156,7 +156,7 @@ const payUrl = `${baseURL}/pay/aliPay?orderId=${route.query.id}&redirect=${redir
     height: 70px;
     padding-left: 30px;
     font-size: 16px;
-    padding-left: 35px;
+    padding-left: 60px;
 
     &.head {
       border-bottom: 1px solid #f5f5f5;
@@ -172,7 +172,7 @@ const payUrl = `${baseURL}/pay/aliPay?orderId=${route.query.id}&redirect=${redir
     margin-left: 30px;
     color: #666666;
     display: inline-block;
-    margin-left: 35px;
+    margin-left: 60px;
 
     &.active,
     &:hover {
@@ -183,9 +183,5 @@ const payUrl = `${baseURL}/pay/aliPay?orderId=${route.query.id}&redirect=${redir
       background: url('@/assets/images/alipay.png') no-repeat center / contain;
     }
   }
-}
-
-.item {
-  margin-left: 20px;
 }
 </style>

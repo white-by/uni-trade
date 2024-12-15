@@ -120,6 +120,7 @@
           type="danger"
           size="large"
           style="font-size: 16px; width: 140px"
+          class="btn_del"
           @click="confirmDeleteProduct(product.id)"
           >删除商品</el-button
         >
@@ -290,5 +291,9 @@ const confirmDeleteProduct = async (id) => {
 
 .seller:hover {
   color: $comColor;
+}
+
+.btn_del {
+  margin-left: 400px;
 }
 </style>

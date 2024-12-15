@@ -92,31 +92,46 @@ onMounted(() => {
   checkNewAnnouncement() // 页面加载时恢复公告和红点状态
 
   // 连接到 SSE 服务端
-  eventSource = new EventSource('http://127.0.0.1:5000/sse/announcements')
+  eventSource = new EventSource('http://127.0.0.1:5001/announcements/sse')
 
   // 接收新公告
   eventSource.onmessage = (event) => {
+    console.log('Received SSE data:', event.data) // 查看原始数据
     try {
-      const data = JSON.parse(event.data)
-      if (Array.isArray(data)) {
-        announcements.value = data
-        localStorage.setItem('announcements', JSON.stringify(data)) // 持久化公告数据
+      // 提取 data 部分
+      const rawData = event.data.trim().slice(1) // 去掉前面的 'data: ' 部分
 
-        // 只有当对话框未打开时，才显示红点
-        if (!dialogTableVisible.value && data.length > 0) {
+      // 按空格拆分字符串
+      const parts = rawData.split(' ')
+
+      if (parts.length >= 4) {
+        // 提取日期
+        const dateParts = parts.slice(3).join(' ') // 获取时间部分
+        const date = dateParts.split(' ')[0] // 获取日期部分（即第一个部分）
+
+        // 提取所需数据
+        const extractedData = {
+          id: parts[0], // 第一个值作为 id
+          title: parts[1], // 第二个值作为 title
+          content: parts[2], // 第三个值作为 content
+          date: date
+        }
+
+        console.log('Extracted Data:', extractedData)
+
+        // 你可以将数据存储到你的变量中
+        announcements.value = [extractedData]
+        localStorage.setItem('announcements', JSON.stringify([extractedData])) // 持久化公告数据
+
+        // 如果有新的公告且对话框未打开
+        if (!dialogTableVisible.value && extractedData.length > 0) {
           hasNewAnnouncement.value = true
-          localStorage.setItem('hasNewAnnouncement', 'true') // 更新新公告状态
+          localStorage.setItem('hasNewAnnouncement', 'true')
         }
       }
     } catch (error) {
-      console.error('Error parsing SSE data:', error)
+      console.log('公告获取失败', error)
     }
-  }
-
-  // 处理 SSE 错误
-  eventSource.onerror = () => {
-    console.error('SSE 连接出错，尝试重新连接...')
-    eventSource.close()
   }
 })
 

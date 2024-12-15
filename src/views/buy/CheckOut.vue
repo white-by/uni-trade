@@ -154,7 +154,7 @@ const router = useRouter()
 
 const createOrder = async () => {
   const orderData = ref({
-    sellerID: cartStore.selectedProduct.value.userName,
+    sellerID: cartStore.selectedProduct.value.userID,
     goodsID: cartStore.selectedProduct.value.id,
     price: cartStore.selectedProduct.value.price,
     deliveryMethod: cartStore.selectedProduct.value.deliveryMethod,

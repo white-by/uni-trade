@@ -96,7 +96,6 @@ onMounted(() => {
 
   // 接收新公告
   eventSource.onmessage = (event) => {
-    console.log('Received SSE data:', event.data) // 查看原始数据
     try {
       // 提取 data 部分
       const rawData = event.data.trim().slice(1) // 去掉前面的 'data: ' 部分
@@ -105,28 +104,30 @@ onMounted(() => {
       const parts = rawData.split(' ')
 
       if (parts.length >= 4) {
-        // 提取日期
-        const dateParts = parts.slice(3).join(' ') // 获取时间部分
-        const date = dateParts.split(' ')[0] // 获取日期部分（即第一个部分）
+        // 提取公告数据
+        const dateParts = parts.slice(3).join(' ')
+        const date = dateParts.split(' ')[0] // 获取日期部分
 
-        // 提取所需数据
-        const extractedData = {
-          id: parts[0], // 第一个值作为 id
-          title: parts[1], // 第二个值作为 title
-          content: parts[2], // 第三个值作为 content
-          date: date
+        const newAnnouncement = {
+          id: parts[0], // 公告 ID
+          title: parts[1], // 公告标题
+          content: parts[2], // 公告内容
+          date: date // 公告日期
         }
 
-        console.log('Extracted Data:', extractedData)
+        // 检查公告 ID 是否已经存在
+        const existingAnnouncements = announcements.value
+        const isNew = !existingAnnouncements.some((item) => item.id === newAnnouncement.id)
 
-        // 你可以将数据存储到你的变量中
-        announcements.value = [extractedData]
-        localStorage.setItem('announcements', JSON.stringify([extractedData])) // 持久化公告数据
+        if (isNew) {
+          announcements.value.unshift(newAnnouncement) // 如果是新公告，添加到公告列表的前面
+          localStorage.setItem('announcements', JSON.stringify(announcements.value)) // 更新本地存储
 
-        // 如果有新的公告且对话框未打开
-        if (!dialogTableVisible.value && extractedData.length > 0) {
-          hasNewAnnouncement.value = true
-          localStorage.setItem('hasNewAnnouncement', 'true')
+          // 设置红点显示
+          if (!dialogTableVisible.value) {
+            hasNewAnnouncement.value = true
+            localStorage.setItem('hasNewAnnouncement', 'true') // 更新红点状态
+          }
         }
       }
     } catch (error) {

@@ -159,7 +159,7 @@ const createOrder = async () => {
     price: cartStore.selectedProduct.value.price,
     deliveryMethod: cartStore.selectedProduct.value.deliveryMethod,
     shippingCost: cartStore.selectedProduct.value.shippingCost,
-    SenderAddrID: cartStore.selectedProduct.value.addrID,
+    senderAddrID: cartStore.selectedProduct.value.addrID,
     shippingAddrID: curAddress.value.id
   })
   console.log('orderData:', orderData.value)

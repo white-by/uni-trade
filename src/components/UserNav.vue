@@ -120,7 +120,7 @@ onMounted(() => {
         const isNew = !existingAnnouncements.some((item) => item.id === newAnnouncement.id)
 
         if (isNew) {
-          announcements.value.unshift(newAnnouncement) // 如果是新公告，添加到公告列表的前面
+          announcements.value.push(newAnnouncement) // 如果是新公告，添加到公告列表的前面
           localStorage.setItem('announcements', JSON.stringify(announcements.value)) // 更新本地存储
 
           // 设置红点显示

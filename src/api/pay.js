@@ -22,3 +22,14 @@ export const getOrderApi = (id) => {
     }
   })
 }
+
+// export const alipayNotify = () => {
+//   const userStore = useUserStore()
+//   return httpInstance({
+//     url: '/alipay/notify',
+//     method: 'POST',
+//     headers: {
+//       Authorization: `${userStore.userInfo.token}`
+//     }
+//   })
+// }

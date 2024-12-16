@@ -2,6 +2,9 @@
 import { ref, nextTick, onMounted } from 'vue'
 import { ElMessage, ElMessageBox } from 'element-plus'
 import { Search } from '@element-plus/icons-vue'
+import useFormatTime from '@/hooks/useFormatTime'
+
+const { formatTime } = useFormatTime()
 
 import {
   getAnnouncementListApi,
@@ -21,7 +24,11 @@ const AnnouncementList = ref([])
 const getAnnouncementList = async () => {
   const res = await getAnnouncementListApi(queryForm.value)
   if (res.data.code === 1) {
-    AnnouncementList.value = res.data.data.announcementList
+    AnnouncementList.value = res.data.data.announcementList.map((announcement) => ({
+      ...announcement,
+      anTime: formatTime(announcement.anTime) // 格式化时间
+    }))
+
     total.value = res.data.data.total
   } else ElMessage.error('获取公告信息失败')
 }

@@ -199,7 +199,7 @@ import { ref, reactive, watch, nextTick, onMounted } from 'vue'
 import { useCategoryStore } from '@/store/sortCategory'
 import axios from 'axios'
 import { postProductAPI } from '@/api/products'
-import { getAddressListAPI, addAddressAPI } from '@/api/address'
+import { getAddressListAPI, addAddressAPI, setDefaultAddressAPI } from '@/api/address'
 import { ElMessage } from 'element-plus'
 import { useRouter } from 'vue-router'
 
@@ -292,11 +292,19 @@ const submitAddressForm = () => {
     if (valid) {
       const res = await addAddressAPI(newAddress.value)
       if (res.data.code === 1) {
-        const newAddressWithID = { ...newAddress.value, id: res.data.data.id }
-        curAddress.value = { ...newAddressWithID }
+        await getAddressList()
+
+        // 检查剩余地址数量
+        if (addressData.value.length === 1) {
+          const newAddressId = addressData.value[0].id
+
+          // 调用设置默认地址的 API
+          await setDefaultAddressAPI({ oldAddressId: null, newAddressId })
+          defaultAddressId.value = newAddressId
+        }
+
         addDialogVisible.value = false
         resetAddForm()
-        getAddressList()
         ElMessage.success('添加成功')
       } else {
         ElMessage.error(`新增地址失败: ${res.msg}`)

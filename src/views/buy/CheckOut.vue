@@ -137,7 +137,7 @@
 import UserNav from '@/components/UserNav.vue'
 import UserFooter from '@/components/UserFooter.vue'
 import { ref, onMounted } from 'vue'
-import { getAddressListAPI, addAddressAPI } from '@/api/address'
+import { getAddressListAPI, addAddressAPI, setDefaultAddressAPI } from '@/api/address'
 import { createOrderAPI } from '@/api/pay'
 import { ElMessage } from 'element-plus'
 import { useCartStore } from '@/store/cartStore'
@@ -159,8 +159,9 @@ const createOrder = async () => {
     price: cartStore.selectedProduct.value.price,
     deliveryMethod: cartStore.selectedProduct.value.deliveryMethod,
     shippingCost: cartStore.selectedProduct.value.shippingCost,
-    senderAddrID: cartStore.selectedProduct.value.addrID,
-    shippingAddrID: curAddress.value.id
+    senderAddrID:
+      cartStore.selectedProduct.value.deliveryMethod === '无需快递' ? null : cartStore.selectedProduct.value.addrID, //发货地址
+    shippingAddrID: cartStore.selectedProduct.value.deliveryMethod === '无需快递' ? null : curAddress.value.id //收货地址
   })
   console.log('orderData:', orderData.value)
   const res = await createOrderAPI(orderData.value)
@@ -222,10 +223,10 @@ const switchAddress = (item) => {
 
 onMounted(() => {
   getAddressList()
-  // 如果 `selectedProduct` 为空，跳转回商品详情页
+  // 如果 `selectedProduct` 为空，跳转回主页
   if (!cartStore.selectedProduct) {
-    console.warn('商品状态失效，跳转回详情界面')
-    router.push(`/detail/${cartStore.selectedProduct?.id || 'default'}`) // 'default' 可作为兜底值
+    console.warn('商品状态失效，跳转回主页')
+    router.push('/')
   }
 })
 
@@ -262,8 +263,17 @@ const submitAddressForm = () => {
     if (valid) {
       const res = await addAddressAPI(newAddress.value)
       if (res.data.code === 1) {
-        const newAddressWithID = { ...newAddress.value, id: res.data.data.id }
-        curAddress.value = { ...newAddressWithID }
+        await getAddressList()
+
+        // 检查剩余地址数量
+        if (addressData.value.length === 1) {
+          const newAddressId = addressData.value[0].id
+
+          // 调用设置默认地址的 API
+          await setDefaultAddressAPI({ oldAddressId: null, newAddressId })
+          defaultAddressId.value = newAddressId
+        }
+
         addDialogVisible.value = false
         resetAddForm()
         ElMessage.success('添加成功')

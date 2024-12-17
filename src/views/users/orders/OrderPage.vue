@@ -111,6 +111,15 @@
             >
               取消退款
             </el-button>
+            <el-button
+              v-if="scope.row.status == '未付款'"
+              size="small"
+              type="primary"
+              plain
+              @click="handlePay(scope.$index, scope.row)"
+            >
+              去付款
+            </el-button>
           </template></el-table-column
         >
       </el-table>
@@ -322,8 +331,10 @@ import AreaComponets from '@/components/AreaComponets.vue'
 import { getPurchasedDataAPI, getSelledDataAPI, operateOrderAPI, editAddressAPI } from '@/api/order.js'
 import { ElMessage, ElMessageBox } from 'element-plus'
 import useThrottle from '@/hooks/useThrottle'
+import { useRouter } from 'vue-router'
 
 const { throttled } = useThrottle() // 节流
+const router = useRouter()
 
 // 从接口拿取“我买到的”订单信息
 let purchasedPageNum = ref(1) //表格页码
@@ -403,6 +414,16 @@ const showRejectRefundDialog = (order) => {
   currentOrder.id = order.tradeID
   currentOrder.targetStatus = '处理中'
   rejectRefundDialogVisible.value = true
+}
+
+const handlePay = async (index, row) => {
+  const orderId = row.tradeID
+  router.push({
+    path: '/pay',
+    query: {
+      id: orderId
+    }
+  })
 }
 
 // 确认评价

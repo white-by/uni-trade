@@ -23,6 +23,18 @@ export const getOrderApi = (id) => {
   })
 }
 
+export const paySuccess = (data) => {
+  const userStore = useUserStore()
+  return httpInstance({
+    url: '/alipay/success',
+    method: 'POST',
+    data,
+    headers: {
+      Authorization: `${userStore.userInfo.token}`
+    }
+  })
+}
+
 // export const alipayNotify = () => {
 //   const userStore = useUserStore()
 //   return httpInstance({

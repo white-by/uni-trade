@@ -418,6 +418,7 @@ const showRejectRefundDialog = (order) => {
 
 const handlePay = async (index, row) => {
   const orderId = row.tradeID
+  localStorage.setItem('tradeId', orderId)
   router.push({
     path: '/pay',
     query: {

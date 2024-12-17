@@ -6,6 +6,7 @@ import { ref } from 'vue'
 // import { alipayNotify } from '@/api/pay'
 import { onMounted } from 'vue'
 // import { getOrderApi } from '@/api/pay';
+import { paySuccess } from '@/api/pay'
 
 const router = useRouter()
 const route = useRoute()
@@ -26,9 +27,16 @@ const getCost = () => {
 //   console.log('callback', res)
 // }
 
+const handlePaySuccess = async () => {
+  const tradeId = localStorage.getItem('tradeId')
+  const res = await paySuccess(tradeId)
+  console.log(res.data)
+}
+
 onMounted(() => {
   // callback()
   getCost()
+  handlePaySuccess()
 })
 </script>
 

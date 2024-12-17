@@ -18,6 +18,7 @@ const payInfo = ref({})
 const cost = ref(0)
 const getPayInfo = async () => {
   const res = await getOrderApi(route.query.id)
+  localStorage.setItem('tradeId', route.query.id)
   if (res.data.data.countdown === -1) {
     ElMessage.error({
       message: '订单超时！',

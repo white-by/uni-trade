@@ -38,7 +38,7 @@ export default function useFormatTime() {
     const date = new Date(isoString)
 
     // 不用将时间转换为中国标准时间
-    date.setHours(date.getHours())
+    date.setHours(date.getHours() + 8)
 
     // 格式化为 yyyy-MM-dd HH:mm:ss 格式
     const formattedDate = date.toISOString().replace('T', ' ').slice(0, 19)

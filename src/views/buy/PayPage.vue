@@ -53,7 +53,7 @@ onMounted(
 // 携带订单id以及回调地址跳转到支付地址（get）
 // 支付地址
 const baseURL = config.baseURL
-const backURL = 'http://127.0.0.1:5173/paycallback'
+const backURL = 'http://localhost:5173/paycallback'
 const redirectUrl = encodeURIComponent(backURL)
 const payUrl = `${baseURL}/pay/aliPay?orderId=${route.query.id}&redirect=${redirectUrl}`
 </script>

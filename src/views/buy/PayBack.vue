@@ -1,13 +1,35 @@
 <script setup>
 import UserNav from '@/components/UserNav.vue'
 import UserFooter from '@/components/UserFooter.vue'
-import { useRouter } from 'vue-router'
+import { useRoute, useRouter } from 'vue-router'
+import { ref } from 'vue'
+// import { alipayNotify } from '@/api/pay'
+import { onMounted } from 'vue'
+// import { getOrderApi } from '@/api/pay';
 
 const router = useRouter()
+const route = useRoute()
 
 const toHome = () => {
   router.replace('/')
 }
+const cost = ref(0)
+const getCost = () => {
+  cost.value = route.query.total_amount
+}
+// const getOrderInfo = async () => {
+//   const res = await getOrderApi(route.query.)
+// }
+
+// const callback = () => {
+//   const res = alipayNotify()
+//   console.log('callback', res)
+// }
+
+onMounted(() => {
+  // callback()
+  getCost()
+})
 </script>
 
 <template>
@@ -17,14 +39,16 @@ const toHome = () => {
       <!-- 支付结果 -->
       <div class="pay-result">
         <span class="iconfont icon-chenggong green"></span>
-        <span class="iconfont icon-jingshi red"></span>
+        <!-- <span class="iconfont icon-jingshi red"></span> -->
         <p class="tit">支付成功</p>
         <p class="tip">感谢您的支持，若有任何问题请随时联系我们！</p>
         <p>支付方式：<span>支付宝</span></p>
-        <p>支付金额：<span>¥200.00</span></p>
+        <p>
+          支付金额：<span class="cost">¥{{ cost }}</span>
+        </p>
         <div class="btn">
-          <el-button type="primary" style="margin-right: 20px">查看订单</el-button>
-          <el-button @click="toHome">进入首页</el-button>
+          <!-- <el-button type="primary" style="margin-right: 20px">查看订单</el-button> -->
+          <el-button type="primary" @click="toHome">进入首页</el-button>
         </div>
         <p class="alert">
           <span class="iconfont icon-tip"></span>
@@ -39,7 +63,7 @@ const toHome = () => {
 <style scoped lang="scss">
 .pay-page {
   margin-top: 40px;
-  margin-bottom: 80px;
+  margin-bottom: 40px;
 }
 
 .pay-result {
@@ -60,6 +84,11 @@ const toHome = () => {
 
   .red {
     color: #ff5e41;
+  }
+
+  .cost {
+    color: $priceColor;
+    font-size: 20px;
   }
 
   .tit {

@@ -6,12 +6,14 @@ import { ref, onMounted, onUnmounted, watch } from 'vue'
 import { useUserStore } from '@/store/userStore'
 import useThrottle from '@/hooks/useThrottle.js'
 import { useSearchStore } from '@/store/searchStore'
+import { useSelectStore } from '@/store/selectStore'
 // import { useCategoryStore } from '@/store/sortCategory'
 
 const userStore = useUserStore()
 const userName = ref(userStore.userInfo.userName)
 
 const searchStore = useSearchStore()
+const selectStore = useSelectStore()
 // const categoryStore = useCategoryStore()
 const searchInput = ref('')
 
@@ -22,6 +24,7 @@ const { throttled } = useThrottle()
 const toHome = () => {
   searchStore.searchQuery = ''
   searchInput.value = ''
+  selectStore.selectData = ''
   // categoryStore.categoryID = 0
 }
 

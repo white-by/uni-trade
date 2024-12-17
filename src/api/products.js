@@ -31,8 +31,17 @@ export const getProductsListAPI = (category, page, limit, searchQuery) => {
 }
 
 //根据筛选条件筛选商品
+// export const getFilteredProductsAPI = (data) => {
+//   return httpInstance({
+//     url: '/products',
+//     method: 'POST',
+//     data: data
+//   })
+// }
+
+//根据筛选条件筛选商品
 export function getFilteredProductsAPI({
-  category = 0,
+  categoryID = 0,
   area = '',
   city = '',
   deliveryMethod = '',
@@ -46,17 +55,17 @@ export function getFilteredProductsAPI({
   searchQuery = ''
 } = {}) {
   return httpInstance({
-    url: '/products',
+    url: '/product/select',
     params: {
-      category: category || undefined,
+      categoryID: categoryID || undefined,
       area: area || undefined,
       city: city || undefined,
-      deliveryMethod: deliveryMethod || undefined,
+      deliveryMethod: deliveryMethod && deliveryMethod !== '包邮' ? deliveryMethod : undefined,
       priceMax: priceMax > 0 ? priceMax : undefined, // 仅在大于0时发送
       priceMin: priceMin > 0 ? priceMin : undefined,
       province: province || undefined,
       publishDate: publishDate || undefined,
-      shippingCost: shippingCost > 0 ? shippingCost : undefined,
+      shippingCost: shippingCost > 0 ? shippingCost : (deliveryMethod == "包邮" ? 0 : undefined),
       page,
       limit,
       searchQuery: searchQuery || undefined

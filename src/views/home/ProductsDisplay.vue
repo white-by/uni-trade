@@ -3,11 +3,13 @@ import { ref, onMounted, watch } from 'vue'
 import { getProductsListAPI } from '@/api/products.js'
 import { useCategoryStore } from '@/store/sortCategory'
 import { useSearchStore } from '@/store/searchStore'
+import { useSelectStore } from '@/store/selectStore'
 import { ElMessage } from 'element-plus'
 
 const productsList = ref([]) // 商品列表
 const categoryStore = useCategoryStore() // 分类状态
 const searchStore = useSearchStore() // 搜索状态
+const selectStore = useSelectStore()
 
 const currentPage = ref(1) // 当前页码
 const pageSize = ref(12) // 每页条数
@@ -43,12 +45,14 @@ const getProductsList = async () => {
       ElMessage.success('搜索成功')
     }
 
-    if (res.data.data.length < pageSize.value) {
+    if (res.data.data == null || res.data.data.length < pageSize.value) {
       hasMoreData.value = false // 没有更多数据了
     }
 
-    productsList.value.push(...res.data.data) // 追加新数据
-    currentPage.value += 1 // 加载下一页
+    if (res.data.data != null) {
+      productsList.value.push(...res.data.data) // 追加新数据
+      currentPage.value += 1 // 加载下一页
+    }
   } catch (error) {
     console.error('获取商品列表失败:', error)
   } finally {
@@ -78,6 +82,33 @@ watch(
 onMounted(() => {
   getProductsList()
 })
+
+// 字段映射方法
+const mapSelectDataToProducts = (selectData) => {
+  return selectData.map((item) => {
+    return {
+      id: item.id,
+      name: item.title,
+      price: item.price,
+      picture: item.imageUrl
+    }
+  })
+}
+
+// 监听selectStore中的selectData变化
+watch(
+  () => selectStore.selectData,
+  (newSelectData) => {
+    if (newSelectData && newSelectData.length > 0) {
+      productsList.value = mapSelectDataToProducts(newSelectData) // 手动映射数据
+      hasMoreData.value = false // 停止无限滚动
+    } else {
+      productsList.value = []
+      hasMoreData.value = false
+    }
+  },
+  { deep: true }
+)
 </script>
 
 <template>

@@ -63,6 +63,7 @@
               <el-option label="邮寄" value="邮寄"></el-option>
               <el-option label="自提" value="自提"></el-option>
               <el-option label="无需快递" value="无需快递"></el-option>
+              <el-option label="包邮" value="包邮"></el-option>
             </el-select> </el-form-item
         ></el-col>
       </el-row>
@@ -111,12 +112,14 @@ import { getFilteredProductsAPI } from '@/api/products'
 import { useCategoryStore } from '@/store/sortCategory'
 import AreaComponets from '@/components/AreaComponets.vue'
 import { useSearchStore } from '@/store/searchStore'
+import { useSelectStore } from '@/store/selectStore'
 
 const categoryStore = useCategoryStore()
 const selector = ref(false)
 const areaComponentRef = ref(null)
 
 const searchStore = useSearchStore() // 搜索
+const selectStore = useSelectStore()
 
 let form = reactive({
   category: '',
@@ -155,7 +158,7 @@ const isShippingDisabled = ref(false)
 watch(
   () => form.deliveryMethod,
   (newValue) => {
-    if (newValue === '自提' || newValue === '无需快递') {
+    if (newValue === '自提' || newValue === '无需快递' || newValue === '包邮') {
       isShippingDisabled.value = true
       form.shippingCost = 0 // 禁用时，自动设置运费为 0
     } else {
@@ -164,59 +167,60 @@ watch(
   }
 )
 
-// // 监听搜索内容变化
-// watch(
-//   () => searchStore.searchQuery,
-//   (newQuery, oldQuery) => {
-//     if (newQuery !== oldQuery) {
-//       applyFilter()
-//     }
-//   }
-// )
-
 //处理筛选
 const dialog = ref(false)
 const loading = ref(false)
 
-//提交筛选
-const applyFilter = async () => {
-  console.log('提交的筛选数据:', form)
-  loading.value = true
-  try {
-    const response = await getFilteredProductsAPI({
-      category: form.category,
-      area: form.area,
-      city: form.city,
-      deliveryMethod: form.deliveryMethod,
-      priceMax: form.priceMax,
-      priceMin: form.priceMin,
-      province: form.province,
-      publishDate: form.publishDate,
-      shippingCost: form.shippingCost,
-      page: 1,
-      limit: 12,
-      searchQuery: searchStore.searchQuery
-    })
-    console.log('成功发送请求')
-    // 处理成功响应
-    console.log('接口返回的数据:', response.data)
-    ElMessage({
-      type: 'success',
-      message: '修改成功'
-    })
-  } catch (error) {
-    // 处理错误
-    console.error('接口调用失败:', error)
-    ElMessage({
-      type: 'error',
-      message: '提交失败，请重试'
-    })
-  } finally {
-    // 无论成功与否都关闭加载状态和抽屉
-    loading.value = false
-    selector.value = false
+  // 提交筛选
+  const applyFilter = async () => {
+    loading.value = true
+
+    try {
+      // 通过 categoryName 查找对应的 categoryID
+      const selectedCategory = categoryStore.categoryList.data.find(
+        (item) => item.categoryName === form.category
+      )
+      const categoryID = selectedCategory ? selectedCategory.categoryID : undefined 
+
+      // 构建参数对象
+      const params = {
+        categoryID: categoryID, // 使用查找到的 categoryID
+        area: form.area,
+        city: form.city,
+        deliveryMethod: form.deliveryMethod && form.deliveryMethod !== '包邮' ? form.deliveryMethod : undefined, // 处理包邮逻辑
+        priceMax: form.priceMax,
+        priceMin: form.priceMin,
+        province: form.province,
+        publishDate: form.publishDate,
+        shippingCost: form.shippingCost,
+        page: 1,
+        limit: 12,
+        searchQuery: searchStore.searchQuery
+      }
+
+      const res = await getFilteredProductsAPI(params)
+
+      // 处理成功响应
+      selectStore.selectData = res.data.data
+      if (res.data.data == null) {
+        ElMessage.warning("没有符合条件的商品！")
+      } else {
+        ElMessage.success("筛选成功")
+      }
+    } catch (error) {
+      // 处理错误
+      console.error('接口调用失败:', error)
+      ElMessage({
+        type: 'error',
+        message: '提交失败，请重试'
+      })
+    } finally {
+      // 无论成功与否都关闭加载状态和抽屉
+      loading.value = false
+      selector.value = false
+    }
   }
-}
+
 
 //点击界外时对应用筛选与否的二次确认
 const handleClose = () => {
@@ -225,30 +229,41 @@ const handleClose = () => {
   }
   ElMessageBox.confirm('确认应用并退出吗?')
     .then(async () => {
-      console.log('提交的筛选数据:', form)
+      // console.log('提交的筛选数据:', form)
       loading.value = true
 
-      // 调用接口
-      try {
-        const response = await getFilteredProductsAPI({
-          category: form.category,
+       try {
+        // 通过 categoryName 查找对应的 categoryID
+        const selectedCategory = categoryStore.categoryList.data.find(
+          (item) => item.categoryName === form.category
+        )
+        const categoryID = selectedCategory ? selectedCategory.categoryID : undefined
+        
+        // 构建参数对象
+        const params = {
+          categoryID: categoryID, // 使用查找到的 categoryID
           area: form.area,
           city: form.city,
-          deliveryMethod: form.deliveryMethod,
+          deliveryMethod: form.deliveryMethod && form.deliveryMethod !== '包邮' ? form.deliveryMethod : undefined, // 处理包邮逻辑
           priceMax: form.priceMax,
           priceMin: form.priceMin,
           province: form.province,
           publishDate: form.publishDate,
           shippingCost: form.shippingCost,
           page: 1,
-          limit: 12
-        })
-        console.log('成功发送请求')
-        console.log('接口返回的数据:', response.data)
-        ElMessage({
-          type: 'success',
-          message: '修改成功'
-        })
+          limit: 12,
+          searchQuery: searchStore.searchQuery
+        }
+
+        const res = await getFilteredProductsAPI(params)
+
+        // 处理成功响应
+        selectStore.selectData = res.data.data
+        if (res.data.data == null) {
+          ElMessage.warning("没有符合条件的商品！")
+        } else {
+          ElMessage.success("筛选成功")
+        }
       } catch (error) {
         // 处理错误
         console.error('接口调用失败:', error)
@@ -257,6 +272,7 @@ const handleClose = () => {
           message: '提交失败，请重试'
         })
       } finally {
+        // 无论成功与否都关闭加载状态和抽屉
         loading.value = false
         selector.value = false
       }

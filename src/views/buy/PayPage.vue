@@ -29,6 +29,7 @@ const getPayInfo = async () => {
     return
   }
   payInfo.value = res.data.data
+  console.log('payInfo:', payInfo.value)
   cost.value = payInfo.value.price + payInfo.value.shippingCost
   // 初始化倒计时秒数
   start(res.data.data.countdown)

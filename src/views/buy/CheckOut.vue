@@ -160,8 +160,8 @@ const createOrder = async () => {
     deliveryMethod: cartStore.selectedProduct.value.deliveryMethod,
     shippingCost: cartStore.selectedProduct.value.shippingCost,
     senderAddrID:
-      cartStore.selectedProduct.value.deliveryMethod === '无需快递' ? null : cartStore.selectedProduct.value.addrID, //发货地址
-    shippingAddrID: cartStore.selectedProduct.value.deliveryMethod === '无需快递' ? null : curAddress.value.id //收货地址
+      cartStore.selectedProduct.value.deliveryMethod === '无需快递' ? 0 : cartStore.selectedProduct.value.addrID, //发货地址
+    shippingAddrID: cartStore.selectedProduct.value.deliveryMethod === '无需快递' ? 0 : curAddress.value.id //收货地址
   })
   console.log('orderData:', orderData.value)
   const res = await createOrderAPI(orderData.value)

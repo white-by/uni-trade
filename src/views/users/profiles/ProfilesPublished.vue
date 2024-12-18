@@ -71,6 +71,7 @@ const getFirstImageURL = (imageUrl) => {
 
 .item-image {
   width: 100px;
+  height: 100px;
   object-fit: cover;
   border-radius: 5px;
   margin-right: 20px;

@@ -48,9 +48,9 @@
                 </div>
                 <div>卖家: {{ scope.row.sellerName }}</div>
                 <div>下单时间: {{ scope.row.orderTime }}</div>
-                <div>支付时间: {{ scope.row.payTime }}</div>
-                <div v-if="scope.row.shippingTime">发货时间: {{ scope.row.shippingTime }}</div>
-                <div v-if="scope.row.turnoverTime">成交时间: {{ scope.row.turnoverTime }}</div>
+                <div v-if="scope.row.payTime != '0001-01-01 00:00:00'">支付时间: {{ scope.row.payTime }}</div>
+                <div v-if="scope.row.shippingTime != '0001-01-01 00:00:00'">发货时间: {{ scope.row.shippingTime }}</div>
+                <div v-if="scope.row.turnoverTime != '0001-01-01 00:00:00'">成交时间: {{ scope.row.turnoverTime }}</div>
               </template>
               <template #reference>
                 <el-button link type="primary" size="small"> 查看详情 </el-button>
@@ -67,7 +67,7 @@
           <template #default="scope">
             <el-button
               v-if="scope.row.status == '未发货'"
-              :disabled="scope.row.deliveryMethod === '无需快递'"
+              :disabled="scope.row.deliveryMethod == '0'"
               size="small"
               type="primary"
               plain
@@ -235,9 +235,9 @@
                 </div>
                 <div>买家: {{ scope.row.sellerName }}</div>
                 <div>下单时间: {{ scope.row.orderTime }}</div>
-                <div>支付时间: {{ scope.row.payTime }}</div>
-                <div v-if="scope.row.shippingTime">发货时间: {{ scope.row.shippingTime }}</div>
-                <div v-if="scope.row.turnoverTime">成交时间: {{ scope.row.turnoverTime }}</div>
+                <div v-if="scope.row.payTime != '0001-01-01 00:00:00'">支付时间: {{ scope.row.payTime }}</div>
+                <div v-if="scope.row.shippingTime != '0001-01-01 00:00:00'">发货时间: {{ scope.row.shippingTime }}</div>
+                <div v-if="scope.row.turnoverTime != '0001-01-01 00:00:00'">成交时间: {{ scope.row.turnoverTime }}</div>
               </template>
               <template #reference>
                 <el-button link type="primary" size="small"> 查看详情 </el-button>
@@ -519,7 +519,7 @@ const handleCancelRefund = async (index, row) => {
     })
     const res = await operateOrderAPI({
       id: row.tradeID,
-      status: '退款的上一个状态'
+      status: '取消退款'
     })
     if (res.data.code === 1) {
       ElMessage.success('取消退款成功！')

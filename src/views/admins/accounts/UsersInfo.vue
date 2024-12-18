@@ -213,7 +213,7 @@ const deleteUser = async (userID) => {
       <el-table-column label="用户名" prop="userName" align="center"></el-table-column>
       <el-table-column label="头像" align="center">
         <template #default="{ row }">
-          <img :src="row.picture" alt="头像" style="height: 80px" />
+          <img :src="row.picture" alt="头像" style="height: 80px; width: 80px" />
         </template>
       </el-table-column>
       <el-table-column label="性别" prop="gender" align="center">

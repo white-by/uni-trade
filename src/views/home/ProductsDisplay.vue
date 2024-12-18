@@ -118,8 +118,7 @@ watch(
 <template>
   <div
     v-infinite-scroll="getProductsList"
-    infinite-scroll-disabled="false"
-    infinite-scroll-distance="20"
+    infinite-scroll-distance="0"
     class="product-container"
     v-if="productsList.length > 0"
   >

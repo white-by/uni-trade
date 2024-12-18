@@ -3,6 +3,9 @@ import { ref, onMounted } from 'vue'
 import { Search } from '@element-plus/icons-vue'
 import { ElMessage, ElMessageBox } from 'element-plus'
 import { getProductListApi, deleteProductApi } from '@/api/saleInfo'
+import useFormatTime from '@/hooks/useFormatTime'
+
+const { formatTime } = useFormatTime()
 
 const queryForm = ref({
   searchQuery: '',
@@ -106,7 +109,7 @@ onMounted(() => {
             <template #default>
               <div>浏览量: {{ scope.row.views }}</div>
               <div>收藏量: {{ scope.row.stars }}</div>
-              <div>发布时间: {{ scope.row.postTime }}</div>
+              <div>发布时间: {{ formatTime(scope.row.postTime) }}</div>
               <div v-if="scope.row.isSold === 0">销售状态: 未售出</div>
               <div v-if="scope.row.isSold === 1">销售状态: 已售出</div>
             </template>

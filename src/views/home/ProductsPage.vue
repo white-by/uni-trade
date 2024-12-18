@@ -16,6 +16,5 @@ onMounted(() => categoryStore.getCategory())
     <UserNav />
     <ProductsHeader />
     <ProductsDisplay />
-    <UserFooter />
   </div>
 </template>

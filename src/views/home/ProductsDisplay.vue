@@ -107,6 +107,10 @@ watch(
       hasMoreData.value = false
     }
   },
+  () => {
+    resetListState() // 重置列表状态（例如清空已有数据、重置分页等）
+    getProductsList() // 重新获取商品列表
+  },
   { deep: true }
 )
 </script>

@@ -192,7 +192,7 @@ const loading = ref(false)
         priceMin: form.priceMin,
         province: form.province,
         publishDate: form.publishDate,
-        shippingCost: form.shippingCost,
+        shippingCost: form.shippingCost > 0 ? form.shippingCost : (form.deliveryMethod === '包邮' ? 0 : -1),
         page: 1,
         limit: 12,
         searchQuery: searchStore.searchQuery

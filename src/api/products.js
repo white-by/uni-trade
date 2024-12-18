@@ -65,7 +65,7 @@ export function getFilteredProductsAPI({
       priceMin: priceMin > 0 ? priceMin : undefined,
       province: province || undefined,
       publishDate: publishDate || undefined,
-      shippingCost: shippingCost > 0 ? shippingCost : (deliveryMethod == "包邮" ? 0 : undefined),
+      shippingCost: shippingCost,
       page,
       limit,
       searchQuery: searchQuery || undefined

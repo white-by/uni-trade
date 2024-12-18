@@ -28,8 +28,8 @@ const getCost = () => {
 // }
 
 const handlePaySuccess = async () => {
-  const tradeId = localStorage.getItem('tradeId')
-  const res = await paySuccess(tradeId)
+  const tradeId = parseInt(localStorage.getItem('tradeId'), 10)
+  const res = await paySuccess({ tradeId: tradeId })
   console.log(res.data)
 }
 

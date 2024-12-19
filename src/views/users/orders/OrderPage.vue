@@ -47,8 +47,10 @@
                   {{ scope.row.senderAddress.detailArea }}
                 </div>
                 <div>卖家: {{ scope.row.sellerName }}</div>
-                <div>下单时间: {{ scope.row.orderTime }}</div>
-                <div v-if="scope.row.payTime != '0001-01-01 00:00:00'">支付时间: {{ scope.row.payTime }}</div>
+                <div>下单时间: {{ formatTime(scope.row.orderTime) }}</div>
+                <div v-if="scope.row.payTime != '0001-01-01 00:00:00'">
+                  支付时间: {{ formatTime(scope.row.payTime) }}
+                </div>
                 <div v-if="scope.row.shippingTime != '0001-01-01 00:00:00'">发货时间: {{ scope.row.shippingTime }}</div>
                 <div v-if="scope.row.turnoverTime != '0001-01-01 00:00:00'">成交时间: {{ scope.row.turnoverTime }}</div>
               </template>
@@ -332,6 +334,8 @@ import { getPurchasedDataAPI, getSelledDataAPI, operateOrderAPI, editAddressAPI 
 import { ElMessage, ElMessageBox } from 'element-plus'
 import useThrottle from '@/hooks/useThrottle'
 import { useRouter } from 'vue-router'
+import useFormatTime from '@/hooks/useFormatTime'
+const { formatTime } = useFormatTime()
 
 const { throttled } = useThrottle() // 节流
 const router = useRouter()

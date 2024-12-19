@@ -113,7 +113,11 @@
         <el-button type="primary" plain size="large" circle style="margin-left: 300px" @click="throttleToggleStarred">
           <i :class="isStarred ? 'iconfont icon-starred' : 'iconfont icon-star'"></i>
         </el-button>
-        <el-button type="primary" plain size="large" circle><i class="iconfont icon-chat"></i></el-button>
+        <el-popover placement="bottom" title="联系电话" :width="200" trigger="click" :content="product.tel"
+          ><template #reference>
+            <el-button type="primary" plain size="large" circle>
+              <i class="iconfont icon-chat"></i></el-button></template
+        ></el-popover>
       </div>
       <div v-else-if="product.isSold == 0 && userStore.userInfo.userID == product.userID" class="user-btn-group">
         <el-button

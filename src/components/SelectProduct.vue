@@ -8,7 +8,7 @@
       </div>
     </template>
     <div class="filter-container">
-      <el-col :span="11">
+      <!-- <el-col :span="11">
         <el-form-item label="物品类别" prop="category">
           <el-select v-model="form.category" placeholder="选择物品类别">
             <el-option
@@ -19,7 +19,7 @@
             ></el-option>
           </el-select>
         </el-form-item>
-      </el-col>
+      </el-col> -->
       <el-col
         ><el-form-item label="价格区间">
           <el-input-number
@@ -171,56 +171,53 @@ watch(
 const dialog = ref(false)
 const loading = ref(false)
 
-  // 提交筛选
-  const applyFilter = async () => {
-    loading.value = true
+// 提交筛选
+const applyFilter = async () => {
+  loading.value = true
 
-    try {
-      // 通过 categoryName 查找对应的 categoryID
-      const selectedCategory = categoryStore.categoryList.data.find(
-        (item) => item.categoryName === form.category
-      )
-      const categoryID = selectedCategory ? selectedCategory.categoryID : undefined 
+  try {
+    // 通过 categoryName 查找对应的 categoryID
+    const selectedCategory = categoryStore.categoryList.data.find((item) => item.categoryName === form.category)
+    const categoryID = selectedCategory ? selectedCategory.categoryID : undefined
 
-      // 构建参数对象
-      const params = {
-        categoryID: categoryID, // 使用查找到的 categoryID
-        area: form.area,
-        city: form.city,
-        deliveryMethod: form.deliveryMethod && form.deliveryMethod !== '包邮' ? form.deliveryMethod : undefined, // 处理包邮逻辑
-        priceMax: form.priceMax,
-        priceMin: form.priceMin,
-        province: form.province,
-        publishDate: form.publishDate,
-        shippingCost: form.shippingCost > 0 ? form.shippingCost : (form.deliveryMethod === '包邮' ? 0 : -1),
-        page: 1,
-        limit: 12,
-        searchQuery: searchStore.searchQuery
-      }
-
-      const res = await getFilteredProductsAPI(params)
-
-      // 处理成功响应
-      selectStore.selectData = res.data.data
-      if (res.data.data == null) {
-        ElMessage.warning("没有符合条件的商品！")
-      } else {
-        ElMessage.success("筛选成功")
-      }
-    } catch (error) {
-      // 处理错误
-      console.error('接口调用失败:', error)
-      ElMessage({
-        type: 'error',
-        message: '提交失败，请重试'
-      })
-    } finally {
-      // 无论成功与否都关闭加载状态和抽屉
-      loading.value = false
-      selector.value = false
+    // 构建参数对象
+    const params = {
+      categoryID: categoryID, // 使用查找到的 categoryID
+      area: form.area,
+      city: form.city,
+      deliveryMethod: form.deliveryMethod && form.deliveryMethod !== '包邮' ? form.deliveryMethod : undefined, // 处理包邮逻辑
+      priceMax: form.priceMax,
+      priceMin: form.priceMin,
+      province: form.province,
+      publishDate: form.publishDate,
+      shippingCost: form.shippingCost > 0 ? form.shippingCost : form.deliveryMethod === '包邮' ? 0 : -1,
+      page: 1,
+      limit: 12,
+      searchQuery: searchStore.searchQuery
     }
-  }
 
+    const res = await getFilteredProductsAPI(params)
+
+    // 处理成功响应
+    selectStore.selectData = res.data.data
+    if (res.data.data == null) {
+      ElMessage.warning('没有符合条件的商品！')
+    } else {
+      ElMessage.success('筛选成功')
+    }
+  } catch (error) {
+    // 处理错误
+    console.error('接口调用失败:', error)
+    ElMessage({
+      type: 'error',
+      message: '提交失败，请重试'
+    })
+  } finally {
+    // 无论成功与否都关闭加载状态和抽屉
+    loading.value = false
+    selector.value = false
+  }
+}
 
 //点击界外时对应用筛选与否的二次确认
 const handleClose = () => {
@@ -232,13 +229,11 @@ const handleClose = () => {
       // console.log('提交的筛选数据:', form)
       loading.value = true
 
-       try {
+      try {
         // 通过 categoryName 查找对应的 categoryID
-        const selectedCategory = categoryStore.categoryList.data.find(
-          (item) => item.categoryName === form.category
-        )
+        const selectedCategory = categoryStore.categoryList.data.find((item) => item.categoryName === form.category)
         const categoryID = selectedCategory ? selectedCategory.categoryID : undefined
-        
+
         // 构建参数对象
         const params = {
           categoryID: categoryID, // 使用查找到的 categoryID
@@ -260,9 +255,9 @@ const handleClose = () => {
         // 处理成功响应
         selectStore.selectData = res.data.data
         if (res.data.data == null) {
-          ElMessage.warning("没有符合条件的商品！")
+          ElMessage.warning('没有符合条件的商品！')
         } else {
-          ElMessage.success("筛选成功")
+          ElMessage.success('筛选成功')
         }
       } catch (error) {
         // 处理错误

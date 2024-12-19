@@ -5,6 +5,8 @@ import { ref, onMounted } from 'vue'
 import { Search } from '@element-plus/icons-vue'
 import { ElMessageBox, ElMessage } from 'element-plus'
 import { getRefundListApi, operateRefundListApi } from '@/api/saleInfo'
+import useFormatTime from '@/hooks/useFormatTime'
+const { formatTime } = useFormatTime()
 
 const queryForm = ref({
   searchQuery: '',
@@ -37,9 +39,9 @@ const handleAction = (row, action) => {
     cancelButtonText: '取消',
     type: 'warning'
   }).then(async () => {
-    row.status = action
     const tradeID = row.tradeID
-    // console.log('测试：', tradeID)
+    action = action == '1' ? '同意退货' : '拒绝退货'
+    row.status = action
     const res = await operateRefundListApi({ tradeID, action })
     if (res.data.code === 1) {
       ElMessage.success('操作成功！')
@@ -111,11 +113,15 @@ const handleAction = (row, action) => {
               <div v-if="scope.row.shippingCost != 0">运费: {{ scope.row.shippingCost }}元</div>
               <div>卖家ID: {{ scope.row.sellerID }}</div>
               <div>买家ID: {{ scope.row.buyerID }}</div>
-              <div>下单时间: {{ scope.row.orderTime }}</div>
-              <div>支付时间: {{ scope.row.payTime }}</div>
-              <div>退货申请时间: {{ scope.row.refundTime }}</div>
-              <div v-if="scope.row.shippingTime">发货时间: {{ scope.row.shippingTime }}</div>
-              <div v-if="scope.row.turnoverTime">成交时间: {{ scope.row.turnoverTime }}</div>
+              <div>下单时间: {{ formatTime(scope.row.orderTime) }}</div>
+              <div>支付时间: {{ formatTime(scope.row.payTime) }}</div>
+              <div>退货申请时间: {{ formatTime(scope.row.refundTime) }}</div>
+              <div v-if="scope.row.shippingTime != '0001-01-01T00:00:00Z'">
+                发货时间: {{ formatTime(scope.row.shippingTime) }}
+              </div>
+              <div v-if="scope.row.turnoverTime != '0001-01-01T00:00:00Z'">
+                成交时间: {{ formatTime(scope.row.turnoverTime) }}
+              </div>
             </template>
             <template #reference>
               <el-button link type="primary" size="small">查看详情</el-button>

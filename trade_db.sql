@@ -238,7 +238,7 @@ INSERT INTO `goods` VALUES (21, '数据库与系统第六章答案', 6, 10.00, 3
 INSERT INTO `goods` VALUES (22, '软件测试第三周练习答案', 6, 9.00, 3, '电子版，发邮箱，不会可讲解', 0, 'https://s2.loli.net/2024/12/18/ASnXRfaUJrzKVHW.png,https://s2.loli.net/2024/12/18/IKHdb7W6DjJpqCV.png', '2024-12-18 14:08:09', '0', 0, NULL, 0);
 INSERT INTO `goods` VALUES (23, '软件测试复习资料', 6, 5.00, 3, '虽然不用考试，但最好还是复习一下', 1, 'https://s2.loli.net/2024/12/18/Zo3TzHuURr8gFDA.png', '2024-12-18 14:08:48', '0', 0, NULL, 1);
 INSERT INTO `goods` VALUES (24, 'Unity射箭游戏源文件', 6, 99.00, 7, '可运行', 0, 'https://s2.loli.net/2024/12/18/2VFsv9GfAPcOmKp.png,https://s2.loli.net/2024/12/18/7KTVLwvJQD6sPqE.png', '2024-12-18 14:10:56', '0', 0, NULL, 1);
-INSERT INTO `goods` VALUES (25, '明萨拉', 6, 99999.00, 1, '不卖，没走丢，长太漂亮了给你们看一下', 0, 'https://s2.loli.net/2024/12/18/xIrKwNzhRgy1T8M.png,https://s2.loli.net/2024/12/18/MpH9JWq6ofYg87L.png', '2024-12-18 14:12:14', '2', 99999, 19, 3);
+INSERT INTO `goods` VALUES (25, '明萨拉', 6, 999999.00, 1, '不卖，没走丢，长太漂亮了给你们看一下', 0, 'https://s2.loli.net/2024/12/18/xIrKwNzhRgy1T8M.png,https://s2.loli.net/2024/12/18/MpH9JWq6ofYg87L.png', '2024-12-18 14:12:14', '2', 99999, 19, 3);
 INSERT INTO `goods` VALUES (26, '用C#编写数据库实验', 6, 20.00, 7, '内含源码', 0, 'https://s2.loli.net/2024/12/18/CJcwL4tWIzKMRs1.png', '2024-12-18 14:14:11', '0', 0, NULL, 1);
 INSERT INTO `goods` VALUES (27, 'steam平台雨世界cdk', 3, 21.00, 7, '发货后不可退款', 0, 'https://s2.loli.net/2024/12/18/PMvQB9TSLJ4Kemf.png', '2024-12-18 14:18:44', '0', 0, NULL, 1);
 INSERT INTO `goods` VALUES (28, 'steam平台空洞骑士cdk', 3, 23.00, 7, '发货后不可退款', 1, 'https://s2.loli.net/2024/12/18/sQG3JDucieqUIYo.png', '2024-12-18 14:19:20', '0', 0, NULL, 4);

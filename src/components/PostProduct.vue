@@ -78,7 +78,7 @@
           <!-- 售价 -->
           <el-col :span="8">
             <el-form-item label="售价 " prop="price">
-              <el-input-number v-model="form.price" :precision="2" :step="1" :min="0" :max="99999">
+              <el-input-number v-model="form.price" :precision="2" :step="1" :min="0" :max="999999">
                 <template #prefix>
                   <span>￥</span>
                 </template>

@@ -192,6 +192,21 @@
         <el-button type="primary" @click="throttledHandleRefund">确 定</el-button>
       </span>
     </el-dialog>
+
+    <!-- 发货对话框 -->
+    <el-dialog title="快递单号" v-model="shipDialogVisible" width="500px">
+      <el-input
+        v-model="trackingNumber"
+        placeholder="请输入快递单号。"
+        :rows="3"
+        type="textarea"
+        style="margin-bottom: 10px"
+      >
+      </el-input>
+      <span class="dialog-footer" style="display: flex; justify-content: center">
+        <el-button type="primary" @click="throttledHandleShip">确 定</el-button>
+      </span>
+    </el-dialog>
   </div>
 
   <!-- 我卖出的 -->
@@ -388,6 +403,7 @@ const handleSelledPageChange = (page) => {
 const commentDialogVisible = ref(false)
 const refundDialogVisible = ref(false)
 const rejectRefundDialogVisible = ref(false)
+const shipDialogVisible = ref(false)
 
 // 当前操作的订单信息
 const currentOrder = reactive({
@@ -444,7 +460,11 @@ const handlePay = async (index, row) => {
 // 确认评价
 const handleComment = async () => {
   if (!comment.value) {
-    ElMessage.warning('请输入评价内容')
+    ElMessage({
+      message: '请输入评价内容',
+      type: 'warning',
+      plain: true
+    })
     return
   }
 
@@ -473,7 +493,11 @@ const throttledHandleComment = throttled(handleComment, 1000)
 // 退款
 const handleRefund = async () => {
   if (!refundReason.value) {
-    ElMessage.warning('请输入退款理由')
+    ElMessage({
+      message: '请输入退款理由',
+      type: 'warning',
+      plain: true
+    })
     return
   }
 
@@ -547,29 +571,52 @@ const handleCancelRefund = async (index, row) => {
   }
 }
 
+const trackingNumber = ref('') // 快递单号
+const currentRow = ref(null) // 存储当前选中的订单行
 // 去发货
 const handleDispatch = async (row) => {
+  // 保存当前的订单行
+  currentRow.value = row
+
+  // 打开填写快递单号的对话框
+  shipDialogVisible.value = true
+}
+
+// 发货操作，只有填写了快递单号才会发请求
+const handleShip = async () => {
+  // 检查是否填写了快递单号
+  if (!trackingNumber.value) {
+    ElMessage({
+      message: '请填写快递单号',
+      type: 'warning',
+      plain: true
+    })
+    return
+  }
+
   try {
-    await ElMessageBox.confirm('您确定要发货吗？', '提示', {
-      confirmButtonText: '确定',
-      cancelButtonText: '取消',
-      type: 'warning'
-    })
+    // 发货请求
     const res = await operateOrderAPI({
-      id: row.tradeID,
-      status: '已发货'
+      id: currentRow.value.tradeID, // 使用传递过来的当前行数据
+      status: '已发货',
+      trackingNumber: trackingNumber.value // 传递快递单号
     })
+
     if (res.data.code === 1) {
       ElMessage.success('发货成功！')
       const currentStatus = res.data.data.status
-      row.status = currentStatus
+      currentRow.value.status = currentStatus // 更新当前行的状态
+      shipDialogVisible.value = false // 发货成功后关闭对话框
+      trackingNumber.value = '' // 清空快递单号
     } else {
       ElMessage.error('网络请求失败')
     }
   } catch {
-    ElMessage.info('操作已取消')
+    ElMessage.error('发货失败，发生错误')
   }
 }
+// 节流处理：限制每秒响应一次
+const throttledHandleShip = throttled(handleShip, 1000)
 
 // 取消订单
 const handleCancelOrder = async (index, row) => {
@@ -622,7 +669,11 @@ const handleAcceptRefund = async (index, row) => {
 // 拒绝退款
 const handleRejectRefund = async () => {
   if (!refundReason.value) {
-    ElMessage.warning('请输入退款理由')
+    ElMessage({
+      message: '请输入退款理由',
+      type: 'warning',
+      plain: true
+    })
     return
   }
 

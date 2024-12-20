@@ -55,7 +55,7 @@
                   发货时间: {{ formatTime(scope.row.shippingTime) }}
                 </div>
                 <div v-if="scope.row.turnoverTime != '0001-01-01T00:00:00Z'">
-                  成交时间: {{ formatTime(scope.row.turnoverTime) }}
+                  完成时间: {{ formatTime(scope.row.turnoverTime) }}
                 </div>
               </template>
               <template #reference>
@@ -240,7 +240,7 @@
                   {{ scope.row.senderAddress.detailArea }}
                 </div>
                 <div>买家: {{ scope.row.sellerName }}</div>
-                <div>下单时间: {{ scope.row.orderTime }}</div>
+                <div>下单时间: {{ formatTime(scope.row.orderTime) }}</div>
                 <div v-if="scope.row.payTime != '0001-01-01T00:00:00Z'">
                   支付时间: {{ formatTime(scope.row.payTime) }}
                 </div>
@@ -248,7 +248,7 @@
                   发货时间: {{ formatTime(scope.row.shippingTime) }}
                 </div>
                 <div v-if="scope.row.turnoverTime != '0001-01-01T00:00:00Z'">
-                  成交时间: {{ formatTime(scope.row.turnoverTime) }}
+                  完成时间: {{ formatTime(scope.row.turnoverTime) }}
                 </div>
               </template>
               <template #reference>

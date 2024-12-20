@@ -2,16 +2,20 @@
 import PostProduct from '@/components/PostProduct.vue'
 import SelectProduct from '@/components/SelectProduct.vue'
 import { useCategoryStore } from '@/store/sortCategory'
-import { ref } from 'vue'
+import { onMounted, ref } from 'vue'
 
 const categoryStore = useCategoryStore()
-const selectedCategoryID = ref(0)
+const selectedCategoryID = ref(categoryStore.categoryID)
 
 const handleCategoryClick = (categoryID) => {
   categoryStore.setCategoryID(categoryID)
   // console.log('点击了分类：', categoryID)
   selectedCategoryID.value = categoryID
 }
+
+onMounted(() => {
+  console.log('selectedCategoryID:', selectedCategoryID.value)
+})
 </script>
 
 <template>

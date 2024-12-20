@@ -48,11 +48,15 @@
                 </div>
                 <div>卖家: {{ scope.row.sellerName }}</div>
                 <div>下单时间: {{ formatTime(scope.row.orderTime) }}</div>
-                <div v-if="scope.row.payTime != '0001-01-01 00:00:00'">
+                <div v-if="scope.row.payTime != '0001-01-01T00:00:00Z'">
                   支付时间: {{ formatTime(scope.row.payTime) }}
                 </div>
-                <div v-if="scope.row.shippingTime != '0001-01-01 00:00:00'">发货时间: {{ scope.row.shippingTime }}</div>
-                <div v-if="scope.row.turnoverTime != '0001-01-01 00:00:00'">成交时间: {{ scope.row.turnoverTime }}</div>
+                <div v-if="scope.row.shippingTime != '0001-01-01T00:00:00Z'">
+                  发货时间: {{ formatTime(scope.row.shippingTime) }}
+                </div>
+                <div v-if="scope.row.turnoverTime != '0001-01-01T00:00:00Z'">
+                  成交时间: {{ formatTime(scope.row.turnoverTime) }}
+                </div>
               </template>
               <template #reference>
                 <el-button link type="primary" size="small"> 查看详情 </el-button>
@@ -237,9 +241,15 @@
                 </div>
                 <div>买家: {{ scope.row.sellerName }}</div>
                 <div>下单时间: {{ scope.row.orderTime }}</div>
-                <div v-if="scope.row.payTime != '0001-01-01 00:00:00'">支付时间: {{ scope.row.payTime }}</div>
-                <div v-if="scope.row.shippingTime != '0001-01-01 00:00:00'">发货时间: {{ scope.row.shippingTime }}</div>
-                <div v-if="scope.row.turnoverTime != '0001-01-01 00:00:00'">成交时间: {{ scope.row.turnoverTime }}</div>
+                <div v-if="scope.row.payTime != '0001-01-01T00:00:00Z'">
+                  支付时间: {{ formatTime(scope.row.payTime) }}
+                </div>
+                <div v-if="scope.row.shippingTime != '0001-01-01T00:00:00Z'">
+                  发货时间: {{ formatTime(scope.row.shippingTime) }}
+                </div>
+                <div v-if="scope.row.turnoverTime != '0001-01-01T00:00:00Z'">
+                  成交时间: {{ formatTime(scope.row.turnoverTime) }}
+                </div>
               </template>
               <template #reference>
                 <el-button link type="primary" size="small"> 查看详情 </el-button>

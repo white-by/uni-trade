@@ -202,9 +202,9 @@ const navigateToProfile = () => {
           <li>
             <router-link to="/user/collections"><i class="iconfont icon-shop"></i></router-link>
           </li>
-          <li>
+          <!-- <li>
             <a href="javascript:;"><i class="iconfont icon-message"></i></a>
-          </li>
+          </li> -->
           <el-divider direction="vertical" />
           <li>
             <el-dropdown placement="bottom" size="large">

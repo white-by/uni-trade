@@ -59,13 +59,13 @@ onMounted(() => {
       <el-table-column prop="tradeID" label="订单号" align="center"></el-table-column>
 
       <el-table-column prop="goodsName" label="商品名称" align="center"></el-table-column>
-      <el-table-column label="实付" align="center"
-        ><template #default="{ row }"> {{ row.price + row.shippingCost }}元 </template></el-table-column
-      >
+      <el-table-column label="实付" align="center">
+        <template #default="{ row }"> {{ row.price + row.shippingCost }}元 </template>
+      </el-table-column>
       <el-table-column prop="sellerName" label="卖家" align="center"></el-table-column>
       <el-table-column prop="buyerName" label="买家" align="center"></el-table-column>
-      <el-table-column prop="deliveryMethod" label="发货方式" align="center"
-        ><template #default="{ row }">
+      <el-table-column prop="deliveryMethod" label="发货方式" align="center">
+        <template #default="{ row }">
           <span v-if="row.deliveryMethod == '0'">无需快递</span>
           <span v-else-if="row.deliveryMethod == '1'">自提</span>
           <span v-else-if="row.deliveryMethod == '2'">邮寄</span>

@@ -9,8 +9,8 @@
           <el-table-column prop="city" label="市" width="100" />
           <el-table-column prop="area" label="区" width="100" />
           <el-table-column prop="detailArea" label="详细地址" width="180" />
-          /></el-table-column
-        >
+          />
+        </el-table-column>
         <el-table-column prop="name" label="联系人" width="100px"> </el-table-column>
         <el-table-column prop="tel" label="联系电话" width="150px"> </el-table-column>
         <el-table-column label="默认地址" width="100px">
@@ -27,16 +27,18 @@
         </el-table-column>
         <el-table-column label="操作" width="120px">
           <template #default="scope">
-            <el-button size="small" type="primary" @click="openEditDialog(scope.row)"
-              ><i class="iconfont icon-edit"></i></el-button
-            ><el-button size="small" type="danger" @click="handleDelete(scope.row.id)"
-              ><i class="iconfont icon-delete"></i></el-button
-          ></template>
+            <el-button size="small" type="primary" @click="openEditDialog(scope.row)">
+              <i class="iconfont icon-edit"></i>
+            </el-button>
+            <el-button size="small" type="danger" @click="handleDelete(scope.row.id)">
+              <i class="iconfont icon-delete"></i>
+            </el-button>
+          </template>
         </el-table-column>
       </el-table>
-      <el-button type="primary" plain style="width: 100%; margin-top: 30px" @click="openAddDialog()"
-        ><i class="iconfont icon-add" style="padding: 5px"></i> 添加地址</el-button
-      >
+      <el-button type="primary" plain style="width: 100%; margin-top: 30px" @click="openAddDialog()">
+        <i class="iconfont icon-add" style="padding: 5px"></i> 添加地址
+      </el-button>
     </el-card>
 
     <!-- 修改地址对话框 -->
@@ -49,11 +51,8 @@
             @updateCity="editForm.city = $event"
             @updateArea="editForm.area = $event"
           />
-          <el-input
-            v-model="editForm.detailArea"
-            placeholder="请输入详细地址"
-            style="margin-top: 10px; width: 340px"
-          ></el-input>
+          <el-input v-model="editForm.detailArea" placeholder="请输入详细地址" style="margin-top: 10px; width: 340px">
+          </el-input>
         </el-form-item>
         <el-form-item label="联系人" prop="name" style="width: 420px">
           <el-input v-model="editForm.name" placeholder="请输入联系人姓名"></el-input>
@@ -77,11 +76,8 @@
             @updateCity="newAddress.city = $event"
             @updateArea="newAddress.area = $event"
           />
-          <el-input
-            v-model="newAddress.detailArea"
-            placeholder="请输入详细地址"
-            style="margin-top: 10px; width: 340px"
-          ></el-input>
+          <el-input v-model="newAddress.detailArea" placeholder="请输入详细地址" style="margin-top: 10px; width: 340px">
+          </el-input>
         </el-form-item>
         <el-form-item label="联系人" prop="name" style="width: 420px">
           <el-input v-model="newAddress.name" placeholder="请输入联系人姓名"></el-input>

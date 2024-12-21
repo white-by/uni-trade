@@ -7,9 +7,9 @@
       <div v-for="(product, index) in profilesStore.publishedProducts" :key="product.id" class="published-item">
         <img :src="getFirstImageURL(product.imageUrl)" alt="商品图片" class="item-image" />
         <div class="item-info">
-          <router-link class="product-name" :to="`/detail/${product.id}`"
-            ><h3 class="item-title">{{ product.title }}</h3></router-link
-          >
+          <router-link class="product-name" :to="`/detail/${product.id}`">
+            <h3 class="item-title">{{ product.title }}</h3>
+          </router-link>
           <p class="item-price">￥{{ product.price }}</p>
           <span class="item-desc" :title="product.description">{{ product.description }}</span>
         </div>

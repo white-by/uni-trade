@@ -8,9 +8,9 @@
         <img :src="getFirstImageURL(item.imageUrl)" alt="商品图片" class="item-image" />
 
         <div class="item-info">
-          <router-link class="product-name" :to="`/detail/${item.id}`"
-            ><h3 class="item-title">{{ item.title }}</h3></router-link
-          >
+          <router-link class="product-name" :to="`/detail/${item.id}`">
+            <h3 class="item-title">{{ item.title }}</h3>
+          </router-link>
 
           <p class="item-price">￥{{ item.price }}</p>
           <span class="item-desc" :title="item.description">{{ item.description }}</span>

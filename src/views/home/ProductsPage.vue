@@ -2,7 +2,7 @@
 import UserNav from '@/components/UserNav.vue'
 import ProductsHeader from './ProductsHeader.vue'
 import ProductsDisplay from './ProductsDisplay.vue'
-// import UserFooter from '@/components/UserFooter.vue'
+import UserFooter from '@/components/UserFooter.vue'
 import { useCategoryStore } from '@/store/sortCategory'
 import { onMounted } from 'vue'
 
@@ -16,5 +16,6 @@ onMounted(() => categoryStore.getCategory())
     <UserNav />
     <ProductsHeader />
     <ProductsDisplay />
+    <UserFooter />
   </div>
 </template>

@@ -210,11 +210,10 @@ const deleteAnnouncement = async (announcementID) => {
             type="textarea"
             placeholder="请输入分类描述"
             style="padding-right: 10%"
-          ></el-input>
+          >
+          </el-input>
         </el-form-item>
-        <!-- <el-form-item label="公告发布时间" prop="anTime">
-          <el-input v-model="announcementForm.anTime" placeholder="请输入公告发布时间"></el-input>
-        </el-form-item> -->
+
         <span style="display: flex; justify-content: center">
           <el-button type="primary" @click="handleConfirm">提交</el-button>
           <el-button @click="dialogVisible = false">取消</el-button>

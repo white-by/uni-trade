@@ -576,9 +576,24 @@ const currentRow = ref(null) // 存储当前选中的订单行
 const handleDispatch = async (row) => {
   // 保存当前的订单行
   currentRow.value = row
+  if (row.deliveryMethod === '2') {
+    // 邮寄方式才需要填写快递单号
+    shipDialogVisible.value = true
+    return
+  }
 
-  // 打开填写快递单号的对话框
-  shipDialogVisible.value = true
+  // 自提和无需快递的订单直接发货
+  const res = await operateOrderAPI({
+    id: row.tradeID,
+    status: '已发货'
+  })
+  if (res.data.code === 1) {
+    ElMessage.success('发货成功！')
+    const currentStatus = res.data.data.status
+    row.status = currentStatus
+  } else {
+    ElMessage.error('网络请求失败')
+  }
 }
 
 // 发货操作，只有填写了快递单号才会发请求

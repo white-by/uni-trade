@@ -103,8 +103,8 @@ onMounted(() => {
       </el-table-column>
       <el-table-column prop="shippingCost" label="邮费" align="center"> </el-table-column>
       <!-- 查看详情 -->
-      <el-table-column label="更多" align="center"
-        ><template #default="scope">
+      <el-table-column label="更多" align="center">
+        <template #default="scope">
           <el-popover effect="light" trigger="hover" placement="top" width="auto">
             <template #default>
               <div>浏览量: {{ scope.row.views }}</div>
@@ -117,8 +117,8 @@ onMounted(() => {
               <el-button link type="primary" size="small"> 查看详情 </el-button>
             </template>
           </el-popover>
-        </template></el-table-column
-      >
+        </template>
+      </el-table-column>
       <el-table-column label="操作" align="center">
         <template #default="{ row }">
           <el-row type="flex" justify="center" :gutter="10">

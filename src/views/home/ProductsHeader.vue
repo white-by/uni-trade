@@ -7,6 +7,7 @@ import { onMounted, ref } from 'vue'
 const categoryStore = useCategoryStore()
 const selectedCategoryID = ref(categoryStore.categoryID)
 
+// 点击分类
 const handleCategoryClick = (categoryID) => {
   categoryStore.setCategoryID(categoryID)
   // console.log('点击了分类：', categoryID)

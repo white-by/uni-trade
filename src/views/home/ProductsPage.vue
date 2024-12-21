@@ -8,6 +8,7 @@ import { onMounted } from 'vue'
 
 //将分类数据存入pinia，供此页面所有组件使用，避免重复发送api请求
 const categoryStore = useCategoryStore()
+
 onMounted(() => categoryStore.getCategory())
 </script>
 

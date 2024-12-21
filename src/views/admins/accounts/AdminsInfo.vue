@@ -18,6 +18,7 @@ const queryForm = ref({
 const total = ref(0)
 const AdminList = ref([])
 
+// 获取管理员列表
 const getAdminList = async () => {
   const res = await getAdminListApi(queryForm.value)
   if (res.data.code === 1) {
@@ -25,6 +26,7 @@ const getAdminList = async () => {
     total.value = res.data.data.total
   } else ElMessage.error('获取管理员信息失败')
 }
+
 onMounted(() => {
   getAdminList()
 })
@@ -115,17 +117,19 @@ const editAdmin = (admin) => {
   nextTick(() => formRef.value?.clearValidate())
 }
 
+// 分页
 const handlePageChange = (pageNum) => {
   queryForm.value.pageNum = pageNum
   getAdminList()
 }
 
+// 提交表单
 const handleConfirm = async () => {
   formRef.value.validate(async (valid) => {
     if (valid) {
       // 显式将 age 转换为数字
       adminForm.value.age = Number(adminForm.value.age)
-      console.log('提交的表单数据:', adminForm.value)
+      // console.log('提交的表单数据:', adminForm.value)
 
       if (adminForm.value.adminID) {
         const res = await editAdminApi(adminForm.value)
@@ -145,7 +149,7 @@ const handleConfirm = async () => {
       // 刷新
       getAdminList()
     } else {
-      console.log('表单校验失败')
+      // console.log('表单校验失败')
       return false
     }
   })
@@ -166,8 +170,8 @@ const deleteAdmin = async (adminID) => {
       getAdminList()
     }
     // getAdminList()
-  } catch (error) {
-    console.log('管理员删除操作已取消', error)
+  } catch {
+    // console.log('管理员删除操作已取消', error)
   }
 }
 </script>
@@ -176,8 +180,9 @@ const deleteAdmin = async (adminID) => {
   <div class="contain">
     <h1>管理员管理</h1>
     <br /><br />
-    <!-- 新增按钮 -->
+    <!-- 搜索框和新增按钮 -->
     <div style="display: flex; justify-content: space-between; margin-bottom: 15px">
+      <!-- 搜索框 -->
       <div>
         <el-input
           v-model="queryForm.searchQuery"
@@ -190,9 +195,11 @@ const deleteAdmin = async (adminID) => {
           </template>
         </el-input>
       </div>
-      <el-button style="display: flex; justify-content: flex-end" type="primary" @click="openAddAdminForm"
-        >增加</el-button
-      >
+
+      <!-- 新增按钮 -->
+      <el-button style="display: flex; justify-content: flex-end" type="primary" @click="openAddAdminForm">
+        增加
+      </el-button>
     </div>
 
     <!-- 管理员列表 -->
@@ -207,6 +214,8 @@ const deleteAdmin = async (adminID) => {
       <el-table-column label="年龄" prop="age" align="center"></el-table-column>
       <el-table-column label="邮箱" prop="mail" align="center"></el-table-column>
       <el-table-column label="电话" prop="tel" align="center"></el-table-column>
+
+      <!-- 操作列 -->
       <el-table-column label="操作" align="center">
         <template #default="{ row }">
           <el-row type="flex" justify="center" :gutter="10">

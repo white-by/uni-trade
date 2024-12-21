@@ -74,15 +74,17 @@ const rules = ref({
 const { encrypt } = useASE()
 
 const formRef = ref(null)
+// 登录
 const handleLogin = () => {
-  formRef.value.validate(async (valid, fields) => {
+  formRef.value.validate(async (valid) => {
     const password = encrypt(form.value.password)
     // console.log('加密后：', password)
     // 添加 fields 参数
     const { mail } = form.value
+
     if (valid) {
       const res = await loginApi({ mail, password })
-      console.log('res', res)
+      // console.log('res', res)
 
       if (res.data.code === 1) {
         ElMessage.success('登录成功')
@@ -92,7 +94,7 @@ const handleLogin = () => {
         ElMessage.error('邮箱或密码错误')
       }
     } else {
-      console.log('error submit!', fields)
+      // console.log('error submit!', fields)
       return false
     }
   })

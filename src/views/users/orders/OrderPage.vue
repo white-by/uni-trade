@@ -56,7 +56,7 @@
                 <div v-if="scope.row.shippingTime != '0001-01-01T00:00:00Z'">
                   发货时间: {{ formatTime(scope.row.shippingTime) }}
                 </div>
-                <div v-if="scope.row.trackingNumber != null">快递单号: {{ scope.row.trackingNumber }}</div>
+                <div v-if="scope.row.trackingNumber != ''">快递单号: {{ scope.row.trackingNumber }}</div>
                 <div v-if="scope.row.turnoverTime != '0001-01-01T00:00:00Z'">
                   完成时间: {{ formatTime(scope.row.turnoverTime) }}
                 </div>
@@ -243,7 +243,7 @@
                 <div v-if="scope.row.shippingTime != '0001-01-01T00:00:00Z'">
                   发货时间: {{ formatTime(scope.row.shippingTime) }}
                 </div>
-                <div v-if="scope.row.trackingNumber != null">快递单号: {{ scope.row.trackingNumber }}</div>
+                <div v-if="scope.row.trackingNumber != ''">快递单号: {{ scope.row.trackingNumber }}</div>
                 <div v-if="scope.row.turnoverTime != '0001-01-01T00:00:00Z'">
                   完成时间: {{ formatTime(scope.row.turnoverTime) }}
                 </div>
@@ -369,13 +369,16 @@ let purchasedPageNum = ref(1) //表格页码
 let purchasedPageSize = ref(5) //每页最大展示条数
 const purchasedTotal = ref(0)
 const purchasedData = ref([])
+
+// 获取我买到的订单信息
 const getPurchasedData = async () => {
   const res = await getPurchasedDataAPI(purchasedPageNum.value, purchasedPageSize.value)
-  console.log('getPurchasedDataAPI响应:', res.data.data)
+  // console.log('getPurchasedDataAPI响应:', res.data.data)
   purchasedData.value = res.data.data.orderList
   purchasedTotal.value = res.data.data.total
 }
 
+// 初始化时获取数据
 const handlePruchasedPageChange = (page) => {
   purchasedPageNum.value = page
   getPurchasedData()
@@ -386,13 +389,16 @@ let selledPageNum = ref(1) //表格页码
 let selledPageSize = ref(5) //每页最大展示条数
 const selledTotal = ref(0)
 const selledData = ref([])
+
+// 获取我卖出的订单信息
 const getSelledData = async () => {
   const res = await getSelledDataAPI(selledPageNum.value, selledPageSize.value)
-  console.log('getSelledDataAPI响应:', res.data.data)
+  // console.log('getSelledDataAPI响应:', res.data.data)
   selledData.value = res.data.data.orderList
   selledTotal.value = res.data.data.total
 }
 
+// 初始化时获取数据
 const handleSelledPageChange = (page) => {
   selledPageNum.value = page
   getSelledData()
@@ -445,6 +451,7 @@ const showRejectRefundDialog = (order) => {
   rejectRefundDialogVisible.value = true
 }
 
+// 支付
 const handlePay = async (index, row) => {
   const orderId = row.tradeID
   localStorage.setItem('tradeId', orderId)
@@ -570,8 +577,10 @@ const handleCancelRefund = async (index, row) => {
   }
 }
 
-const trackingNumber = ref('') // 快递单号
-const currentRow = ref(null) // 存储当前选中的订单行
+// 快递单号
+const trackingNumber = ref('')
+// 存储当前选中的订单行
+const currentRow = ref(null)
 // 去发货
 const handleDispatch = async (row) => {
   // 保存当前的订单行
@@ -729,6 +738,7 @@ const editForm = ref({
   detailArea: ''
 })
 
+// 打开修改地址对话框
 const openAddressEditDialog = (row) => {
   dialogVisible.value = true
   editForm.value = {
@@ -739,6 +749,7 @@ const openAddressEditDialog = (row) => {
     area: row.shippingAddress.area,
     detailArea: row.shippingAddress.detailArea
   }
+
   nextTick(() => {
     if (areaComponentRef.value) {
       areaComponentRef.value.setAddress(editForm.value.province, editForm.value.city, editForm.value.area)
@@ -746,6 +757,7 @@ const openAddressEditDialog = (row) => {
   })
 }
 
+// 确认修改地址
 const confirmAddressEdit = async () => {
   const params = {
     id: editForm.value.tradeID,
@@ -773,6 +785,7 @@ const confirmAddressEdit = async () => {
 // 节流处理：限制每秒响应一次
 const throttledConfirmAddressEdit = throttled(confirmAddressEdit, 1000)
 
+// 重置表单数据
 const resetForm = () => {
   //重置表单数据
   editForm.value = { tradeID: '', province: '', city: '', area: '', detailAddress: '' }

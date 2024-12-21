@@ -11,9 +11,12 @@ import { paySuccess } from '@/api/pay'
 const router = useRouter()
 const route = useRoute()
 
+// 返回首页
 const toHome = () => {
   router.replace('/')
 }
+
+// 支付金额
 const cost = ref(0)
 const getCost = () => {
   cost.value = route.query.total_amount
@@ -27,10 +30,13 @@ const getCost = () => {
 //   console.log('callback', res)
 // }
 
+// 支付成功
 const handlePaySuccess = async () => {
   const tradeId = parseInt(localStorage.getItem('tradeId'), 10)
   const res = await paySuccess({ tradeId: tradeId })
-  console.log(res.data)
+  if (res.data.code === 1) {
+    // console.log(res.data)
+  }
 }
 
 onMounted(() => {
@@ -65,6 +71,7 @@ onMounted(() => {
       </div>
     </div>
   </div>
+
   <UserFooter />
 </template>
 

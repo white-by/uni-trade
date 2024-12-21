@@ -1,11 +1,15 @@
 <template>
   <UserNav />
+
   <el-card class="collection-contain">
     <el-row style="margin-bottom: 50px; color: dimgray"><h3>我的收藏</h3></el-row>
+
     <div v-if="collectionList != null">
+      <!-- 商品列表 -->
       <div v-for="item in collectionList" :key="item.id" class="published-item">
         <img :src="getFirstImageURL(item.imageUrl)" alt="商品图片" class="item-image" />
 
+        <!-- 商品信息 -->
         <div class="item-info">
           <router-link class="product-name" :to="`/detail/${item.id}`">
             <h3 class="item-title">{{ item.title }}</h3>
@@ -14,6 +18,7 @@
           <span class="item-desc" :title="item.description">{{ item.description }}</span>
         </div>
       </div>
+
       <!-- 分页 -->
       <div>
         <el-pagination
@@ -27,6 +32,8 @@
         />
       </div>
     </div>
+
+    <!-- 暂无数据 -->
     <div v-else class="no-product-container">
       <img src="@/assets/images/none/暂无数据.png" alt="暂无数据" />
     </div>
@@ -45,6 +52,8 @@ let pageNum = ref(1) //表格页码
 let pageSize = ref(5) //每页最大展示条数
 const total = ref(0)
 const collectionList = ref([])
+
+// 获取收藏列表
 const getCollectionList = async () => {
   const res = await getCollectionListAPI(pageNum.value, pageSize.value)
   // console.log('getCollectionListAPI返回数据', res.data.data)

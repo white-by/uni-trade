@@ -4,6 +4,7 @@ import { useProfilesStore } from '@/store/profilesStore'
 
 const profilesStore = useProfilesStore()
 
+// 计算时间差
 const timeAgo = (time) => {
   // 解析时间字符串为 Date 对象
   // const targetTime = new Date(time.replace(/-/g, '/')) // 替换“-”为“/”，确保跨浏览器兼容
@@ -17,6 +18,7 @@ const timeAgo = (time) => {
   const months = Math.floor(days / 30) // 假设每个月30天
   const years = Math.floor(days / 365) // 假设每年365天
 
+  // 根据时间差返回不同的描述
   if (seconds < 60) return `${seconds} 秒前`
   if (minutes < 60) return `${minutes} 分钟前`
   if (hours < 24) return `${hours} 小时前`
@@ -31,7 +33,10 @@ const timeAgo = (time) => {
     <div class="nav">
       <ProfilesNav />
     </div>
+
+    <!-- 评论列表 -->
     <div class="comment-container" v-if="profilesStore.receivedComments.length != 0">
+      <!-- 评论列表 -->
       <div v-for="comment in profilesStore.receivedComments" :key="comment.commentID" class="comment-item">
         <el-avatar :src="comment.commentatorAvatar" class="avatar" />
         <div class="comment-details">
@@ -45,6 +50,8 @@ const timeAgo = (time) => {
         </div>
       </div>
     </div>
+
+    <!-- 暂无评价 -->
     <div v-else class="no-product-container">
       <img src="@/assets/images/none/暂无订单.png" alt="暂无订单" class="no-product-image" />
     </div>

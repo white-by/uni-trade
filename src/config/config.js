@@ -1,4 +1,8 @@
-// config.js
+/**
+ * config.js
+ * 全局配置文件
+ */
+
 export const config = {
   //apifox云端MOCK
   // baseURL: 'https://apifoxmock.com/m1/5227100-4893915-default',

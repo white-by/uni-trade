@@ -1,8 +1,14 @@
+/**
+ * cartStore.js
+ * 购物选中的商品信息
+ */
+
 import { defineStore } from 'pinia'
 import { ref } from 'vue'
 
 export const useCartStore = defineStore('cart', () => {
-  const selectedProduct = ref(null) // 当前选中的商品信息
+  // 当前选中的商品信息
+  const selectedProduct = ref(null)
 
   // 设置当前选中的商品
   const setSelectedProduct = (product) => {
@@ -17,6 +23,6 @@ export const useCartStore = defineStore('cart', () => {
   return {
     selectedProduct,
     setSelectedProduct,
-    clearSelectedProduct,
+    clearSelectedProduct
   }
 })

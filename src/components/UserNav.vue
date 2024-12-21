@@ -21,6 +21,7 @@ const router = useRouter()
 
 const { throttled } = useThrottle()
 
+// 返回首页
 const toHome = () => {
   searchStore.searchQuery = ''
   searchInput.value = ''
@@ -146,6 +147,7 @@ onUnmounted(() => {
   }
 })
 
+// 退出登录
 const confirmLogout = async () => {
   try {
     await ElMessageBox.confirm('确定要退出登录吗？', '提示', {
@@ -160,6 +162,7 @@ const confirmLogout = async () => {
   }
 }
 
+// 跳转到个人中心
 const navigateToProfile = () => {
   const userID = userStore.userInfo.userID
   const targetUrl = `/profiles/${userID}/receivedComment`

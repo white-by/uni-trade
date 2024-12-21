@@ -7,12 +7,14 @@ import { useProfilesStore } from '@/store/profilesStore'
 const userStore = useUserStore()
 const profilesStore = useProfilesStore()
 
+// 根据性别返回文本
 const genderText = computed(() => {
   if (profilesStore.introduction.gender === 0) return '女'
   else if (profilesStore.introduction.gender === 1) return '男'
   else return null
 })
 
+// 从 URL 中提取用户 ID
 const getIdFromUrl = () => {
   const url = window.location.pathname // 获取路径部分
   const segments = url.split('/') // 根据 / 分割路径
@@ -35,6 +37,7 @@ const getIdFromUrl = () => {
 </script>
 
 <template>
+  <!-- 用户信息 -->
   <div class="profile-container">
     <el-avatar :size="120" :src="profilesStore.introduction.avatarUrl" class="avatar" />
     <div class="info-column">

@@ -19,6 +19,7 @@ export const getDetail = (id) => {
   })
 }
 
+// 获取商品列表
 export const deleteProduct = (id) => {
   return request({
     url: `/product/delete/${id}`,
@@ -26,6 +27,7 @@ export const deleteProduct = (id) => {
   })
 }
 
+// 更新商品收藏状态
 export const updateIsStarred = (id, data) => {
   return request({
     url: `/detail/${id}`,

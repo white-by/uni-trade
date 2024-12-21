@@ -36,12 +36,15 @@ const selectedArea = ref('')
 const provinceArr = Object.keys(areaObj)
 const emit = defineEmits(['updateProvince', 'updateCity', 'updateArea'])
 
+// 监听省份
 watch(selectedProvince, (newVal) => {
   emit('updateProvince', newVal)
 })
+// 监听市
 watch(selectedCity, (newVal) => {
   emit('updateCity', newVal)
 })
+// 监听区
 watch(selectedArea, (newVal) => {
   emit('updateArea', newVal)
 })
@@ -54,22 +57,25 @@ const areaArr = computed(() =>
   selectedProvince.value && selectedCity.value ? areaObj[selectedProvince.value][selectedCity.value] : []
 )
 
-// 监听选择变化，自动更新值
+// 监听省变化
 watch(selectedProvince, () => {
   selectedCity.value = ''
   selectedArea.value = ''
 })
 
+// 监听市变化
 watch(selectedCity, () => {
   selectedArea.value = ''
 })
 
+// 重置地址
 const resetAddress = () => {
   selectedProvince.value = ''
   selectedCity.value = ''
   selectedArea.value = ''
 }
 
+// 设置地址
 const setAddress = async (province, city, area) => {
   selectedProvince.value = province
   nextTick(() => {

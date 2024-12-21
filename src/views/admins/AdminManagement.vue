@@ -26,6 +26,7 @@ const activeIndex = ref('')
 const adminStore = useAdminStore()
 const adminName = ref(adminStore.adminInfo.adminName)
 
+// 确认退出登录
 const confirmLogout = async () => {
   try {
     await ElMessageBox.confirm('确定要退出登录吗？', '提示', {
@@ -35,8 +36,8 @@ const confirmLogout = async () => {
     })
     adminStore.clearAdminInfo()
     router.push('/admin/login')
-  } catch (error) {
-    console.log('取消了登出操作', error)
+  } catch {
+    // console.log('取消了登出操作', error)
   }
 }
 
@@ -80,6 +81,7 @@ watch(
   <div class="">
     <el-container class="layout-container">
       <el-header class="app-header">
+        <!-- logo -->
         <div class="header-left">
           <RouterLink to="/admin">
             <el-icon class="header-icon">
@@ -97,6 +99,7 @@ watch(
                 <ArrowDown />
               </el-icon>
             </span>
+            <!-- 下拉菜单 -->
             <template #dropdown>
               <el-dropdown-menu>
                 <router-link to="/admin/profiles"><el-dropdown-item>个人信息</el-dropdown-item></router-link>

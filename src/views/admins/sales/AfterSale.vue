@@ -16,9 +16,11 @@ const queryForm = ref({
 const total = ref(0)
 
 const refundList = ref([])
+
+// 获取退款列表
 const getRefundList = async () => {
   const res = await getRefundListApi(queryForm.value)
-  console.log('res: ', res.data)
+  // console.log('res: ', res.data)
   refundList.value = res.data.data.refundList
   total.value = res.data.data.total
 }
@@ -27,11 +29,13 @@ onMounted(() => {
   getRefundList()
 })
 
+// 分页
 const handlePageChange = (pageNum) => {
   queryForm.value.pageNum = pageNum
   getRefundList()
 }
 
+// 操作退款列表
 const handleAction = (row, action) => {
   const message = action === '同意退货' ? '确定同意退货吗？' : '确定拒绝退货吗？'
   ElMessageBox.confirm(message, '提示', {
@@ -55,6 +59,7 @@ const handleAction = (row, action) => {
     <h1>售后管理</h1>
     <br /><br />
     <div style="display: flex; justify-content: space-between; margin-bottom: 15px">
+      <!-- 搜索框 -->
       <div style="display: flex; justify-content: flex-end">
         <el-input
           v-model="queryForm.searchQuery"

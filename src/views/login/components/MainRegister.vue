@@ -128,7 +128,7 @@ const addPassFlag = ref(false)
 const addPassFlag1 = ref(false)
 const isCounting = ref(false)
 const countdown = ref(60)
-
+// 表单验证规则
 const rules = ref({
   schoolName: [{ required: true, message: '请选择学校', trigger: 'change' }],
   mail: [{ required: true, message: '请输入邮箱前缀', trigger: 'blur' }],
@@ -171,6 +171,7 @@ const rules = ref({
   ]
 })
 
+// 初始化倒计时
 const initializeCountdown = () => {
   const savedTargetTime = localStorage.getItem('verificationCountdown')
   if (savedTargetTime) {
@@ -182,6 +183,7 @@ const initializeCountdown = () => {
   }
 }
 
+// 开始倒计时
 const startCountdown = () => {
   const now = Date.now()
   const targetTime = now + countdown.value * 1000
@@ -204,12 +206,13 @@ onMounted(() => {
   initializeCountdown()
 })
 
+// 发送验证码
 const sendVerificationCode = async () => {
   formRef.value.validateField(['schoolName', 'mail'], async (valid) => {
     if (valid) {
       startCountdown()
       const res = await getCode(form.value.mail)
-      console.log(res.data.code)
+      // console.log(res.data.code)
       if (res.data.code === 1) {
         ElMessage.success('发送成功')
       } else {
@@ -220,7 +223,7 @@ const sendVerificationCode = async () => {
 }
 
 const formRef = ref(null) // 引用表单
-
+// 注册
 const handleRegister = async () => {
   // 调用表单验证
   formRef.value?.validate(async (valid) => {
@@ -258,7 +261,7 @@ const handleRegister = async () => {
         ElMessage.error('注册失败')
       }
     } else {
-      console.log('表单验证失败')
+      // console.log('表单验证失败')
     }
   })
 }

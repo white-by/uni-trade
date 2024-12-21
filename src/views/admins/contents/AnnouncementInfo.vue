@@ -21,6 +21,7 @@ const queryForm = ref({
 const total = ref(0)
 const AnnouncementList = ref([])
 
+// 获取公告列表
 const getAnnouncementList = async () => {
   const res = await getAnnouncementListApi(queryForm.value)
   if (res.data.code === 1) {
@@ -32,6 +33,7 @@ const getAnnouncementList = async () => {
     total.value = res.data.data.total
   } else ElMessage.error('获取公告信息失败')
 }
+
 onMounted(() => {
   getAnnouncementList()
 })
@@ -92,15 +94,17 @@ const editAnnouncement = (announcement) => {
   nextTick(() => formRef.value?.clearValidate())
 }
 
+// 分页
 const handlePageChange = (pageNum) => {
   queryForm.value.pageNum = pageNum
   getAnnouncementList()
 }
 
+// 提交表单
 const handleConfirm = async () => {
   formRef.value.validate(async (valid) => {
     if (valid) {
-      console.log('提交的表单数据:', announcementForm.value)
+      // console.log('提交的表单数据:', announcementForm.value)
 
       if (announcementForm.value.announcementID) {
         const res = await editAnnouncementApi(announcementForm.value)
@@ -120,7 +124,7 @@ const handleConfirm = async () => {
       // 刷新
       getAnnouncementList()
     } else {
-      console.log('表单校验失败')
+      // console.log('表单校验失败')
       return false
     }
   })
@@ -143,8 +147,8 @@ const deleteAnnouncement = async (announcementID) => {
       getAnnouncementList()
     }
     // getAnnouncementList()
-  } catch (error) {
-    console.log('公告删除操作已取消', error)
+  } catch {
+    // console.log('公告删除操作已取消', error)
   }
 }
 </script>
@@ -154,7 +158,9 @@ const deleteAnnouncement = async (announcementID) => {
     <h1>公告管理</h1>
     <br /><br />
 
+    <!-- 搜索框和新增按钮 -->
     <div style="display: flex; justify-content: space-between; margin-bottom: 15px">
+      <!-- 搜索框 -->
       <div style="display: flex; justify-content: flex-end">
         <el-input
           v-model="queryForm.searchQuery"
@@ -167,6 +173,7 @@ const deleteAnnouncement = async (announcementID) => {
           </template>
         </el-input>
       </div>
+
       <!-- 新增按钮 -->
       <el-button type="primary" @click="openAddAnnouncementForm">增加</el-button>
     </div>
@@ -176,6 +183,8 @@ const deleteAnnouncement = async (announcementID) => {
       <el-table-column label="公告标题" prop="anTitle" align="center"></el-table-column>
       <el-table-column label="公告内容" prop="anContent" align="center"></el-table-column>
       <el-table-column label="公告发布时间" prop="anTime" align="center"></el-table-column>
+
+      <!-- 操作列 -->
       <el-table-column label="操作" align="center">
         <template #default="{ row }">
           <el-row type="flex" justify="center" :gutter="10">

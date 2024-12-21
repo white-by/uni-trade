@@ -75,13 +75,13 @@ export function getFilteredProductsAPI({
 
 // 发布闲置
 export const postProductAPI = (data) => {
-    const userStore = useUserStore()
+  const userStore = useUserStore()
   return httpInstance({
     url: '/postProduct',
     method: 'post',
     headers: {
-           Authorization: `${userStore.userInfo.token}`
-          },
+      Authorization: `${userStore.userInfo.token}`
+    },
     data: data
   })
 }

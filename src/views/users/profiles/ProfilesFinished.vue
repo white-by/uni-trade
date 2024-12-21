@@ -3,10 +3,13 @@
     <div class="nav">
       <ProfilesNav />
     </div>
+
+    <!-- 已完成的订单 -->
     <div class="published-container" v-if="profilesStore.finishedProducts != null">
       <div v-for="item in profilesStore.finishedProducts" :key="item.id" class="published-item">
         <img :src="getFirstImageURL(item.imageUrl)" alt="商品图片" class="item-image" />
 
+        <!-- 商品信息 -->
         <div class="item-info">
           <router-link class="product-name" :to="`/detail/${item.id}`">
             <h3 class="item-title">{{ item.title }}</h3>
@@ -17,6 +20,8 @@
         </div>
       </div>
     </div>
+
+    <!-- 暂无数据 -->
     <div v-else class="no-product-container">
       <img src="@/assets/images/none/暂无订单.png" alt="暂无订单" class="no-product-image" />
     </div>

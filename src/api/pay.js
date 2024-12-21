@@ -1,6 +1,7 @@
 import httpInstance from '@/utils/https'
 import { useUserStore } from '@/store/userStore'
 
+// 创建订单
 export const createOrderAPI = (Data) => {
   const userStore = useUserStore()
   return httpInstance({
@@ -13,6 +14,7 @@ export const createOrderAPI = (Data) => {
   })
 }
 
+// 获取订单列表
 export const getOrderApi = (id) => {
   const userStore = useUserStore()
   return httpInstance({
@@ -23,6 +25,7 @@ export const getOrderApi = (id) => {
   })
 }
 
+// 获取订单列表
 export const paySuccess = (data) => {
   const userStore = useUserStore()
   return httpInstance({

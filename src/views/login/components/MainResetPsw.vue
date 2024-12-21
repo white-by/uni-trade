@@ -99,7 +99,7 @@ const addPassFlag = ref(false)
 const addPassFlag1 = ref(false)
 const isCounting = ref(false)
 const countdown = ref(60)
-
+// 表单验证规则
 const rules = ref({
   mail: [
     { required: true, message: '请输入邮箱', trigger: 'blur' },
@@ -145,6 +145,7 @@ const rules = ref({
   ]
 })
 
+// 初始化倒计时
 const initializeCountdown = () => {
   const savedTargetTime = localStorage.getItem('verificationCountdownPsw')
   if (savedTargetTime) {
@@ -156,6 +157,7 @@ const initializeCountdown = () => {
   }
 }
 
+// 开始倒计时
 const startCountdown = () => {
   const now = Date.now()
   const targetTime = now + countdown.value * 1000
@@ -180,13 +182,13 @@ onMounted(() => {
 })
 
 const formRef = ref(null)
-
+// 发送验证码
 const sendVerificationCode = async () => {
   formRef.value.validateField('mail', async (valid) => {
     if (valid) {
       startCountdown()
       const res = await getCode(form.value.mail)
-      console.log(res.data.code)
+      // console.log(res.data.code)
       if (res.data.code === 1) {
         ElMessage.success('发送成功')
       } else {
@@ -196,6 +198,7 @@ const sendVerificationCode = async () => {
   })
 }
 
+// 重置密码
 const handleResetPassword = async () => {
   // 调用表单验证
   formRef.value?.validate(async (valid) => {
@@ -229,7 +232,7 @@ const handleResetPassword = async () => {
         ElMessage.error('重置密码失败')
       }
     } else {
-      console.log('表单验证失败')
+      // console.log('表单验证失败')
     }
   })
 }

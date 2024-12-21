@@ -152,6 +152,7 @@ const tempActiveAddress = ref({}) // 临时选中的地址
 const cartStore = useCartStore()
 const router = useRouter()
 
+// 提交订单
 const createOrder = async () => {
   const orderData = ref({
     sellerID: cartStore.selectedProduct.value.userID,
@@ -163,7 +164,8 @@ const createOrder = async () => {
       cartStore.selectedProduct.value.deliveryMethod === '无需快递' ? 0 : cartStore.selectedProduct.value.addrID, //发货地址
     shippingAddrID: cartStore.selectedProduct.value.deliveryMethod === '无需快递' ? 0 : curAddress.value.id //收货地址
   })
-  console.log('orderData:', orderData.value)
+  // console.log('orderData:', orderData.value)
+
   const res = await createOrderAPI(orderData.value)
   if (res.data.code === 1) {
     // 正常生成逻辑
@@ -193,7 +195,7 @@ const getAddressList = async () => {
     defaultAddressId.value = defaultAddr.id
     activeAddress.value = defaultAddr
     curAddress.value = defaultAddr
-    console.log('默认地址：', curAddress.value)
+    // console.log('默认地址：', curAddress.value)
   }
 }
 
@@ -256,6 +258,7 @@ const rules = {
   tel: [{ required: true, message: '请输入联系电话', trigger: 'blur' }]
 }
 
+// 新增地址表单引用
 const addAddressFormRef = ref(null)
 // 提交表单
 const submitAddressForm = () => {
@@ -288,6 +291,7 @@ const submitAddressForm = () => {
 
 // 添加地址对话框地址组件ref
 const _areaComponentRef = ref(null)
+// 重置新增地址表单
 const resetAddForm = () => {
   newAddress.value = {
     name: '',

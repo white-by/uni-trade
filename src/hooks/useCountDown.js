@@ -1,3 +1,7 @@
+/**
+ * 支付结算页倒计时
+ */
+
 import { computed, onUnmounted, ref } from 'vue'
 
 export const useCountDown = () => {

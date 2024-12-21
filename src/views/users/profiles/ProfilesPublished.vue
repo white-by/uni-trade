@@ -3,7 +3,10 @@
     <div class="nav">
       <ProfilesNav />
     </div>
+
+    <!-- 已发布的商品 -->
     <div class="published-container" v-if="profilesStore.publishedProducts != null">
+      <!-- 商品列表 -->
       <div v-for="(product, index) in profilesStore.publishedProducts" :key="product.id" class="published-item">
         <img :src="getFirstImageURL(product.imageUrl)" alt="商品图片" class="item-image" />
         <div class="item-info">
@@ -21,6 +24,8 @@
         />
       </div>
     </div>
+
+    <!-- 暂无数据 -->
     <div v-else class="no-product-container">
       <img src="@/assets/images/none/暂无订单.png" alt="暂无订单" class="no-product-image" />
     </div>
@@ -36,6 +41,7 @@ import { useUserStore } from '@/store/userStore'
 const profilesStore = useProfilesStore()
 const userStore = useUserStore()
 
+// 从 URL 中提取用户 ID
 const getIdFromUrl = () => {
   const url = window.location.pathname // 获取路径部分
   const segments = url.split('/') // 根据 / 分割路径

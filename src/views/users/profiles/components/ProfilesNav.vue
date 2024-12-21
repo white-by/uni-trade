@@ -54,7 +54,7 @@ watch(
 function menuSelect(index) {
   activeIndex.value = index
   const userID = profilesStore.introduction.userID // 获取当前用户ID
-  console.log('当前userID:', userID)
+  // console.log('当前userID:', userID)
   if (index === '1') {
     router.push(`/profiles/${userID}/published`)
   } else if (index === '2') {
@@ -68,6 +68,7 @@ function menuSelect(index) {
 </script>
 
 <template>
+  <!-- 个人资料页导航 -->
   <div class="container">
     <el-menu :default-active="activeIndex" mode="horizontal" @select="menuSelect">
       <el-menu-item index="1">

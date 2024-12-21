@@ -1,3 +1,8 @@
+/**
+ * userStore.js
+ * 用户个人信息
+ */
+
 import { defineStore } from 'pinia'
 import { loginApi } from '@/api/user'
 import { getUserInfoAPI } from '@/api/profiles'
@@ -15,14 +20,16 @@ export const useUserStore = defineStore(
       if (res.data.code === 1) {
         ElMessage.success('登录成功')
         userInfo.value = res.data.data
-        console.log('登录数据：', userInfo.value)
+        // console.log('登录数据：', userInfo.value)
       } else ElMessage.error('用户名或密码错误')
     }
 
+    // 清除用户信息
     const clearUserInfo = () => {
       userInfo.value = {}
     }
 
+    // 获取用户信息
     const fetchUserInfo = async () => {
       // console.log('pinia原数据：', userInfo.value)
       const res = await getUserInfoAPI()

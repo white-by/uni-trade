@@ -13,6 +13,7 @@ const queryForm = ref({
 const total = ref(0)
 const CategoryList = ref([])
 
+// 获取分类列表
 const getCategoryList = async () => {
   const res = await getCategoryListApi(queryForm.value)
   if (res.data.code === 1) {
@@ -20,6 +21,7 @@ const getCategoryList = async () => {
     total.value = res.data.data.total
   } else ElMessage.error('获取分类信息失败')
 }
+
 onMounted(() => {
   getCategoryList()
 })
@@ -76,15 +78,17 @@ const editCategory = (category) => {
   nextTick(() => formRef.value?.clearValidate())
 }
 
+// 分页
 const handlePageChange = (pageNum) => {
   queryForm.value.pageNum = pageNum
   getCategoryList()
 }
 
+// 提交表单
 const handleConfirm = async () => {
   formRef.value.validate(async (valid) => {
     if (valid) {
-      console.log('提交的表单数据:', categoryForm.value)
+      // console.log('提交的表单数据:', categoryForm.value)
 
       if (categoryForm.value.categoryID) {
         const res = await editCategoryApi(categoryForm.value)
@@ -104,7 +108,7 @@ const handleConfirm = async () => {
       // 刷新
       getCategoryList()
     } else {
-      console.log('表单校验失败')
+      // console.log('表单校验失败')
       return false
     }
   })
@@ -125,8 +129,8 @@ const deleteCategory = async (categoryID) => {
       getCategoryList()
     }
     // getCategoryList()
-  } catch (error) {
-    console.log('分类删除操作已取消', error)
+  } catch {
+    // console.log('分类删除操作已取消', error)
   }
 }
 </script>
@@ -136,7 +140,9 @@ const deleteCategory = async (categoryID) => {
     <h1>分类管理</h1>
     <br /><br />
 
+    <!-- 搜索框和新增按钮 -->
     <div style="display: flex; justify-content: space-between; margin-bottom: 15px">
+      <!-- 搜索框 -->
       <div style="display: flex; justify-content: flex-end">
         <el-input
           v-model="queryForm.searchQuery"
@@ -149,6 +155,7 @@ const deleteCategory = async (categoryID) => {
           </template>
         </el-input>
       </div>
+
       <!-- 新增按钮 -->
       <el-button type="primary" @click="openAddCategoryForm">增加</el-button>
     </div>

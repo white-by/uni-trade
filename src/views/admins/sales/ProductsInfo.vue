@@ -15,6 +15,7 @@ const queryForm = ref({
 const total = ref(0)
 const productList = ref([])
 
+// 获取商品列表
 const getProductList = async () => {
   // console.log('query: ', queryForm.value)
   const res = await getProductListApi(queryForm.value)
@@ -24,6 +25,7 @@ const getProductList = async () => {
   // console.log('productList: ', productList.value)
 }
 
+// 分页
 const handlePageChange = (pageNum) => {
   queryForm.value.pageNum = pageNum
   getProductList()
@@ -37,12 +39,14 @@ const deleteProduct = async (productID) => {
       cancelButtonText: '取消',
       type: 'warning'
     })
-    await deleteProductApi(productID)
+    const res = await deleteProductApi(productID)
     // productList.value = productList.value.filter((product) => product.productID !== productID)
-    ElMessage.success('商品已删除')
-    getProductList()
-  } catch (error) {
-    console.log('商品删除操作已取消', error)
+    if (res.data.code === 1) {
+      ElMessage.success('商品已删除')
+      getProductList()
+    }
+  } catch {
+    // console.log('商品删除操作已取消', error)
   }
 }
 
@@ -56,6 +60,7 @@ onMounted(() => {
     <h1>商品管理</h1>
     <br /><br />
     <div style="display: flex; justify-content: space-between; margin-bottom: 15px">
+      <!-- 搜索框 -->
       <div style="display: flex; justify-content: flex-end">
         <el-input
           v-model="queryForm.searchQuery"

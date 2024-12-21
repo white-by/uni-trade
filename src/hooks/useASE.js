@@ -1,3 +1,7 @@
+/**
+ * AES 密码加密解密
+ */
+
 import CryptoJS from 'crypto-js'
 
 export default function () {

@@ -1,13 +1,16 @@
 <template>
   <UserNav />
+
   <div class="content">
     <br /><br />
     <el-form :model="tempUser" :rules="rules" ref="formRef" label-width="60px" class="form" style="max-width: 600px">
+      <!-- 头像 -->
       <div class="avatar-container" @click="selectAvatar">
         <el-avatar :size="130" :src="tempUser.picture" />
         <input type="file" ref="fileInput" @change="onFileChange" style="display: none" accept="image/*" />
       </div>
 
+      <!-- 表单项 -->
       <el-form-item label="ID">
         <el-input v-model="tempUser.userID" disabled />
       </el-form-item>
@@ -46,11 +49,13 @@
         <el-input v-model="tempUser.tel" />
       </el-form-item>
 
+      <!-- 提交按钮 -->
       <el-form-item>
         <el-button type="primary" @click="throttledOnSubmit" class="submit-button">保存</el-button>
       </el-form-item>
     </el-form>
   </div>
+
   <UserFooter />
 </template>
 
@@ -123,6 +128,7 @@ async function onFileChange(event) {
     })
 
     try {
+      // 上传头像
       const response = await fetch('/api/v2/upload', {
         method: 'POST',
         headers: {
@@ -137,12 +143,12 @@ async function onFileChange(event) {
         // 上传成功，更新头像 URL
         tempUser.picture = result.data.url
         ElMessage.success('头像上传成功')
-        console.log('头像上传成功:', result.data.url)
+        // console.log('头像上传成功:', result.data.url)
       } else {
         console.error('头像上传失败:', result.message)
       }
-    } catch (error) {
-      console.error('头像上传出错:', error)
+    } catch {
+      // console.error('头像上传出错:', error)
     }
   }
 }
@@ -170,7 +176,7 @@ const onSubmit = async () => {
         Object.assign(tempUser, originalUser) // 回滚所有数据
       }
     } else {
-      console.log('表单校验失败')
+      // console.log('表单校验失败')
       return false
     }
   })

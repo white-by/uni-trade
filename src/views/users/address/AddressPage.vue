@@ -1,8 +1,11 @@
 <template>
   <UserNav />
+
   <div style="display: flex; justify-content: center; margin: 50px; min-height: 68vh">
     <el-card>
       <el-row style="margin-bottom: 20px; color: dimgray"><h3>我的地址</h3></el-row>
+
+      <!-- 地址列表 -->
       <el-table :data="addressData" stripe border empty-text="暂无地址">
         <el-table-column label="联系地址" width="380px">
           <el-table-column prop="province" label="省" width="100" />
@@ -11,6 +14,8 @@
           <el-table-column prop="detailArea" label="详细地址" width="180" />
           />
         </el-table-column>
+
+        <!-- 联系人和联系电话 -->
         <el-table-column prop="name" label="联系人" width="100px"> </el-table-column>
         <el-table-column prop="tel" label="联系电话" width="150px"> </el-table-column>
         <el-table-column label="默认地址" width="100px">
@@ -25,6 +30,8 @@
             </el-radio>
           </template>
         </el-table-column>
+
+        <!-- 操作列 -->
         <el-table-column label="操作" width="120px">
           <template #default="scope">
             <el-button size="small" type="primary" @click="openEditDialog(scope.row)">
@@ -36,6 +43,7 @@
           </template>
         </el-table-column>
       </el-table>
+
       <el-button type="primary" plain style="width: 100%; margin-top: 30px" @click="openAddDialog()">
         <i class="iconfont icon-add" style="padding: 5px"></i> 添加地址
       </el-button>
@@ -91,6 +99,7 @@
       </el-form>
     </el-dialog>
   </div>
+
   <UserFooter />
 </template>
 
@@ -159,6 +168,7 @@ const handleDefaultAddressChange = (newAddressId) => {
 
 //新增地址
 const addDialogVisible = ref(false)
+// 打开新增地址对话框
 const openAddDialog = () => {
   addDialogVisible.value = true
   addAddressFormRef.value?.clearValidate()
@@ -256,11 +266,13 @@ const openEditDialog = (row) => {
   })
 }
 
+// 提交修改
 const editAddressFormRef = ref(null)
+// 定义验证规则
 const confirmEdit = async () => {
   editAddressFormRef.value.validate(async (valid) => {
     if (valid) {
-      console.log('修改后的地址信息: ', editForm.value)
+      // console.log('修改后的地址信息: ', editForm.value)
       const res = await updateAddressAPI(editForm.value.id, editForm.value)
       if (res.data.code === 1) {
         const addressIndex = addressData.value.findIndex((item) => item.id === editForm.value.id)
@@ -279,6 +291,7 @@ const confirmEdit = async () => {
   })
 }
 
+// 修改地址对话框地址组件ref
 const resetEditForm = () => {
   editForm.value = { id: '', province: '', city: '', area: '', detailAddress: '' }
   if (areaComponentRef.value) {
@@ -294,8 +307,8 @@ const handleDelete = async (id) => {
       cancelButtonText: '取消',
       type: 'warning'
     })
-  } catch (error) {
-    console.log('取消了删除操作', error)
+  } catch {
+    // console.log('取消了删除操作', error)
     return
   }
   const res = await deleteAddressAPI(id)

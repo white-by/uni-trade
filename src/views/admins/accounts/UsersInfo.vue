@@ -16,6 +16,7 @@ const queryForm = ref({
 const total = ref(0)
 const usersList = ref([])
 
+// 获取用户列表
 const getUsersList = async () => {
   // console.log('query: ', queryForm.value)
   const res = await getUsersListApi(queryForm.value)
@@ -24,6 +25,7 @@ const getUsersList = async () => {
   total.value = res.data.data.total
   // console.log('usersList: ', usersList.value)
 }
+
 onMounted(() => {
   getUsersList()
 })
@@ -132,17 +134,19 @@ const editUser = (user) => {
   nextTick(() => formRef.value?.clearValidate())
 }
 
+// 分页
 const handlePageChange = (pageNum) => {
   queryForm.value.pageNum = pageNum
   getUsersList()
 }
 
+// 提交表单
 const handleConfirm = async () => {
   formRef.value.validate(async (valid) => {
     if (valid) {
       const updatedMail = `${mailPrefix.value}${schoolEmailSuffix.value}`
       userForm.value.mail = updatedMail
-      console.log('提交的表单数据:', userForm.value)
+      // console.log('提交的表单数据:', userForm.value)
       if (userForm.value.userID) {
         const res = await editUserApi(userForm.value)
         if (res.data.code === 1) ElMessage.success('用户信息已更新')
@@ -163,7 +167,7 @@ const handleConfirm = async () => {
       // 刷新
       getUsersList()
     } else {
-      console.log('表单校验失败')
+      // console.log('表单校验失败')
       return false
     }
   })
@@ -181,8 +185,8 @@ const deleteUser = async (userID) => {
     // usersList.value = usersList.value.filter((user) => user.userID !== userID)
     ElMessage.success('用户已删除')
     getUsersList()
-  } catch (error) {
-    console.log('用户删除操作已取消', error)
+  } catch {
+    // console.log('用户删除操作已取消', error)
   }
 }
 </script>
@@ -191,8 +195,9 @@ const deleteUser = async (userID) => {
   <div class="contain">
     <h1>用户管理</h1>
     <br /><br />
-    <!-- 新增按钮 -->
+    <!-- 搜索框和新增按钮 -->
     <div style="display: flex; justify-content: space-between; margin-bottom: 15px">
+      <!-- 搜索框 -->
       <div style="display: flex; justify-content: flex-end">
         <el-input
           v-model="queryForm.searchQuery"
@@ -205,6 +210,8 @@ const deleteUser = async (userID) => {
           </template>
         </el-input>
       </div>
+
+      <!-- 新增按钮 -->
       <el-button type="primary" @click="openAddUserForm">增加</el-button>
     </div>
 
@@ -231,6 +238,8 @@ const deleteUser = async (userID) => {
           </el-tag>
         </template>
       </el-table-column>
+
+      <!-- 操作列 -->
       <el-table-column label="操作" align="center">
         <template #default="{ row }">
           <el-row type="flex" justify="center" :gutter="10">

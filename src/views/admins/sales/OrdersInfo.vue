@@ -16,6 +16,7 @@ const queryForm = ref({
 const total = ref(0)
 const orderList = ref([])
 
+// 获取订单列表
 const getOrderList = async () => {
   // console.log('query: ', queryForm.value)
   const res = await getOrderListApi(queryForm.value)
@@ -25,6 +26,7 @@ const getOrderList = async () => {
   // console.log('orderList: ', orderList.value)
 }
 
+// 分页
 const handlePageChange = (pageNum) => {
   queryForm.value.pageNum = pageNum
   getOrderList()
@@ -40,6 +42,7 @@ onMounted(() => {
     <h1>订单管理</h1>
     <br /><br />
     <div style="display: flex; justify-content: space-between; margin-bottom: 15px">
+      <!-- 搜索框 -->
       <div style="display: flex; justify-content: flex-end">
         <el-input
           v-model="queryForm.searchQuery"

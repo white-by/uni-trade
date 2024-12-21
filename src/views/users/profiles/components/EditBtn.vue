@@ -293,6 +293,7 @@ const switchAddress = (item) => {
 
 //新增地址
 const addDialogVisible = ref(false)
+// 打开新增地址对话框
 const openAddDialog = () => {
   addDialogVisible.value = true
   addAddressFormRef.value?.clearValidate()
@@ -341,6 +342,7 @@ const submitAddressForm = () => {
 
 // 添加地址对话框地址组件ref
 const _areaComponentRef = ref(null)
+// 重置新增地址表单
 const resetAddForm = () => {
   newAddress.value = {
     name: '',
@@ -374,6 +376,7 @@ function upload(options) {
 
   formData.append('smfile', file, newFileName)
 
+  // 上传图片
   axios
     .post('/api/v2/upload', formData, {
       headers: {
@@ -383,7 +386,7 @@ function upload(options) {
     })
     .then((res) => {
       if (res.data && res.data.data && res.data.data.url) {
-        console.log('图片上传成功:', res.data.data.url)
+        // console.log('图片上传成功:', res.data.data.url)
 
         // 调用 onSuccess 回调，传递响应和文件对象
         onSuccess(res.data, file)
@@ -402,13 +405,14 @@ function upload(options) {
     })
 }
 
+// 上传成功回调
 function onUploadSuccess(response, file) {
   const uploadedUrl = response.data.url
   if (uploadedUrl) {
     file.url = uploadedUrl // 为文件对象绑定真实 URL
     uploadedImages.value.push(uploadedUrl) // 添加到已上传图片列表
     form.imageUrl = uploadedImages.value.join(',') // 更新拼接字符串
-    console.log('上传成功，当前图片列表:', form.imageUrl)
+    // console.log('上传成功，当前图片列表:', form.imageUrl)
   } else {
     console.error('服务器返回的 URL 数据为空:', response)
   }
@@ -417,7 +421,7 @@ function onUploadSuccess(response, file) {
 // 删除图片
 function handleRemove(file) {
   const urlToRemove = file.url
-  console.log('删除图片:', file.url)
+  // console.log('删除图片:', file.url)
   if (!urlToRemove) {
     console.error('无法找到需要删除的文件 URL')
     return
@@ -427,7 +431,7 @@ function handleRemove(file) {
   if (index > -1) {
     uploadedImages.value.splice(index, 1) // 从数组中删除该 URL
     form.imageUrl = uploadedImages.value.join(',') // 更新拼接字符串
-    console.log('删除后图片列表:', form.imageUrl)
+    // console.log('删除后图片列表:', form.imageUrl)
   } else {
     console.warn('要删除的图片 URL 未找到:', urlToRemove)
   }
@@ -437,6 +441,7 @@ function handleRemove(file) {
 const dialogImageUrl = ref('')
 const picDialogVisible = ref(false)
 
+// 预览图片
 const handlePictureCardPreview = (uploadFile) => {
   dialogImageUrl.value = uploadFile.url
   picDialogVisible.value = true
@@ -487,6 +492,7 @@ function resetForm() {
 }
 
 const isShippingDisabled = ref(form.deliveryMethod == '邮寄' ? false : true)
+// 监听配送方式变化，禁用运费输入框
 watch(
   () => form.deliveryMethod,
   (newValue) => {
@@ -499,6 +505,7 @@ watch(
   }
 )
 
+// 表单验证规则
 const rules = {
   title: [{ required: true, message: '请输入物品标题', trigger: 'blur' }],
   description: [{ required: true, message: '请输入物品描述', trigger: 'blur' }],

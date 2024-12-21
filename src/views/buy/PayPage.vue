@@ -16,6 +16,8 @@ const router = useRouter()
 
 const payInfo = ref({})
 const cost = ref(0)
+
+// 获取支付信息
 const getPayInfo = async () => {
   const res = await getOrderApi(route.query.id)
   localStorage.setItem('tradeId', route.query.id)
@@ -30,7 +32,7 @@ const getPayInfo = async () => {
     return
   }
   payInfo.value = res.data.data
-  console.log('payInfo:', payInfo.value)
+  // console.log('payInfo:', payInfo.value)
   cost.value = payInfo.value.price + payInfo.value.shippingCost
   // 初始化倒计时秒数
   start(res.data.data.countdown)

@@ -24,6 +24,7 @@ export const addAdminApi = (adminData) => {
     data: adminData
   })
 }
+
 /**
  * 编辑管理员
  * @param adminData

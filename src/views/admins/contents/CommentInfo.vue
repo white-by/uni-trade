@@ -17,6 +17,7 @@ const queryForm = ref({
 const total = ref(0)
 const CommentList = ref([])
 
+// 获取评论列表
 const getCommentList = async () => {
   const res = await getCommentListApi(queryForm.value)
   if (res.data.code === 1) {
@@ -30,10 +31,12 @@ const getCommentList = async () => {
     total.value = res.data.data.total
   } else ElMessage.error(res.data.msg)
 }
+
 onMounted(() => {
   getCommentList()
 })
 
+// 分页
 const handlePageChange = (pageNum) => {
   queryForm.value.pageNum = pageNum
   getCommentList()
@@ -53,8 +56,8 @@ const deleteComment = async (commentID) => {
       ElMessage.success('评论已删除')
     }
     // getCommentList()
-  } catch (error) {
-    console.log('评论删除操作已取消', error)
+  } catch {
+    // console.log('评论删除操作已取消', error)
   }
 }
 </script>
@@ -65,6 +68,7 @@ const deleteComment = async (commentID) => {
     <br /><br />
 
     <div style="display: flex; justify-content: space-between; margin-bottom: 15px">
+      <!-- 搜索框 -->
       <div style="display: flex; justify-content: flex-end">
         <el-input
           v-model="queryForm.searchQuery"

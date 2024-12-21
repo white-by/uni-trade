@@ -144,12 +144,13 @@ import { useUserStore } from '@/store/userStore'
 import { useCartStore } from '@/store/cartStore'
 import { useRouter } from 'vue-router'
 import dayjs from 'dayjs'
+import useThrottle from '@/hooks/useThrottle'
 
+// 格式化时间
 function formatTime(isoTime) {
   if (!isoTime) return '-'
   return dayjs(isoTime).format('YYYY-MM-DD HH:mm:ss')
 }
-import useThrottle from '@/hooks/useThrottle'
 
 const cartStore = useCartStore()
 const router = useRouter()
@@ -160,6 +161,8 @@ const product = ref({})
 const imageList = ref([])
 const route = useRoute()
 const isStarred = ref(false)
+
+// 获取商品详情
 const getProducts = async () => {
   const res = await getDetail(route.params.id)
   product.value = res.data.data
@@ -167,12 +170,14 @@ const getProducts = async () => {
   // 将 product.image 按逗号分割成数组并赋值给 imageList
   imageList.value = product.value.imageUrl ? product.value.imageUrl.split(',') : []
 }
+
 onMounted(() => getProducts())
 
+// 收藏/取消收藏
 const toggleStarred = async () => {
   isStarred.value = !isStarred.value
   product.value.isStarred = isStarred.value
-  console.log('product.value.isStarred:', product.value.isStarred)
+  // console.log('product.value.isStarred:', product.value.isStarred)
   const res = await updateIsStarred(product.value.id, { isStarred: isStarred.value })
 
   if (res.data.code === 1) {
@@ -197,19 +202,20 @@ const throttleToggleStarred = throttled(toggleStarred, 1000)
 // 点击“购买”按钮时保存数据并跳转
 const goToCheckout = () => {
   cartStore.setSelectedProduct(product)
-  console.log('商品详情：', cartStore.selectedProduct.value)
+  // console.log('商品详情：', cartStore.selectedProduct.value)
   router.push('/checkout')
 }
 
 // 删除商品
 const confirmDeleteProduct = async (id) => {
-  console.log(id)
+  // console.log(id)
   try {
     await ElMessageBox.confirm('确定要删除此商品吗？', '提示', {
       confirmButtonText: '确认',
       cancelButtonText: '取消',
       type: 'warning'
     })
+
     const res = await deleteProduct(id)
     if (res.data.code === 1) {
       ElMessage.success('商品已删除')

@@ -27,17 +27,17 @@
               </el-form-item>
 
               <el-form-item>
-                <el-link class="link forgot-password-link" @click="handleResetPassword" :underline="false"
-                  >忘记密码？</el-link
-                >
+                <el-link class="link forgot-password-link" @click="handleResetPassword" :underline="false">
+                  忘记密码？
+                </el-link>
               </el-form-item>
               <el-form-item>
                 <el-button type="primary" @click="handleLogin" class="login-button">登录</el-button>
               </el-form-item>
               <el-form-item>
-                <el-link class="link register-link" @click="handleRegister" :underline="false"
-                  >没有账号？去注册</el-link
-                >
+                <el-link class="link register-link" @click="handleRegister" :underline="false">
+                  没有账号？去注册
+                </el-link>
               </el-form-item>
             </el-form>
           </div>
@@ -72,6 +72,7 @@ let form = ref({
 
 const addPassFlag = ref(false)
 const userStore = useUserStore()
+// 表单验证规则
 const rules = ref({
   mail: [
     { required: true, message: '请输入邮箱', trigger: 'blur' },
@@ -103,8 +104,9 @@ const rules = ref({
 const { encrypt } = useASE()
 
 const formRef = ref(null)
+// 登录
 const handleLogin = () => {
-  formRef.value.validate(async (valid, fields) => {
+  formRef.value.validate(async (valid) => {
     // console.log('加密前：', form.value.password)
     const password = encrypt(form.value.password)
     // console.log('加密后：', password)
@@ -114,17 +116,19 @@ const handleLogin = () => {
       await userStore.getUserInfo({ mail, password })
       router.replace('/')
     } else {
-      console.log('error submit!', fields)
+      // console.log('error submit!', fields)
       return false
     }
   })
 }
 
+// 忘记密码
 const handleResetPassword = () => {
   // 跳转到忘记密码页面
   router.push('/reset-psw')
 }
 
+// 注册
 const handleRegister = () => {
   // 跳转到注册页面
   router.push('/register')

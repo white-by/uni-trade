@@ -5,22 +5,24 @@
   <!-- 我买到的 -->
   <div style="display: flex; justify-content: center; margin: 50px">
     <el-card>
-      <el-row style="margin-bottom: 20px; color: dimgray"><h3>我买到的</h3></el-row
-      ><el-table :data="purchasedData" stripe border empty-text="暂无买到的订单">
+      <el-row style="margin-bottom: 20px; color: dimgray">
+        <h3>我买到的</h3>
+      </el-row>
+      <el-table :data="purchasedData" stripe border empty-text="暂无买到的订单">
         <el-table-column prop="tradeID" label="订单号" width="80"></el-table-column>
 
         <el-table-column prop="goodsName" label="商品名称" width="150"></el-table-column>
-        <el-table-column label="实付" width="80"
-          ><template #default="{ row }"> {{ row.price + row.shippingCost }}元 </template></el-table-column
-        >
+        <el-table-column label="实付" width="80">
+          <template #default="{ row }"> {{ row.price + row.shippingCost }}元 </template>
+        </el-table-column>
         <el-table-column prop="deliveryMethod" label="发货方式" width="100">
           <template #default="{ row }">
             <span v-if="row.deliveryMethod == '0'">无需快递</span>
             <span v-else-if="row.deliveryMethod == '1'">自提</span>
             <span v-else-if="row.deliveryMethod == '2'">邮寄</span>
             <span v-else>未知方式</span>
-          </template></el-table-column
-        >
+          </template>
+        </el-table-column>
         <el-table-column prop="shippingAddress.name" label="联系人" width="80"></el-table-column>
         <el-table-column prop="shippingAddress.tel" label="联系电话" width="130"></el-table-column>
         <!-- 用户自己的收货地址 -->
@@ -54,6 +56,7 @@
                 <div v-if="scope.row.shippingTime != '0001-01-01T00:00:00Z'">
                   发货时间: {{ formatTime(scope.row.shippingTime) }}
                 </div>
+                <div v-if="scope.row.trackingNumber != null">快递单号: {{ scope.row.trackingNumber }}</div>
                 <div v-if="scope.row.turnoverTime != '0001-01-01T00:00:00Z'">
                   完成时间: {{ formatTime(scope.row.turnoverTime) }}
                 </div>
@@ -62,8 +65,8 @@
                 <el-button link type="primary" size="small"> 查看详情 </el-button>
               </template>
             </el-popover>
-          </template></el-table-column
-        >
+          </template>
+        </el-table-column>
 
         <!-- 订单状态 -->
         <el-table-column prop="status" label="订单状态" width="100"></el-table-column>
@@ -126,8 +129,8 @@
             >
               去付款
             </el-button>
-          </template></el-table-column
-        >
+          </template>
+        </el-table-column>
       </el-table>
 
       <!-- 分页 -->
@@ -153,27 +156,19 @@
           @updateCity="editForm.city = $event"
           @updateArea="editForm.area = $event"
         />
-        <el-input
-          v-model="editForm.detailArea"
-          placeholder="请输入详细地址"
-          style="margin-top: 10px; width: 340px"
-        ></el-input>
+        <el-input v-model="editForm.detailArea" placeholder="请输入详细地址" style="margin-top: 10px; width: 340px">
+        </el-input>
       </el-form-item>
 
       <span class="dialog-footer" style="display: flex; justify-content: center">
-        <el-button type="primary" @click="throttledConfirmAddressEdit">确认修改</el-button>
+        <el-button type="primary" @click="throttledConfirmAddressEdit">确认修改 </el-button>
       </span>
     </el-dialog>
 
     <!-- 评价对话框 -->
     <el-dialog title="评价内容" v-model="commentDialogVisible" width="500px" @close="resetCommentForm">
-      <el-input
-        v-model="comment"
-        placeholder="请输入评价内容"
-        :rows="3"
-        type="textarea"
-        style="margin-bottom: 10px"
-      ></el-input>
+      <el-input v-model="comment" placeholder="请输入评价内容" :rows="3" type="textarea" style="margin-bottom: 10px">
+      </el-input>
       <span class="dialog-footer" style="display: flex; justify-content: center">
         <el-button type="primary" @click="throttledHandleComment">确 定</el-button>
       </span>
@@ -187,39 +182,25 @@
         :rows="3"
         type="textarea"
         style="margin-bottom: 10px"
-      ></el-input>
-      <span class="dialog-footer" style="display: flex; justify-content: center">
-        <el-button type="primary" @click="throttledHandleRefund">确 定</el-button>
-      </span>
-    </el-dialog>
-
-    <!-- 发货对话框 -->
-    <el-dialog title="快递单号" v-model="shipDialogVisible" width="500px">
-      <el-input
-        v-model="trackingNumber"
-        placeholder="请输入快递单号。"
-        :rows="3"
-        type="textarea"
-        style="margin-bottom: 10px"
       >
       </el-input>
       <span class="dialog-footer" style="display: flex; justify-content: center">
-        <el-button type="primary" @click="throttledHandleShip">确 定</el-button>
+        <el-button type="primary" @click="throttledHandleRefund">确 定</el-button>
       </span>
     </el-dialog>
   </div>
 
   <!-- 我卖出的 -->
   <div style="display: flex; justify-content: center; margin: 50px">
-    <el-card
-      ><el-row style="margin-bottom: 20px; color: dimgray"><h3>我卖出的</h3></el-row
-      ><el-table :data="selledData" stripe border empty-text="暂无卖出的订单">
+    <el-card>
+      <el-row style="margin-bottom: 20px; color: dimgray"><h3>我卖出的</h3></el-row>
+      <el-table :data="selledData" stripe border empty-text="暂无卖出的订单">
         <el-table-column prop="tradeID" label="订单号" width="80"></el-table-column>
 
         <el-table-column prop="goodsName" label="商品名称" width="150"></el-table-column>
-        <el-table-column label="实收" width="80"
-          ><template #default="{ row }"> {{ row.price + row.shippingCost }}元 </template></el-table-column
-        >
+        <el-table-column label="实收" width="80">
+          <template #default="{ row }"> {{ row.price + row.shippingCost }}元 </template>
+        </el-table-column>
         <el-table-column prop="deliveryMethod" label="发货方式" width="100">
           <template #default="{ row }">
             <span v-if="row.deliveryMethod == '0'">无需快递</span>
@@ -262,6 +243,7 @@
                 <div v-if="scope.row.shippingTime != '0001-01-01T00:00:00Z'">
                   发货时间: {{ formatTime(scope.row.shippingTime) }}
                 </div>
+                <div v-if="scope.row.trackingNumber != null">快递单号: {{ scope.row.trackingNumber }}</div>
                 <div v-if="scope.row.turnoverTime != '0001-01-01T00:00:00Z'">
                   完成时间: {{ formatTime(scope.row.turnoverTime) }}
                 </div>
@@ -270,8 +252,8 @@
                 <el-button link type="primary" size="small"> 查看详情 </el-button>
               </template>
             </el-popover>
-          </template></el-table-column
-        >
+          </template>
+        </el-table-column>
 
         <!-- 订单状态 -->
         <el-table-column prop="status" label="订单状态" width="100"></el-table-column>
@@ -315,9 +297,24 @@
             >
               拒绝退款
             </el-button>
-          </template></el-table-column
-        >
+          </template>
+        </el-table-column>
       </el-table>
+
+      <!-- 发货对话框 -->
+      <el-dialog title="快递单号" v-model="shipDialogVisible" width="500px">
+        <el-input
+          v-model="trackingNumber"
+          placeholder="请输入快递单号。"
+          :rows="3"
+          type="textarea"
+          style="margin-bottom: 10px"
+        >
+        </el-input>
+        <span class="dialog-footer" style="display: flex; justify-content: center">
+          <el-button type="primary" @click="throttledHandleShip">确 定</el-button>
+        </span>
+      </el-dialog>
 
       <!-- 拒绝退款对话框 -->
       <el-dialog title="拒绝退款理由" v-model="rejectRefundDialogVisible" width="500px" @close="resetRefundForm">
@@ -327,7 +324,8 @@
           :rows="3"
           type="textarea"
           style="margin-bottom: 10px"
-        ></el-input>
+        >
+        </el-input>
         <span class="dialog-footer" style="display: flex; justify-content: center">
           <el-button type="primary" @click="throttledHandleRejectRefund">确 定</el-button>
         </span>
@@ -347,6 +345,7 @@
       </div>
     </el-card>
   </div>
+
   <UserFooter />
 </template>
 

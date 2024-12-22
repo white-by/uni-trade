@@ -21,7 +21,8 @@
             style="width: 90%"
             maxlength="300"
             show-word-limit
-          ></el-input>
+          >
+          </el-input>
         </el-form-item>
 
         <!-- 物品图片上传 -->

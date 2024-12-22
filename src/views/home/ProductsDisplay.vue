@@ -128,7 +128,7 @@ watch(
           <RouterLink :to="`/detail/${product.id}`">
             <img :src="getFirstImageURL(product.picture)" class="product-image" />
             <div class="product-info">
-              <h3 class="product-title">{{ product.name }}</h3>
+              <h3 class="product-title" :title="product.name">{{ product.name }}</h3>
               <p class="product-price">￥{{ product.price }}</p>
             </div>
           </RouterLink>
@@ -137,6 +137,8 @@ watch(
     </el-row>
     <el-backtop :right="100" :bottom="100" />
   </div>
+
+  <!-- 没有商品时显示 -->
   <div v-else class="no-product-container">
     <img src="@/assets/images/none/暂无商品.png" alt="暂无商品" class="no-product-image" />
   </div>

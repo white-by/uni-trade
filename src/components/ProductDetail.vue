@@ -8,6 +8,7 @@
         </el-carousel-item>
       </el-carousel>
     </div>
+
     <!-- 右侧详情表单 -->
     <el-form
       label-width="100px"
@@ -63,8 +64,9 @@
                       : 'color: #9587e3; background-color: white;'
                   "
                   :disabled="true"
-                  >邮寄</el-button
                 >
+                  邮寄
+                </el-button>
                 <el-button
                   :type="product.deliveryMethod === '自提' ? 'primary' : ''"
                   :style="
@@ -73,8 +75,9 @@
                       : 'color: #9587e3; background-color: white;'
                   "
                   :disabled="true"
-                  >自提</el-button
                 >
+                  自提
+                </el-button>
                 <el-button
                   :type="product.deliveryMethod === '无需快递' ? 'primary' : ''"
                   :style="
@@ -83,11 +86,12 @@
                       : 'color: #9587e3; background-color: white;'
                   "
                   :disabled="true"
-                  >无需快递</el-button
                 >
+                  无需快递
+                </el-button>
               </el-button-group>
-            </el-form-item></el-col
-          >
+            </el-form-item>
+          </el-col>
         </el-row>
 
         <el-form-item label="邮费">
@@ -97,27 +101,29 @@
         </el-form-item>
 
         <el-row>
-          <el-col :gutter="10" :span="9"
-            ><el-form-item label="浏览">{{ product.views }}</el-form-item></el-col
-          >
+          <el-col :gutter="10" :span="9">
+            <el-form-item label="浏览">{{ product.views }} </el-form-item>
+          </el-col>
           <el-col :span="10">
-            <el-form-item label="收藏">{{ product.stars }}</el-form-item></el-col
-          >
+            <el-form-item label="收藏">{{ product.stars }}</el-form-item>
+          </el-col>
         </el-row>
       </div>
 
       <div class="btn-group" v-if="product.isSold == 0 && userStore.userInfo.userID != product.userID">
-        <el-button type="primary" size="large" style="font-size: 16px; width: 140px" @click="goToCheckout()"
-          >购买</el-button
-        >
+        <el-button type="primary" size="large" style="font-size: 16px; width: 140px" @click="goToCheckout()">
+          购买
+        </el-button>
         <el-button type="primary" plain size="large" circle style="margin-left: 300px" @click="throttleToggleStarred">
           <i :class="isStarred ? 'iconfont icon-starred' : 'iconfont icon-star'"></i>
         </el-button>
-        <el-popover placement="bottom" title="联系电话：" :width="200" trigger="click" :content="product.tel"
-          ><template #reference>
+        <el-popover placement="bottom" title="联系电话：" :width="200" trigger="click" :content="product.tel">
+          <template #reference>
             <el-button type="primary" plain size="large" circle>
-              <i class="iconfont icon-chat"></i></el-button></template
-        ></el-popover>
+              <i class="iconfont icon-chat"></i>
+            </el-button>
+          </template>
+        </el-popover>
       </div>
       <div v-else-if="product.isSold == 0 && userStore.userInfo.userID == product.userID" class="user-btn-group">
         <el-button
@@ -126,8 +132,9 @@
           style="font-size: 16px; width: 140px"
           class="btn_del"
           @click="confirmDeleteProduct(product.id)"
-          >删除商品</el-button
         >
+          删除商品
+        </el-button>
       </div>
       <div v-else style="height: 50px"></div>
     </el-form>

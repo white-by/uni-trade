@@ -412,8 +412,13 @@ function onUploadSuccess(response, file) {
   if (uploadedUrl) {
     file.url = uploadedUrl // 为文件对象绑定真实 URL
     uploadedImages.value.push(uploadedUrl) // 添加到已上传图片列表
-    form.imageUrl = uploadedImages.value.join(',') // 更新拼接字符串
-    // console.log('上传成功，当前图片列表:', form.imageUrl)
+
+    // 保留原有的 form.imageUrl 数据，并拼接新的 URL
+    const existingUrls = form.imageUrl ? form.imageUrl.split(',') : [] // 原有数据转换为数组
+    const updatedUrls = [...existingUrls, ...uploadedImages.value] // 拼接原有数据与新数据
+    form.imageUrl = [...new Set(updatedUrls)].join(',') // 去重并更新为字符串
+
+    console.log('上传成功，当前图片列表:', form.imageUrl)
   } else {
     console.error('服务器返回的 URL 数据为空:', response)
   }
@@ -427,12 +432,13 @@ function handleRemove(file) {
     console.error('无法找到需要删除的文件 URL')
     return
   }
+  uploadedImages.value = form.imageUrl.split(',')
   // 查找 URL 并删除
   const index = uploadedImages.value.findIndex((url) => url === urlToRemove)
   if (index > -1) {
     uploadedImages.value.splice(index, 1) // 从数组中删除该 URL
     form.imageUrl = uploadedImages.value.join(',') // 更新拼接字符串
-    // console.log('删除后图片列表:', form.imageUrl)
+    console.log('删除后图片列表:', form.imageUrl)
   } else {
     console.warn('要删除的图片 URL 未找到:', urlToRemove)
   }
@@ -455,9 +461,6 @@ function openDialog() {
 
 // 提交表单并触发更新事件
 const submitForm = async () => {
-  // 更新图片URL，将文件列表的图片合并成逗号分隔的字符串
-  form.imageUrl = imageList.value.map((item) => item.url).join(',')
-
   const data = {
     id: form.id,
     title: form.title,

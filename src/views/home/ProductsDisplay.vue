@@ -118,7 +118,7 @@ watch(
 <template>
   <div
     v-infinite-scroll="getProductsList"
-    infinite-scroll-distance="0"
+    infinite-scroll-distance="20"
     class="product-container"
     v-if="productsList.length > 0"
   >
@@ -135,7 +135,7 @@ watch(
         </el-card>
       </el-col>
     </el-row>
-    <el-backtop :right="100" :bottom="100" />
+    <el-backtop :right="50" :bottom="50" :target="'.product-container'" />
   </div>
 
   <!-- 没有商品时显示 -->
@@ -148,7 +148,7 @@ watch(
 .product-container {
   padding-left: 60px;
   padding-right: 60px;
-  /* height: 700px; */
+  height: 700px;
   overflow-y: auto;
   min-height: 600px;
 }

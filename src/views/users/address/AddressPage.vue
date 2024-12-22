@@ -1,7 +1,7 @@
 <template>
   <UserNav />
 
-  <div style="display: flex; justify-content: center; margin: 50px; min-height: 68vh">
+  <div style="display: flex; justify-content: center; margin: 50px; min-height: 55vh">
     <el-card>
       <el-row style="margin-bottom: 20px; color: dimgray"><h3>我的地址</h3></el-row>
 

@@ -1,44 +1,45 @@
 <template>
   <UserNav />
 
-  <el-card class="collection-contain">
-    <el-row style="margin-bottom: 50px; color: dimgray"><h3>我的收藏</h3></el-row>
+  <div class="contain">
+    <el-card class="collection-contain">
+      <el-row style="margin-bottom: 50px; color: dimgray"><h3>我的收藏</h3></el-row>
 
-    <div v-if="collectionList != null">
-      <!-- 商品列表 -->
-      <div v-for="item in collectionList" :key="item.id" class="published-item">
-        <img :src="getFirstImageURL(item.imageUrl)" alt="商品图片" class="item-image" />
+      <div v-if="collectionList != null">
+        <!-- 商品列表 -->
+        <div v-for="item in collectionList" :key="item.id" class="published-item">
+          <img :src="getFirstImageURL(item.imageUrl)" alt="商品图片" class="item-image" />
 
-        <!-- 商品信息 -->
-        <div class="item-info">
-          <router-link class="product-name" :to="`/detail/${item.id}`">
-            <h3 class="item-title">{{ item.title }}</h3>
-          </router-link>
-          <p class="item-price">￥{{ item.price }}</p>
-          <span class="item-desc" :title="item.description">{{ item.description }}</span>
+          <!-- 商品信息 -->
+          <div class="item-info">
+            <router-link class="product-name" :to="`/detail/${item.id}`">
+              <h3 class="item-title">{{ item.title }}</h3>
+            </router-link>
+            <p class="item-price">￥{{ item.price }}</p>
+            <span class="item-desc" :title="item.description">{{ item.description }}</span>
+          </div>
+        </div>
+
+        <!-- 分页 -->
+        <div>
+          <el-pagination
+            size="small"
+            style="justify-content: center; margin-top: 20px"
+            layout="prev, pager, next"
+            :current-page="pageNum"
+            :page-size="pageSize"
+            :total="total"
+            @current-change="handlePageChange"
+          />
         </div>
       </div>
 
-      <!-- 分页 -->
-      <div>
-        <el-pagination
-          size="small"
-          style="justify-content: center; margin-top: 20px"
-          layout="prev, pager, next"
-          :current-page="pageNum"
-          :page-size="pageSize"
-          :total="total"
-          @current-change="handlePageChange"
-        />
+      <!-- 暂无数据 -->
+      <div v-else class="no-product-container">
+        <img src="@/assets/images/none/暂无数据.png" alt="暂无数据" />
       </div>
-    </div>
-
-    <!-- 暂无数据 -->
-    <div v-else class="no-product-container">
-      <img src="@/assets/images/none/暂无数据.png" alt="暂无数据" />
-    </div>
-  </el-card>
-
+    </el-card>
+  </div>
   <UserFooter />
 </template>
 
@@ -78,6 +79,9 @@ onMounted(() => {
 </script>
 
 <style scoped lang="scss">
+.contain {
+  min-height: 60vh;
+}
 .no-product-container {
   display: flex;
   justify-content: center;

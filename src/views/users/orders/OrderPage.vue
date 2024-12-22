@@ -147,22 +147,31 @@
       </div>
     </el-card>
 
-    <!-- 修改地址对话框 -->
-    <el-dialog title="修改地址" v-model="dialogVisible" width="500px" @close="resetForm">
-      <el-form-item label="新地址">
-        <AreaComponets
-          ref="areaComponentRef"
-          @updateProvince="editForm.province = $event"
-          @updateCity="editForm.city = $event"
-          @updateArea="editForm.area = $event"
-        />
-        <el-input v-model="editForm.detailArea" placeholder="请输入详细地址" style="margin-top: 10px; width: 340px">
-        </el-input>
-      </el-form-item>
-
-      <span class="dialog-footer" style="display: flex; justify-content: center">
-        <el-button type="primary" @click="throttledConfirmAddressEdit">确认修改 </el-button>
-      </span>
+    <!-- 切换地址 -->
+    <el-dialog v-model="showSelectAddrDialog" title="切换发货地址" width="470px">
+      <div class="addressWrapper">
+        <div
+          class="text item"
+          v-for="item in addressData"
+          :key="item.id"
+          :class="{ active: tempActiveAddress.addrID === item.id }"
+          @click="switchAddress(item)"
+        >
+          <ul>
+            <li>
+              <span>收<i />货<i />人：</span>{{ item.name }}
+            </li>
+            <li><span>联系方式：</span>{{ item.tel }}</li>
+            <li><span>收货地址：</span>{{ item.province }}{{ item.city }}{{ item.area }}{{ item.detailArea }}</li>
+          </ul>
+        </div>
+      </div>
+      <template #footer>
+        <span class="dialog-footer" style="display: flex; justify-content: center">
+          <el-button @click="cancelSwitchAddress">取消</el-button>
+          <el-button type="primary" @click="confirmSwitchAddress">确定</el-button>
+        </span>
+      </template>
     </el-dialog>
 
     <!-- 评价对话框 -->
@@ -352,17 +361,69 @@
 <script setup>
 import UserNav from '@/components/UserNav.vue'
 import UserFooter from '@/components/UserFooter.vue'
-import { onMounted, ref, reactive, nextTick } from 'vue'
-import AreaComponets from '@/components/AreaComponets.vue'
+import { onMounted, ref, reactive } from 'vue'
 import { getPurchasedDataAPI, getSelledDataAPI, operateOrderAPI, editAddressAPI } from '@/api/order.js'
 import { ElMessage, ElMessageBox } from 'element-plus'
 import useThrottle from '@/hooks/useThrottle'
 import { useRouter } from 'vue-router'
 import useFormatTime from '@/hooks/useFormatTime'
+import { getAddressListAPI } from '@/api/address'
+
+onMounted(() => {
+  getAddressList()
+})
+
+const showSelectAddrDialog = ref(false)
+const addressData = ref([]) // 地址列表
+const activeAddress = ref({}) // 激活的地址
+const tempActiveAddress = ref({}) // 临时选中的地址
+const tempTradeID = ref()
 const { formatTime } = useFormatTime()
 
 const { throttled } = useThrottle() // 节流
 const router = useRouter()
+
+// 获取地址列表
+const getAddressList = async () => {
+  const res = await getAddressListAPI()
+  addressData.value = res.data.data
+  console.log('地址列表：', addressData.value)
+}
+
+// 打开切换地址对话框
+const openAddressEditDialog = (row) => {
+  showSelectAddrDialog.value = true
+  activeAddress.value = row.shippingAddress
+  console.log('当前地址：', row.shippingAddress)
+  tempTradeID.value = row.tradeID
+  tempActiveAddress.value = { ...activeAddress.value } // 将当前激活地址存入临时变量
+}
+
+// 确认切换地址
+const confirmSwitchAddress = async () => {
+  activeAddress.value = { ...tempActiveAddress.value } // 更新激活状态
+  showSelectAddrDialog.value = false
+  const params = {
+    id: tempTradeID.value,
+    addrID: activeAddress.value.id
+  }
+  const res = await editAddressAPI(params)
+  if (res.data.code === 1) {
+    ElMessage.success('修改成功')
+    getPurchasedData()
+  }
+}
+
+// 取消切换地址
+const cancelSwitchAddress = () => {
+  tempActiveAddress.value = { ...activeAddress.value } // 恢复为之前的激活状态
+  showSelectAddrDialog.value = false
+}
+
+// 切换地址
+const switchAddress = (item) => {
+  tempActiveAddress.value = item // 更新临时变量
+}
 
 // 从接口拿取“我买到的”订单信息
 let purchasedPageNum = ref(1) //表格页码
@@ -725,72 +786,38 @@ const throttledHandleRejectRefund = throttled(handleRejectRefund, 1000)
 onMounted(() => {
   getPurchasedData(), getSelledData()
 })
-
-//修改地址组件逻辑
-const areaComponentRef = ref(null)
-const dialogVisible = ref(false)
-const editForm = ref({
-  tradeID: '',
-  addrID: '',
-  province: '',
-  city: '',
-  area: '',
-  detailArea: ''
-})
-
-// 打开修改地址对话框
-const openAddressEditDialog = (row) => {
-  dialogVisible.value = true
-  editForm.value = {
-    tradeID: row.tradeID,
-    addrID: row.shippingAddress.addrID,
-    province: row.shippingAddress.province,
-    city: row.shippingAddress.city,
-    area: row.shippingAddress.area,
-    detailArea: row.shippingAddress.detailArea
-  }
-
-  nextTick(() => {
-    if (areaComponentRef.value) {
-      areaComponentRef.value.setAddress(editForm.value.province, editForm.value.city, editForm.value.area)
-    }
-  })
-}
-
-// 确认修改地址
-const confirmAddressEdit = async () => {
-  const params = {
-    id: editForm.value.tradeID,
-    addrID: editForm.value.addrID
-  }
-  // console.log('params:', params)
-  const res = await editAddressAPI(params)
-  if (res.data.code === 1) {
-    ElMessage.success('修改成功')
-    // 更新订单数据中的地址信息
-    const order = purchasedData.value.find((item) => item.tradeID === editForm.value.tradeID)
-    if (order) {
-      order.shippingAddress.province = editForm.value.province
-      order.shippingAddress.city = editForm.value.city
-      order.shippingAddress.area = editForm.value.area
-      order.shippingAddress.detailArea = editForm.value.detailArea
-    }
-  } else {
-    ElMessage.error('网络请求失败')
-  }
-
-  dialogVisible.value = false
-  resetForm()
-}
-// 节流处理：限制每秒响应一次
-const throttledConfirmAddressEdit = throttled(confirmAddressEdit, 1000)
-
-// 重置表单数据
-const resetForm = () => {
-  //重置表单数据
-  editForm.value = { tradeID: '', province: '', city: '', area: '', detailAddress: '' }
-  if (areaComponentRef.value) {
-    areaComponentRef.value.resetAddress()
-  }
-}
 </script>
+
+<style scoped lang="scss">
+.addressWrapper {
+  max-height: 500px;
+  overflow-y: auto;
+}
+
+.text {
+  flex: 1;
+  min-height: 90px;
+  display: flex;
+  align-items: center;
+
+  &.item {
+    border: 1px solid #f5f5f5;
+    margin-bottom: 10px;
+    cursor: pointer;
+    border-radius: 5px; // 添加圆角
+    transition: border-color 0.3s, background-color 0.3s; // 增加平滑过渡效果
+
+    &.active,
+    &:hover {
+      border-color: $comColor;
+      background: rgba(149, 135, 227, 0.1);
+    }
+
+    > ul {
+      padding: 10px;
+      font-size: 14px;
+      line-height: 30px;
+    }
+  }
+}
+</style>

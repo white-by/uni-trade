@@ -11,7 +11,7 @@
  Target Server Version : 80039
  File Encoding         : 65001
 
- Date: 22/12/2024 20:31:07
+ Date: 22/12/2024 21:36:07
 */
 
 SET NAMES utf8mb4;
@@ -34,7 +34,7 @@ CREATE TABLE `address`  (
   PRIMARY KEY (`addrID`) USING BTREE,
   INDEX `userID`(`userID` ASC) USING BTREE,
   CONSTRAINT `address_ibfk_1` FOREIGN KEY (`userID`) REFERENCES `users` (`userID`) ON DELETE RESTRICT ON UPDATE RESTRICT
-) ENGINE = InnoDB AUTO_INCREMENT = 21 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = DYNAMIC;
+) ENGINE = InnoDB AUTO_INCREMENT = 23 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of address
@@ -49,6 +49,8 @@ INSERT INTO `address` VALUES (17, 6, '广东省', '珠海市', '香洲区', '中
 INSERT INTO `address` VALUES (18, 3, '北京市', '市辖区', '东城区', '幽暗地域', '12345678903', '塔夫', 0);
 INSERT INTO `address` VALUES (19, 6, '广东省', '广州市', '海珠区', '新港西路中山大学南校园松涛园三楼啫啫鸡', '12345678900', '啫啫鸡', 0);
 INSERT INTO `address` VALUES (20, 7, '广东省', '广州市', '海珠区', '中山大学', '12345678990', 'whi', 1);
+INSERT INTO `address` VALUES (21, 8, '广东省', '广州市', '番禺区', '大学城', '12345678990', 'woman', 1);
+INSERT INTO `address` VALUES (22, 9, '北京市', '市辖区', '东城区', 'c201', '12345678990', '4090', 1);
 
 -- ----------------------------
 -- Table structure for admins
@@ -214,7 +216,7 @@ CREATE TABLE `goods`  (
   CONSTRAINT `goods_ibfk_2` FOREIGN KEY (`categoryID`) REFERENCES `category` (`categoryID`) ON DELETE RESTRICT ON UPDATE RESTRICT,
   CONSTRAINT `goods_ibfk_3` FOREIGN KEY (`addrID`) REFERENCES `address` (`addrID`) ON DELETE RESTRICT ON UPDATE RESTRICT,
   CONSTRAINT `goods_chk_1` CHECK (`price` >= 0)
-) ENGINE = InnoDB AUTO_INCREMENT = 43 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = DYNAMIC;
+) ENGINE = InnoDB AUTO_INCREMENT = 52 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of goods
@@ -225,9 +227,9 @@ INSERT INTO `goods` VALUES (3, '蛋白粉', 2, 99.00, 1, '凑字数', 0, 'https:
 INSERT INTO `goods` VALUES (4, 'pingu摸鱼鹅', 1, 65.00, 1, '未拆袋', 1, 'https://cbu01.alicdn.com/img/ibank/O1CN011aNtFI1EXqJIFR22Q_!!2216426590362-0-cib.310x310.jpg', '2024-12-08 20:29:17', '2', 8, 1, 8);
 INSERT INTO `goods` VALUES (5, '充电宝', 2, 60.00, 2, '2w毫安。使用1年', 1, 'https://cbu01.alicdn.com/img/ibank/2019/194/723/10889327491_1286304817.jpg', '2024-12-08 20:30:16', '0', 8, 1, 7);
 INSERT INTO `goods` VALUES (6, '联想小新电脑', 2, 4000.00, 2, '使用两年', 0, 'https://pic1.zhimg.com/v2-32d8111e1d00fba6d12d7095e4f4d561_r.jpg?source=1940ef5c', '2024-10-09 15:54:20', '1', 8, 1, 19);
-INSERT INTO `goods` VALUES (7, '博德之门3黑胶', 1, 400.00, 6, '全新', 0, 'https://tse1-mm.cn.bing.net/th/id/OIP-C.6oHTxnMBGqA46oG1668s3wHaEK?rs=1&pid=ImgDetMain', '2024-09-09 15:55:07', '2', 8, 1, 17);
+INSERT INTO `goods` VALUES (7, '博德之门3黑胶', 1, 400.00, 6, '全新', 0, 'https://tse1-mm.cn.bing.net/th/id/OIP-C.6oHTxnMBGqA46oG1668s3wHaEK?rs=1&pid=ImgDetMain', '2024-09-09 15:55:07', '2', 8, 1, 18);
 INSERT INTO `goods` VALUES (8, '星界棱镜', 2, 99.00, 8, '打不开，故卖出', 0, 'https://s2.loli.net/2024/12/11/7j2avqJPWRMkHUC.jpg\n', '2024-12-11 03:32:53', '1', 0, 15, 1);
-INSERT INTO `goods` VALUES (9, 'delias厚底小皮鞋女秋冬加绒真皮黑色玛丽珍增高马丁乐福鞋', 3, 100.00, 4, '哑黑色，39码，加绒款，增高5cm，走路不打脚，仅穿过一次，尺码买小了所以出。 鞋垫材质超纤皮，鞋垫材质超纤皮，鞋头圆头，重量非常轻 已自刀，不可小刀，爽快包邮', 0, 'https://s2.loli.net/2024/12/12/8ynONh71MYjkPcp.jpg,https://s2.loli.net/2024/12/12/VNHQgLnB6Uhb3cp.jpg,https://s2.loli.net/2024/12/12/bDSoBAIjr4ZUFMt.jpg', '2024-12-12 11:42:16', '1', 0, 16, 2);
+INSERT INTO `goods` VALUES (9, 'delias厚底小皮鞋女秋冬加绒真皮黑色玛丽珍增高马丁乐福鞋', 3, 100.00, 4, '哑黑色，39码，加绒款，增高5cm，走路不打脚，仅穿过一次，尺码买小了所以出。 鞋垫材质超纤皮，鞋垫材质超纤皮，鞋头圆头，重量非常轻 已自刀，不可小刀，爽快包邮', 0, 'https://s2.loli.net/2024/12/12/8ynONh71MYjkPcp.jpg,https://s2.loli.net/2024/12/12/VNHQgLnB6Uhb3cp.jpg,https://s2.loli.net/2024/12/12/bDSoBAIjr4ZUFMt.jpg', '2024-12-12 11:42:16', '1', 0, 16, 3);
 INSERT INTO `goods` VALUES (10, '树林猫猫狗狗手机壳', 3, 15.80, 1, '适用iPhone15，全包软壳，全新未使用，买多了出', 0, 'https://s2.loli.net/2024/12/14/b1LAO3eBsHVGRNC.png,https://s2.loli.net/2024/12/14/1yJHGl4k8ueB92o.png', '2024-12-14 08:12:19', '2', 4, 16, 4);
 INSERT INTO `goods` VALUES (11, '麦当劳早餐券', 3, 9.90, 7, '猪柳麦满分+小杯豆浆\n拍前先咨询', 1, 'https://s2.loli.net/2024/12/14/7GpLczrDd54tJ6N.png', '2024-12-14 08:15:05', '0', 0, NULL, 4);
 INSERT INTO `goods` VALUES (12, '麦香鱼代下单', 5, 19.99, 7, '【两件套】麦香鱼+五块麦乐鸡\n一旦下单，不支持退款！请考虑清除后再购买', 0, 'https://s2.loli.net/2024/12/14/vuBgtML35iRGXnU.png,https://s2.loli.net/2024/12/14/yBt6fnLVHlbZsoU.png,https://s2.loli.net/2024/12/14/swDGBJvnNh78exT.png', '2024-12-14 08:21:32', '0', 0, NULL, 4);
@@ -242,24 +244,33 @@ INSERT INTO `goods` VALUES (21, '数据库与系统第六章答案', 6, 10.00, 3
 INSERT INTO `goods` VALUES (22, '软件测试第三周练习答案', 6, 9.00, 3, '电子版，发邮箱，不会可讲解', 0, 'https://s2.loli.net/2024/12/18/ASnXRfaUJrzKVHW.png,https://s2.loli.net/2024/12/18/IKHdb7W6DjJpqCV.png', '2024-12-18 14:08:09', '0', 0, NULL, 2);
 INSERT INTO `goods` VALUES (23, '软件测试复习资料', 6, 5.00, 3, '虽然不用考试，但最好还是复习一下', 1, 'https://s2.loli.net/2024/12/18/Zo3TzHuURr8gFDA.png', '2024-12-18 14:08:48', '0', 0, NULL, 1);
 INSERT INTO `goods` VALUES (24, 'Unity射箭游戏源文件', 6, 99.00, 7, '可运行', 0, 'https://s2.loli.net/2024/12/18/2VFsv9GfAPcOmKp.png,https://s2.loli.net/2024/12/18/7KTVLwvJQD6sPqE.png', '2024-12-18 14:10:56', '0', 0, NULL, 1);
-INSERT INTO `goods` VALUES (25, '明萨拉', 6, 999999.00, 1, '不卖，没走丢，长太漂亮了给你们看一下', 0, 'https://s2.loli.net/2024/12/18/xIrKwNzhRgy1T8M.png,https://s2.loli.net/2024/12/18/MpH9JWq6ofYg87L.png', '2024-12-18 14:12:14', '2', 99999, 19, 7);
+INSERT INTO `goods` VALUES (25, '明萨拉', 6, 999999.00, 8, '不卖，没走丢，长太漂亮了给你们看一下', 0, 'https://s2.loli.net/2024/12/18/xIrKwNzhRgy1T8M.png,https://s2.loli.net/2024/12/18/MpH9JWq6ofYg87L.png', '2024-12-18 14:12:14', '2', 99999, 19, 7);
 INSERT INTO `goods` VALUES (26, '用C#编写数据库实验', 6, 20.00, 7, '内含源码', 0, 'https://s2.loli.net/2024/12/18/CJcwL4tWIzKMRs1.png', '2024-12-18 14:14:11', '0', 0, NULL, 1);
 INSERT INTO `goods` VALUES (27, 'steam平台雨世界cdk', 3, 21.00, 7, '发货后不可退款', 0, 'https://s2.loli.net/2024/12/18/PMvQB9TSLJ4Kemf.png', '2024-12-18 14:18:44', '0', 0, NULL, 2);
 INSERT INTO `goods` VALUES (28, 'steam平台空洞骑士cdk', 3, 23.00, 7, '发货后不可退款', 1, 'https://s2.loli.net/2024/12/18/sQG3JDucieqUIYo.png', '2024-12-18 14:19:20', '0', 0, NULL, 4);
 INSERT INTO `goods` VALUES (29, '博德之门3cdk', 3, 218.00, 7, '发货后不可退款', 0, 'https://s2.loli.net/2024/12/18/gFKbIajHrBJ3cix.png', '2024-12-18 14:20:02', '1', 0, 16, 2);
 INSERT INTO `goods` VALUES (30, '星际拓荒cdk', 3, 50.00, 7, '发货后不可退款，不含dlc', 0, 'https://s2.loli.net/2024/12/18/GrzcfNyQmUwn4q7.png', '2024-12-18 14:20:53', '1', 0, 18, 2);
-INSERT INTO `goods` VALUES (31, '山羊', 3, 1.00, 7, 'Unity山羊模型，含声音、动画', 0, 'https://s2.loli.net/2024/12/18/q4QAMgY1LPa6CVW.png', '2024-12-18 14:21:29', '0', 0, NULL, 1);
-INSERT INTO `goods` VALUES (32, 'lv围巾', 1, 999.00, 4, '本来想送妈妈的，广东热得根本没有应用场景，99新，出了。', 0, 'https://s2.loli.net/2024/12/22/LqAMpi7KVOyQ9Wu.jpg', '2024-12-22 04:53:53', '1', 0, 1, 1);
+INSERT INTO `goods` VALUES (31, '山羊', 3, 1.00, 7, 'Unity山羊模型，含声音、动画', 0, 'https://s2.loli.net/2024/12/18/q4QAMgY1LPa6CVW.png', '2024-12-18 14:21:29', '0', 0, NULL, 3);
+INSERT INTO `goods` VALUES (32, 'lv围巾', 1, 999.00, 4, '本来想送妈妈的，广东热得根本没有应用场景，99新，出了。', 0, 'https://s2.loli.net/2024/12/22/LqAMpi7KVOyQ9Wu.jpg', '2024-12-22 04:53:53', '1', 0, 1, 2);
 INSERT INTO `goods` VALUES (33, 'xbox手柄', 1, 99.00, 2, '没背键，换精英手柄了，95新', 0, 'https://s2.loli.net/2024/12/22/DVE8Ry2JMioTzaB.png', '2024-12-22 04:55:15', '1', 0, 1, 1);
-INSERT INTO `goods` VALUES (34, '喜德盛山地自行车黑客380', 1, 488.00, 5, '原价1k3，毕业了便宜出。\n可刀给学妹学弟，也不会给贩子割血，平时仅通勤用，骑了2年多', 0, 'https://s2.loli.net/2024/12/22/RnfZJozi3kbtWLI.jpg', '2024-12-22 04:57:22', '1', 0, 1, 1);
-INSERT INTO `goods` VALUES (35, '少女歌剧大场奈奈立牌', 2, 88.00, 6, '抹布洗😭😭\n太穷了回点血。', 0, 'https://s2.loli.net/2024/12/22/Fw8ygimrB5bIHTE.jpg', '2024-12-22 05:00:19', '1', 0, 15, 5);
+INSERT INTO `goods` VALUES (34, '喜德盛山地自行车黑客380', 1, 488.00, 5, '原价1k3，毕业了便宜出。\n可刀给学妹学弟，也不会给贩子割血，平时仅通勤用，骑了2年多', 0, 'https://s2.loli.net/2024/12/22/RnfZJozi3kbtWLI.jpg', '2024-12-22 04:57:22', '1', 0, 1, 2);
+INSERT INTO `goods` VALUES (35, '少女歌剧大场奈奈立牌', 2, 88.00, 6, '抹布洗😭😭\n太穷了回点血。', 0, 'https://s2.loli.net/2024/12/22/Fw8ygimrB5bIHTE.jpg', '2024-12-22 05:00:19', '1', 0, 15, 7);
 INSERT INTO `goods` VALUES (36, '红楼梦', 2, 25.00, 3, '人民文学出版社的。\n更喜欢看电子书，出了。', 0, 'https://s2.loli.net/2024/12/22/gWmEDYxKyd5oUSa.jpg', '2024-12-22 05:02:04', '1', 0, 14, 1);
-INSERT INTO `goods` VALUES (37, '迷宫组', 2, 299.00, 6, '迷宫组99', 0, 'https://s2.loli.net/2024/12/22/JoQw8Oa569NB7LP.png,https://s2.loli.net/2024/12/22/Bh4oDEAJCQf6XLv.png', '2024-12-22 12:21:22', '1', 0, 15, 1);
-INSERT INTO `goods` VALUES (38, '终将成为你台版漫画', 7, 350.00, 3, '终将成为你漫画，全新', 0, 'https://s2.loli.net/2024/12/22/cFfKzImibdnNERD.png,https://s2.loli.net/2024/12/22/Z3ovODsJIRmCNwG.png', '2024-12-22 12:24:47', '2', 10, 20, 1);
+INSERT INTO `goods` VALUES (37, '迷宫组', 2, 299.00, 6, '迷宫组99', 0, 'https://s2.loli.net/2024/12/22/JoQw8Oa569NB7LP.png,https://s2.loli.net/2024/12/22/Bh4oDEAJCQf6XLv.png', '2024-12-22 12:21:22', '1', 0, 15, 2);
+INSERT INTO `goods` VALUES (38, '终将成为你台版漫画', 7, 350.00, 3, '终将成为你漫画，全新未拆封', 0, 'https://s2.loli.net/2024/12/22/cFfKzImibdnNERD.png,https://s2.loli.net/2024/12/22/Z3ovODsJIRmCNwG.png', '2024-12-22 12:24:47', '2', 10, 20, 2);
 INSERT INTO `goods` VALUES (39, '迷宫饭漫画', 7, 120.00, 3, '天闻角川', 0, 'https://s2.loli.net/2024/12/22/xdTf3BMu4VXIkSq.png', '2024-12-22 12:26:12', '1', 0, 20, 1);
-INSERT INTO `goods` VALUES (40, '迷宫组小立牌', 7, 90.00, 6, '迷宫组小立牌，切煤产物', 0, 'https://s2.loli.net/2024/12/22/Qxt3VArsN8lUoJk.png', '2024-12-22 12:27:56', '1', 0, 20, 1);
-INSERT INTO `goods` VALUES (41, 'AveMujica MyGo 若叶睦立牌', 7, 90.00, 6, 'Ave Mujica 若叶睦 1st 立牌', 0, 'https://s2.loli.net/2024/12/22/ZJVMAWrtIQP54LF.png', '2024-12-22 12:29:09', '1', 0, 20, 1);
-INSERT INTO `goods` VALUES (42, '克洛离别战记黄金国努努', 7, 125.00, 6, '少女歌剧克洛离别战记黄金国努努，状态如图，离别战记有吊牌', 0, 'https://s2.loli.net/2024/12/22/iF3zW52AsJrQd8v.png', '2024-12-22 12:30:24', '2', 8, 20, 1);
+INSERT INTO `goods` VALUES (40, '迷宫组小立牌', 7, 90.00, 6, '迷宫组小立牌，切煤产物', 0, 'https://s2.loli.net/2024/12/22/Qxt3VArsN8lUoJk.png', '2024-12-22 12:27:56', '1', 0, 20, 3);
+INSERT INTO `goods` VALUES (41, '若叶睦立牌 AveMujica MyGo ', 7, 90.00, 6, 'Ave Mujica MyGo 若叶睦 1st 立牌', 0, 'https://s2.loli.net/2024/12/22/ZJVMAWrtIQP54LF.png', '2024-12-22 12:29:09', '1', 0, 20, 5);
+INSERT INTO `goods` VALUES (42, '克洛 离别战记 黄金国努努', 7, 125.00, 6, '少女歌剧克洛，离别战记黄金国努努，状态如图，离别战记有吊牌', 0, 'https://s2.loli.net/2024/12/22/iF3zW52AsJrQd8v.png', '2024-12-22 12:30:24', '2', 8, 20, 3);
+INSERT INTO `goods` VALUES (43, 'dior手提包', 8, 9888.00, 4, 'dior中号 Book Tote 手袋，米白色和蓝色 Oblique 印花刺绣 ', 0, 'https://s2.loli.net/2024/12/22/sE76dNJuDtIlgKU.png,https://s2.loli.net/2024/12/22/G4nrNbwuJCKMg2i.png', '2024-12-22 13:07:01', '1', 0, 21, 1);
+INSERT INTO `goods` VALUES (44, 'dior大衣', 8, 26999.00, 4, '38码，灰色，双面绵羊毛和桑蚕丝混纺面料搭配腰带', 0, 'https://s2.loli.net/2024/12/22/PYhC8SKrbFJufAX.png,https://s2.loli.net/2024/12/22/JyRNjcPlsvY7MeD.png', '2024-12-22 13:11:32', '2', 12, 21, 2);
+INSERT INTO `goods` VALUES (45, '优衣库连帽外套', 8, 99.00, 4, '优衣库 春秋新款女装休闲连帽外套/时尚A字夹克耐久防水 469774', 0, 'https://s2.loli.net/2024/12/22/VhidgBu521AQ6Ds.png,https://s2.loli.net/2024/12/22/zXOoNnUWH9sGPAk.png', '2024-12-22 13:14:00', '2', 10, 21, 1);
+INSERT INTO `goods` VALUES (46, '低腰牛仔阔腿裤全新', 8, 20.00, 4, '全新没穿过，全部实拍\nS码\n腰围72cm 无弹力\n前档19cm\n裤长约95cm\n是低腰，牛仔面料厚实无弹，只适合穿小码的姐妹', 0, 'https://s2.loli.net/2024/12/22/bcdO8PKTgsf3th2.png,https://s2.loli.net/2024/12/22/OmV1cqyjd4kU2Y6.png', '2024-12-22 13:17:39', '1', 0, 21, 1);
+INSERT INTO `goods` VALUES (47, '开衫外套', 8, 30.00, 4, '2024单排扣纯色针织毛衣外套开衫慵懒宽松圆领上衣女\n驼色', 0, 'https://s2.loli.net/2024/12/22/VGJebZK246Eac3T.png,https://s2.loli.net/2024/12/22/ZvxTo5Ju9lNEkA1.png', '2024-12-22 13:19:41', '1', 0, 21, 1);
+INSERT INTO `goods` VALUES (48, 'MLB鸭舌帽', 8, 50.00, 4, 'mlb韩版帽子ny软顶小标la帽子大标洋基队遮阳防晒', 0, 'https://s2.loli.net/2024/12/22/iwsjTMByacXUEl4.png,https://s2.loli.net/2024/12/22/q4SB7ZDYRup3Hl5.png', '2024-12-22 13:24:34', '1', 0, 21, 1);
+INSERT INTO `goods` VALUES (49, '苹果earpods', 9, 30.00, 2, '个人闲置全新拆机有线扁头耳机带包装，7-14pro都可以使用11手机附带的，一次没有使用过。原装正品，习惯用无线一直没用有线不需要连蓝牙的哦线上面都有编码的要的话直接拍就好了', 0, 'https://s2.loli.net/2024/12/22/wbL9GOoSztj5N6r.png,https://s2.loli.net/2024/12/22/elQiXPc2h8AygnT.png', '2024-12-22 13:29:08', '1', 0, 22, 2);
+INSERT INTO `goods` VALUES (50, '尼康D7000 尼康防抖镜头DX 18-105', 9, 950.00, 2, '2020年在深圳的时候朋友送的尼康相机和镜头组合。从深圳顺电买的（顺电是一家专业数码家电连锁品牌，实体店铺，一般开在高端商城里面）。正品。', 0, 'https://s2.loli.net/2024/12/22/TOxUqcrWDLyi8K9.png,https://s2.loli.net/2024/12/22/5ITUiDvoe7EWSM4.png', '2024-12-22 13:32:03', '1', 0, 22, 1);
+INSERT INTO `goods` VALUES (51, '李宁羽毛球拍', 9, 98.00, 1, '个人闲置出李宁羽毛球拍，暑假买的实习工作了，也没空打了，就打了几分钟，保护膜都没斯，，现在便宜出掉，花230买的，拉好的24磅，算是新手拍，4U超轻80多克 包邮！\n双拍98 送球包和三个新球\n实体店买的保证正品 假货无理由退款！有付款记录', 0, 'https://s2.loli.net/2024/12/22/aXCfG1HtNowvsxe.png,https://s2.loli.net/2024/12/22/muFCXk5LYoGvZSK.png,https://s2.loli.net/2024/12/22/D1io7vpdbCYlHfT.png', '2024-12-22 13:35:19', '1', 0, 22, 1);
 
 -- ----------------------------
 -- Table structure for refund_complaint
@@ -415,7 +426,7 @@ CREATE TABLE `users`  (
   PRIMARY KEY (`userID`) USING BTREE,
   UNIQUE INDEX `userName`(`userName` ASC) USING BTREE,
   UNIQUE INDEX `mail`(`mail` ASC) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 8 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = DYNAMIC;
+) ENGINE = InnoDB AUTO_INCREMENT = 10 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of users
@@ -427,5 +438,7 @@ INSERT INTO `users` VALUES (4, 'boreascup', '1jdzWuniG6UMtoa3T6uNLA==', 1, 'http
 INSERT INTO `users` VALUES (5, '麦麦', '1jdzWuniG6UMtoa3T6uNLA==', 1, 'https://s2.loli.net/2024/12/14/zEB5r6GwXCWxaeM.png', '12345678900', 'mcd@mail2.sysu.edu.cn', 1, 0);
 INSERT INTO `users` VALUES (6, '小猿搜题', '1jdzWuniG6UMtoa3T6uNLA==', 1, 'https://s2.loli.net/2024/12/18/F9ICLVRUz5NPGoc.png', '12345678900', 'test@mail2.sysu.edu.cn', 0, 0);
 INSERT INTO `users` VALUES (7, 'whi', '1jdzWuniG6UMtoa3T6uNLA==', 1, 'https://s2.loli.net/2024/12/22/j79YTpSrU1ZWmeJ.jpg', '12345678990', 'whi@mail2.sysu.edu.cn', 0, 0);
+INSERT INTO `users` VALUES (8, 'aaa女装批发', '1jdzWuniG6UMtoa3T6uNLA==', 2, '', '12345678990', 'woman@mail.scut.edu.cn', 0, 0);
+INSERT INTO `users` VALUES (9, '4090', '1jdzWuniG6UMtoa3T6uNLA==', 2, '', '12345678990', '4090@mail.scut.edu.cn', 0, 0);
 
 SET FOREIGN_KEY_CHECKS = 1;

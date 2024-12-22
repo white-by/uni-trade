@@ -1,7 +1,7 @@
 /*
  Navicat Premium Data Transfer
 
- Source Server         : MyDatabase
+ Source Server         : mysql
  Source Server Type    : MySQL
  Source Server Version : 80039
  Source Host           : localhost:3306
@@ -11,7 +11,7 @@
  Target Server Version : 80039
  File Encoding         : 65001
 
- Date: 20/12/2024 09:48:40
+ Date: 22/12/2024 20:31:07
 */
 
 SET NAMES utf8mb4;
@@ -34,7 +34,7 @@ CREATE TABLE `address`  (
   PRIMARY KEY (`addrID`) USING BTREE,
   INDEX `userID`(`userID` ASC) USING BTREE,
   CONSTRAINT `address_ibfk_1` FOREIGN KEY (`userID`) REFERENCES `users` (`userID`) ON DELETE RESTRICT ON UPDATE RESTRICT
-) ENGINE = InnoDB AUTO_INCREMENT = 20 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 21 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of address
@@ -48,6 +48,7 @@ INSERT INTO `address` VALUES (16, 3, '浙江省', '杭州市', '钱塘区', '西
 INSERT INTO `address` VALUES (17, 6, '广东省', '珠海市', '香洲区', '中山大学珠海校区蝾螈食堂三楼', '1234567800', '1', 1);
 INSERT INTO `address` VALUES (18, 3, '北京市', '市辖区', '东城区', '幽暗地域', '12345678903', '塔夫', 0);
 INSERT INTO `address` VALUES (19, 6, '广东省', '广州市', '海珠区', '新港西路中山大学南校园松涛园三楼啫啫鸡', '12345678900', '啫啫鸡', 0);
+INSERT INTO `address` VALUES (20, 7, '广东省', '广州市', '海珠区', '中山大学', '12345678990', 'whi', 1);
 
 -- ----------------------------
 -- Table structure for admins
@@ -64,7 +65,7 @@ CREATE TABLE `admins`  (
   PRIMARY KEY (`adminID`) USING BTREE,
   UNIQUE INDEX `adminName`(`adminName` ASC) USING BTREE,
   CONSTRAINT `admins_chk_1` CHECK (`age` >= 0)
-) ENGINE = InnoDB AUTO_INCREMENT = 5 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 6 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of admins
@@ -72,6 +73,7 @@ CREATE TABLE `admins`  (
 INSERT INTO `admins` VALUES (1, '1jdzWuniG6UMtoa3T6uNLA==', '管理员', '12212121221', '1@qq.com', 0, 20);
 INSERT INTO `admins` VALUES (3, '1jdzWuniG6UMtoa3T6uNLA==', '邪念', '13609723842', 'darkurge@qq.com', 0, 289);
 INSERT INTO `admins` VALUES (4, '1jdzWuniG6UMtoa3T6uNLA==', '莎尔', '18867574564', 'shawdowheart@mail2.sysu.edu.cn', 0, 1000);
+INSERT INTO `admins` VALUES (5, '1jdzWuniG6UMtoa3T6uNLA==', '白烟', '12345678990', '2115182149@qq.com', 0, 19);
 
 -- ----------------------------
 -- Table structure for announcement
@@ -83,14 +85,14 @@ CREATE TABLE `announcement`  (
   `anContent` text CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
   `anTime` datetime NOT NULL,
   PRIMARY KEY (`announcementID`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 4 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 4 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of announcement
 -- ----------------------------
-INSERT INTO `announcement` VALUES (1, '公告测试', '公告内容测', '2024-12-14 08:07:28');
-INSERT INTO `announcement` VALUES (2, '公告测试2', '12313123', '2024-12-16 09:15:53');
-INSERT INTO `announcement` VALUES (3, '公告测试3', '5432', '2024-12-16 09:17:30');
+INSERT INTO `announcement` VALUES (1, '公告测试', '公告测试', '2024-12-14 08:07:28');
+INSERT INTO `announcement` VALUES (2, '公告测试2', '公告测试2', '2024-12-15 09:15:53');
+INSERT INTO `announcement` VALUES (3, '公告测试3', '公告测试3', '2024-12-16 09:17:30');
 
 -- ----------------------------
 -- Table structure for category
@@ -101,18 +103,19 @@ CREATE TABLE `category`  (
   `categoryName` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
   `descriptions` text CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL,
   PRIMARY KEY (`categoryID`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 8 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 9 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of category
 -- ----------------------------
 INSERT INTO `category` VALUES (1, '日常用品', '日常生活中使用的物品，如衣物、文具等');
 INSERT INTO `category` VALUES (2, '数码产品', '如手机、平板、电脑\n');
-INSERT INTO `category` VALUES (3, '二手教材', '旧教材');
+INSERT INTO `category` VALUES (3, '纸质书籍', '旧教材、阅读书籍');
 INSERT INTO `category` VALUES (4, '闲置衣物', '旧衣服');
 INSERT INTO `category` VALUES (5, '通勤工具', '如自行车、电动车、二轮车、平衡车');
 INSERT INTO `category` VALUES (6, '同人周边', '谷子等');
 INSERT INTO `category` VALUES (7, '虚拟物品', '充值卡，软件会员等');
+INSERT INTO `category` VALUES (8, '其它', '暂无');
 
 -- ----------------------------
 -- Table structure for chat_records
@@ -129,7 +132,7 @@ CREATE TABLE `chat_records`  (
   INDEX `receiverID`(`receiverID` ASC) USING BTREE,
   CONSTRAINT `chat_records_ibfk_1` FOREIGN KEY (`senderID`) REFERENCES `users` (`userID`) ON DELETE RESTRICT ON UPDATE RESTRICT,
   CONSTRAINT `chat_records_ibfk_2` FOREIGN KEY (`receiverID`) REFERENCES `users` (`userID`) ON DELETE RESTRICT ON UPDATE RESTRICT
-) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of chat_records
@@ -147,7 +150,7 @@ CREATE TABLE `collection`  (
   INDEX `userID`(`userID` ASC) USING BTREE,
   CONSTRAINT `collection_ibfk_1` FOREIGN KEY (`goodsID`) REFERENCES `goods` (`goodsID`) ON DELETE RESTRICT ON UPDATE RESTRICT,
   CONSTRAINT `collection_ibfk_2` FOREIGN KEY (`userID`) REFERENCES `users` (`userID`) ON DELETE RESTRICT ON UPDATE RESTRICT
-) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of collection
@@ -158,6 +161,7 @@ INSERT INTO `collection` VALUES (7, 2, '2024-12-18 14:01:36');
 INSERT INTO `collection` VALUES (8, 1, '2024-12-13 05:52:46');
 INSERT INTO `collection` VALUES (8, 3, '2024-12-12 10:59:06');
 INSERT INTO `collection` VALUES (9, 1, '2024-12-13 05:52:48');
+INSERT INTO `collection` VALUES (25, 2, '2024-12-22 05:38:17');
 
 -- ----------------------------
 -- Table structure for comment
@@ -174,7 +178,7 @@ CREATE TABLE `comment`  (
   INDEX `commentatorID`(`commentatorID` ASC) USING BTREE,
   CONSTRAINT `comment_ibfk_1` FOREIGN KEY (`goodsID`) REFERENCES `goods` (`goodsID`) ON DELETE RESTRICT ON UPDATE RESTRICT,
   CONSTRAINT `comment_ibfk_2` FOREIGN KEY (`commentatorID`) REFERENCES `users` (`userID`) ON DELETE RESTRICT ON UPDATE RESTRICT
-) ENGINE = InnoDB AUTO_INCREMENT = 5 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 5 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of comment
@@ -210,41 +214,52 @@ CREATE TABLE `goods`  (
   CONSTRAINT `goods_ibfk_2` FOREIGN KEY (`categoryID`) REFERENCES `category` (`categoryID`) ON DELETE RESTRICT ON UPDATE RESTRICT,
   CONSTRAINT `goods_ibfk_3` FOREIGN KEY (`addrID`) REFERENCES `address` (`addrID`) ON DELETE RESTRICT ON UPDATE RESTRICT,
   CONSTRAINT `goods_chk_1` CHECK (`price` >= 0)
-) ENGINE = InnoDB AUTO_INCREMENT = 32 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 43 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of goods
 -- ----------------------------
-INSERT INTO `goods` VALUES (1, '小狗玩偶', 1, 190.00, 1, 'jellycat小狗玩偶', 0, 'https://cbu01.alicdn.com/img/ibank/O1CN01DS6DcJ1TfMxwYtIoM_!!2206564752409-0-cib.jpg,https://cbu01.alicdn.com/img/ibank/O1CN01OM3LFu23opMDQ0lF8_!!2216752467303-0-cib.310x310.jpg', '2024-12-07 23:45:42', '0', 0, 1, 15);
+INSERT INTO `goods` VALUES (1, '小狗玩偶', 1, 190.00, 1, 'jellycat小狗玩偶', 0, 'https://cbu01.alicdn.com/img/ibank/O1CN01DS6DcJ1TfMxwYtIoM_!!2206564752409-0-cib.jpg,https://cbu01.alicdn.com/img/ibank/O1CN01OM3LFu23opMDQ0lF8_!!2216752467303-0-cib.310x310.jpg', '2024-12-07 23:45:42', '0', 0, 1, 16);
 INSERT INTO `goods` VALUES (2, '拍立得mini99', 1, 1300.00, 1, '凑字数凑字数', 1, 'https://tse1-mm.cn.bing.net/th/id/OIP-C.Go6VmQ13-kKnm04jNqMIHQD6D6?rs=1&pid=ImgDetMain', '2024-12-08 15:32:55', '1', 8, 1, 3);
 INSERT INTO `goods` VALUES (3, '蛋白粉', 2, 99.00, 1, '凑字数', 0, 'https://imgservice.suning.cn/uimg1/b2c/image/gFZyU4ciCobR3PX2VAjTjQ.jpg', '2024-12-06 15:41:57', '1', 8, 1, 37);
 INSERT INTO `goods` VALUES (4, 'pingu摸鱼鹅', 1, 65.00, 1, '未拆袋', 1, 'https://cbu01.alicdn.com/img/ibank/O1CN011aNtFI1EXqJIFR22Q_!!2216426590362-0-cib.310x310.jpg', '2024-12-08 20:29:17', '2', 8, 1, 8);
-INSERT INTO `goods` VALUES (5, '充电宝', 2, 60.00, 2, '2w毫安。使用1年', 1, 'https://cbu01.alicdn.com/img/ibank/2019/194/723/10889327491_1286304817.jpg', '2024-12-08 20:30:16', '0', 8, 1, 6);
+INSERT INTO `goods` VALUES (5, '充电宝', 2, 60.00, 2, '2w毫安。使用1年', 1, 'https://cbu01.alicdn.com/img/ibank/2019/194/723/10889327491_1286304817.jpg', '2024-12-08 20:30:16', '0', 8, 1, 7);
 INSERT INTO `goods` VALUES (6, '联想小新电脑', 2, 4000.00, 2, '使用两年', 0, 'https://pic1.zhimg.com/v2-32d8111e1d00fba6d12d7095e4f4d561_r.jpg?source=1940ef5c', '2024-10-09 15:54:20', '1', 8, 1, 19);
 INSERT INTO `goods` VALUES (7, '博德之门3黑胶', 1, 400.00, 6, '全新', 0, 'https://tse1-mm.cn.bing.net/th/id/OIP-C.6oHTxnMBGqA46oG1668s3wHaEK?rs=1&pid=ImgDetMain', '2024-09-09 15:55:07', '2', 8, 1, 17);
-INSERT INTO `goods` VALUES (8, '星界棱镜', 2, 99.00, 5, '打不开，故卖出', 0, 'https://s2.loli.net/2024/12/11/7j2avqJPWRMkHUC.jpg\n', '2024-12-11 03:32:53', '1', 0, 15, 0);
-INSERT INTO `goods` VALUES (9, 'delias厚底小皮鞋女秋冬加绒真皮黑色玛丽珍增高马丁乐福鞋', 3, 100.00, 4, '哑黑色，39码，加绒款，增高5cm，走路不打脚，仅穿过一次，尺码买小了所以出。 鞋垫材质超纤皮，鞋垫材质超纤皮，鞋头圆头，重量非常轻 已自刀，不可小刀，爽快包邮', 0, 'https://s2.loli.net/2024/12/12/8ynONh71MYjkPcp.jpg,https://s2.loli.net/2024/12/12/VNHQgLnB6Uhb3cp.jpg,https://s2.loli.net/2024/12/12/bDSoBAIjr4ZUFMt.jpg', '2024-12-12 11:42:16', '1', 0, 16, 1);
-INSERT INTO `goods` VALUES (10, '树林猫猫狗狗手机壳', 3, 15.80, 1, '适用iPhone15，全包软壳，全新未使用，买多了出', 0, 'https://s2.loli.net/2024/12/14/b1LAO3eBsHVGRNC.png,https://s2.loli.net/2024/12/14/1yJHGl4k8ueB92o.png', '2024-12-14 08:12:19', '2', 4, 16, 3);
+INSERT INTO `goods` VALUES (8, '星界棱镜', 2, 99.00, 8, '打不开，故卖出', 0, 'https://s2.loli.net/2024/12/11/7j2avqJPWRMkHUC.jpg\n', '2024-12-11 03:32:53', '1', 0, 15, 1);
+INSERT INTO `goods` VALUES (9, 'delias厚底小皮鞋女秋冬加绒真皮黑色玛丽珍增高马丁乐福鞋', 3, 100.00, 4, '哑黑色，39码，加绒款，增高5cm，走路不打脚，仅穿过一次，尺码买小了所以出。 鞋垫材质超纤皮，鞋垫材质超纤皮，鞋头圆头，重量非常轻 已自刀，不可小刀，爽快包邮', 0, 'https://s2.loli.net/2024/12/12/8ynONh71MYjkPcp.jpg,https://s2.loli.net/2024/12/12/VNHQgLnB6Uhb3cp.jpg,https://s2.loli.net/2024/12/12/bDSoBAIjr4ZUFMt.jpg', '2024-12-12 11:42:16', '1', 0, 16, 2);
+INSERT INTO `goods` VALUES (10, '树林猫猫狗狗手机壳', 3, 15.80, 1, '适用iPhone15，全包软壳，全新未使用，买多了出', 0, 'https://s2.loli.net/2024/12/14/b1LAO3eBsHVGRNC.png,https://s2.loli.net/2024/12/14/1yJHGl4k8ueB92o.png', '2024-12-14 08:12:19', '2', 4, 16, 4);
 INSERT INTO `goods` VALUES (11, '麦当劳早餐券', 3, 9.90, 7, '猪柳麦满分+小杯豆浆\n拍前先咨询', 1, 'https://s2.loli.net/2024/12/14/7GpLczrDd54tJ6N.png', '2024-12-14 08:15:05', '0', 0, NULL, 4);
-INSERT INTO `goods` VALUES (12, '麦香鱼代下单', 5, 19.99, 7, '【两件套】麦香鱼+五块麦乐鸡\n一旦下单，不支持退款！请考虑清除后再购买', 0, 'https://s2.loli.net/2024/12/14/vuBgtML35iRGXnU.png,https://s2.loli.net/2024/12/14/yBt6fnLVHlbZsoU.png,https://s2.loli.net/2024/12/14/swDGBJvnNh78exT.png', '2024-12-14 08:21:32', '0', 0, NULL, 3);
-INSERT INTO `goods` VALUES (13, '麦旋风买一送一', 5, 15.00, 7, '仅限到店使用', 0, 'https://s2.loli.net/2024/12/14/Cj7tpsy2GENTg8d.png,https://s2.loli.net/2024/12/14/Xjd3kprhIm5EnVu.png', '2024-12-14 08:24:22', '0', 0, NULL, 3);
-INSERT INTO `goods` VALUES (14, '测试', 5, 4.00, 6, '测试', 0, 'https://s2.loli.net/2024/12/14/DqVs7mEAe8h3bvc.png', '2024-12-14 08:25:08', '0', 0, NULL, 1);
+INSERT INTO `goods` VALUES (12, '麦香鱼代下单', 5, 19.99, 7, '【两件套】麦香鱼+五块麦乐鸡\n一旦下单，不支持退款！请考虑清除后再购买', 0, 'https://s2.loli.net/2024/12/14/vuBgtML35iRGXnU.png,https://s2.loli.net/2024/12/14/yBt6fnLVHlbZsoU.png,https://s2.loli.net/2024/12/14/swDGBJvnNh78exT.png', '2024-12-14 08:21:32', '0', 0, NULL, 4);
+INSERT INTO `goods` VALUES (13, '麦旋风买一送一', 5, 15.00, 7, '仅限到店使用', 0, 'https://s2.loli.net/2024/12/14/Cj7tpsy2GENTg8d.png,https://s2.loli.net/2024/12/14/Xjd3kprhIm5EnVu.png', '2024-12-14 08:24:22', '0', 0, NULL, 4);
+INSERT INTO `goods` VALUES (14, '测试', 5, 4.00, 6, '测试', 1, 'https://s2.loli.net/2024/12/14/DqVs7mEAe8h3bvc.png', '2024-12-14 08:25:08', '0', 0, NULL, 2);
 INSERT INTO `goods` VALUES (16, '数据库作业答案', 6, 11.00, 3, '纸质版，测试', 1, 'https://s2.loli.net/2024/12/16/3jrl9wHGxcBIShf.png,https://s2.loli.net/2024/12/16/HZ7JdCtlYxzosKy.png,https://s2.loli.net/2024/12/16/9mrTulbjhf8NzDi.png,https://s2.loli.net/2024/12/16/mvsVxWgiBIy8nlq.png,https://s2.loli.net/2024/12/16/LvJH5GdNygm8O4V.png', '2024-12-16 09:42:21', '2', 6, 17, 5);
 INSERT INTO `goods` VALUES (17, '数据库与系统第一章答案', 6, 10.00, 3, '纸质版面交或邮寄', 0, 'https://s2.loli.net/2024/12/18/QkaXbeJCR1WscpF.png,https://s2.loli.net/2024/12/18/aVBLWDktKYfqOmo.png', '2024-12-18 14:03:36', '2', 8, 17, 4);
 INSERT INTO `goods` VALUES (18, '数据库与系统第二章答案', 6, 10.00, 3, '纸质版面交或邮寄', 0, 'https://s2.loli.net/2024/12/18/7Q1CIBbHlgsAW3z.png,https://s2.loli.net/2024/12/18/tE2SQqn7WKslAyg.png', '2024-12-18 14:04:59', '1', 0, 19, 0);
 INSERT INTO `goods` VALUES (19, '数据库与系统第三章答案', 6, 10.00, 3, '纸质版面交或邮寄', 1, 'https://s2.loli.net/2024/12/18/iG91FVmOMbvRpxo.png,https://s2.loli.net/2024/12/18/EinCce8p9PK3MvV.png', '2024-12-18 14:05:30', '2', 4, 19, 1);
 INSERT INTO `goods` VALUES (20, '数据库与系统第四章答案', 6, 12.00, 3, '纸质版面交或邮寄纸质版面交或邮寄纸质版面交或邮寄纸质版面交或邮寄纸质版面交或邮寄纸质版面交或邮寄纸质版面交或邮寄纸质版面交或邮寄纸质版面交或邮寄纸质版面交或邮寄纸质版面交或邮寄纸质版面交或邮寄纸质版面交或邮寄纸质版面交或邮寄纸质版面交或邮寄纸质版面交或邮寄纸质版面交或邮寄纸质版面交或邮寄纸质版面交或邮寄纸质版面交或邮寄纸质版面交或邮寄纸质版面交或邮寄纸质版面交或邮寄纸质版面交或邮寄纸质版面交或邮寄纸质版面交或邮寄纸质版面交或邮寄纸质版面交或邮寄纸质版面交或邮寄纸质版面交或邮寄纸质版面交或邮寄纸质版面交或邮寄纸质版面交或邮寄纸质版面交或邮寄纸质版面交或邮寄纸质版面交或邮寄纸质版面交或邮寄纸质版面', 0, 'https://s2.loli.net/2024/12/18/Txc3s7JmXOizKLa.png,https://s2.loli.net/2024/12/18/d9Yj6fvKCg8PLEa.png', '2024-12-18 14:06:20', '1', 0, 17, 0);
-INSERT INTO `goods` VALUES (21, '数据库与系统第六章答案', 6, 10.00, 3, '纸质版面交或邮寄纸质版面交或邮寄', 0, 'https://s2.loli.net/2024/12/18/sfylupiq6IUaTD1.png,https://s2.loli.net/2024/12/18/rp71xWS5q3EslBD.png', '2024-12-18 14:07:12', '1', 0, 17, 0);
-INSERT INTO `goods` VALUES (22, '软件测试第三周练习答案', 6, 9.00, 3, '电子版，发邮箱，不会可讲解', 0, 'https://s2.loli.net/2024/12/18/ASnXRfaUJrzKVHW.png,https://s2.loli.net/2024/12/18/IKHdb7W6DjJpqCV.png', '2024-12-18 14:08:09', '0', 0, NULL, 0);
+INSERT INTO `goods` VALUES (21, '数据库与系统第六章答案', 6, 10.00, 3, '纸质版面交或邮寄纸质版面交或邮寄', 0, 'https://s2.loli.net/2024/12/18/sfylupiq6IUaTD1.png,https://s2.loli.net/2024/12/18/rp71xWS5q3EslBD.png', '2024-12-18 14:07:12', '1', 0, 17, 4);
+INSERT INTO `goods` VALUES (22, '软件测试第三周练习答案', 6, 9.00, 3, '电子版，发邮箱，不会可讲解', 0, 'https://s2.loli.net/2024/12/18/ASnXRfaUJrzKVHW.png,https://s2.loli.net/2024/12/18/IKHdb7W6DjJpqCV.png', '2024-12-18 14:08:09', '0', 0, NULL, 2);
 INSERT INTO `goods` VALUES (23, '软件测试复习资料', 6, 5.00, 3, '虽然不用考试，但最好还是复习一下', 1, 'https://s2.loli.net/2024/12/18/Zo3TzHuURr8gFDA.png', '2024-12-18 14:08:48', '0', 0, NULL, 1);
 INSERT INTO `goods` VALUES (24, 'Unity射箭游戏源文件', 6, 99.00, 7, '可运行', 0, 'https://s2.loli.net/2024/12/18/2VFsv9GfAPcOmKp.png,https://s2.loli.net/2024/12/18/7KTVLwvJQD6sPqE.png', '2024-12-18 14:10:56', '0', 0, NULL, 1);
-INSERT INTO `goods` VALUES (25, '明萨拉', 6, 999999.00, 1, '不卖，没走丢，长太漂亮了给你们看一下', 0, 'https://s2.loli.net/2024/12/18/xIrKwNzhRgy1T8M.png,https://s2.loli.net/2024/12/18/MpH9JWq6ofYg87L.png', '2024-12-18 14:12:14', '2', 99999, 19, 3);
+INSERT INTO `goods` VALUES (25, '明萨拉', 6, 999999.00, 1, '不卖，没走丢，长太漂亮了给你们看一下', 0, 'https://s2.loli.net/2024/12/18/xIrKwNzhRgy1T8M.png,https://s2.loli.net/2024/12/18/MpH9JWq6ofYg87L.png', '2024-12-18 14:12:14', '2', 99999, 19, 7);
 INSERT INTO `goods` VALUES (26, '用C#编写数据库实验', 6, 20.00, 7, '内含源码', 0, 'https://s2.loli.net/2024/12/18/CJcwL4tWIzKMRs1.png', '2024-12-18 14:14:11', '0', 0, NULL, 1);
-INSERT INTO `goods` VALUES (27, 'steam平台雨世界cdk', 3, 21.00, 7, '发货后不可退款', 0, 'https://s2.loli.net/2024/12/18/PMvQB9TSLJ4Kemf.png', '2024-12-18 14:18:44', '0', 0, NULL, 1);
+INSERT INTO `goods` VALUES (27, 'steam平台雨世界cdk', 3, 21.00, 7, '发货后不可退款', 0, 'https://s2.loli.net/2024/12/18/PMvQB9TSLJ4Kemf.png', '2024-12-18 14:18:44', '0', 0, NULL, 2);
 INSERT INTO `goods` VALUES (28, 'steam平台空洞骑士cdk', 3, 23.00, 7, '发货后不可退款', 1, 'https://s2.loli.net/2024/12/18/sQG3JDucieqUIYo.png', '2024-12-18 14:19:20', '0', 0, NULL, 4);
-INSERT INTO `goods` VALUES (29, '博德之门3cdk', 3, 218.00, 7, '发货后不可退款', 0, 'https://s2.loli.net/2024/12/18/gFKbIajHrBJ3cix.png', '2024-12-18 14:20:02', '1', 0, 16, 1);
+INSERT INTO `goods` VALUES (29, '博德之门3cdk', 3, 218.00, 7, '发货后不可退款', 0, 'https://s2.loli.net/2024/12/18/gFKbIajHrBJ3cix.png', '2024-12-18 14:20:02', '1', 0, 16, 2);
 INSERT INTO `goods` VALUES (30, '星际拓荒cdk', 3, 50.00, 7, '发货后不可退款，不含dlc', 0, 'https://s2.loli.net/2024/12/18/GrzcfNyQmUwn4q7.png', '2024-12-18 14:20:53', '1', 0, 18, 2);
 INSERT INTO `goods` VALUES (31, '山羊', 3, 1.00, 7, 'Unity山羊模型，含声音、动画', 0, 'https://s2.loli.net/2024/12/18/q4QAMgY1LPa6CVW.png', '2024-12-18 14:21:29', '0', 0, NULL, 1);
+INSERT INTO `goods` VALUES (32, 'lv围巾', 1, 999.00, 4, '本来想送妈妈的，广东热得根本没有应用场景，99新，出了。', 0, 'https://s2.loli.net/2024/12/22/LqAMpi7KVOyQ9Wu.jpg', '2024-12-22 04:53:53', '1', 0, 1, 1);
+INSERT INTO `goods` VALUES (33, 'xbox手柄', 1, 99.00, 2, '没背键，换精英手柄了，95新', 0, 'https://s2.loli.net/2024/12/22/DVE8Ry2JMioTzaB.png', '2024-12-22 04:55:15', '1', 0, 1, 1);
+INSERT INTO `goods` VALUES (34, '喜德盛山地自行车黑客380', 1, 488.00, 5, '原价1k3，毕业了便宜出。\n可刀给学妹学弟，也不会给贩子割血，平时仅通勤用，骑了2年多', 0, 'https://s2.loli.net/2024/12/22/RnfZJozi3kbtWLI.jpg', '2024-12-22 04:57:22', '1', 0, 1, 1);
+INSERT INTO `goods` VALUES (35, '少女歌剧大场奈奈立牌', 2, 88.00, 6, '抹布洗😭😭\n太穷了回点血。', 0, 'https://s2.loli.net/2024/12/22/Fw8ygimrB5bIHTE.jpg', '2024-12-22 05:00:19', '1', 0, 15, 5);
+INSERT INTO `goods` VALUES (36, '红楼梦', 2, 25.00, 3, '人民文学出版社的。\n更喜欢看电子书，出了。', 0, 'https://s2.loli.net/2024/12/22/gWmEDYxKyd5oUSa.jpg', '2024-12-22 05:02:04', '1', 0, 14, 1);
+INSERT INTO `goods` VALUES (37, '迷宫组', 2, 299.00, 6, '迷宫组99', 0, 'https://s2.loli.net/2024/12/22/JoQw8Oa569NB7LP.png,https://s2.loli.net/2024/12/22/Bh4oDEAJCQf6XLv.png', '2024-12-22 12:21:22', '1', 0, 15, 1);
+INSERT INTO `goods` VALUES (38, '终将成为你台版漫画', 7, 350.00, 3, '终将成为你漫画，全新', 0, 'https://s2.loli.net/2024/12/22/cFfKzImibdnNERD.png,https://s2.loli.net/2024/12/22/Z3ovODsJIRmCNwG.png', '2024-12-22 12:24:47', '2', 10, 20, 1);
+INSERT INTO `goods` VALUES (39, '迷宫饭漫画', 7, 120.00, 3, '天闻角川', 0, 'https://s2.loli.net/2024/12/22/xdTf3BMu4VXIkSq.png', '2024-12-22 12:26:12', '1', 0, 20, 1);
+INSERT INTO `goods` VALUES (40, '迷宫组小立牌', 7, 90.00, 6, '迷宫组小立牌，切煤产物', 0, 'https://s2.loli.net/2024/12/22/Qxt3VArsN8lUoJk.png', '2024-12-22 12:27:56', '1', 0, 20, 1);
+INSERT INTO `goods` VALUES (41, 'AveMujica MyGo 若叶睦立牌', 7, 90.00, 6, 'Ave Mujica 若叶睦 1st 立牌', 0, 'https://s2.loli.net/2024/12/22/ZJVMAWrtIQP54LF.png', '2024-12-22 12:29:09', '1', 0, 20, 1);
+INSERT INTO `goods` VALUES (42, '克洛离别战记黄金国努努', 7, 125.00, 6, '少女歌剧克洛离别战记黄金国努努，状态如图，离别战记有吊牌', 0, 'https://s2.loli.net/2024/12/22/iF3zW52AsJrQd8v.png', '2024-12-22 12:30:24', '2', 8, 20, 1);
 
 -- ----------------------------
 -- Table structure for refund_complaint
@@ -260,7 +275,7 @@ CREATE TABLE `refund_complaint`  (
   PRIMARY KEY (`complaintID`) USING BTREE,
   INDEX `tradeID`(`tradeID` ASC) USING BTREE,
   CONSTRAINT `refund_complaint_ibfk_1` FOREIGN KEY (`tradeID`) REFERENCES `trade_records` (`tradeID`) ON DELETE RESTRICT ON UPDATE RESTRICT
-) ENGINE = InnoDB AUTO_INCREMENT = 7 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 7 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of refund_complaint
@@ -284,7 +299,7 @@ CREATE TABLE `refund_records`  (
   PRIMARY KEY (`refundID`) USING BTREE,
   INDEX `tradeID`(`tradeID` ASC) USING BTREE,
   CONSTRAINT `refund_records_ibfk_1` FOREIGN KEY (`tradeID`) REFERENCES `trade_records` (`tradeID`) ON DELETE RESTRICT ON UPDATE RESTRICT
-) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of refund_records
@@ -305,7 +320,7 @@ CREATE TABLE `report`  (
   INDEX `goodsID`(`goodsID` ASC) USING BTREE,
   CONSTRAINT `report_ibfk_1` FOREIGN KEY (`userID`) REFERENCES `users` (`userID`) ON DELETE RESTRICT ON UPDATE RESTRICT,
   CONSTRAINT `report_ibfk_2` FOREIGN KEY (`goodsID`) REFERENCES `goods` (`goodsID`) ON DELETE RESTRICT ON UPDATE RESTRICT
-) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of report
@@ -320,7 +335,7 @@ CREATE TABLE `school`  (
   `schoolName` varchar(80) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
   `mailSuffix` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
   PRIMARY KEY (`schoolID`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 3 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 3 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of school
@@ -362,7 +377,7 @@ CREATE TABLE `trade_records`  (
   CONSTRAINT `trade_records_ibfk_5` FOREIGN KEY (`deliveryAddrID`) REFERENCES `address` (`addrID`) ON DELETE RESTRICT ON UPDATE RESTRICT,
   CONSTRAINT `trade_records_chk_1` CHECK (`turnoverAmount` >= 0),
   CONSTRAINT `trade_records_chk_2` CHECK (`shippingCost` >= 0)
-) ENGINE = InnoDB AUTO_INCREMENT = 33 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 36 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of trade_records
@@ -379,6 +394,9 @@ INSERT INTO `trade_records` VALUES (29, 3, 2, 11, 9.90, NULL, NULL, '2024-12-18 
 INSERT INTO `trade_records` VALUES (30, 3, 1, 28, 23.00, NULL, NULL, '2024-12-19 04:49:59', '2024-12-19 04:50:57', NULL, 0.00, NULL, 0, '', 0, '未发货');
 INSERT INTO `trade_records` VALUES (31, 6, 1, 23, 5.00, NULL, NULL, '2024-12-19 05:23:29', '2024-12-19 05:24:48', '2024-12-19 07:20:24', 0.00, '2024-12-20 01:06:24', 0, '', 0, '交易完成');
 INSERT INTO `trade_records` VALUES (32, 6, 1, 19, 10.00, 19, 8, '2024-12-19 07:12:15', '2024-12-19 07:13:19', NULL, 4.00, '2024-12-19 07:20:34', 2, '', 0, '已取消');
+INSERT INTO `trade_records` VALUES (33, 6, 2, 21, 10.00, 17, 14, '2024-12-22 05:06:19', NULL, NULL, 0.00, '2024-12-22 05:11:19', 1, '', 0, '已取消');
+INSERT INTO `trade_records` VALUES (34, 6, 2, 21, 10.00, 17, 14, '2024-12-22 05:11:59', NULL, NULL, 0.00, '2024-12-22 05:16:59', 1, '', 0, '已取消');
+INSERT INTO `trade_records` VALUES (35, 5, 2, 14, 4.00, NULL, NULL, '2024-12-22 05:12:25', '2024-12-22 05:12:54', NULL, 0.00, NULL, 0, '', 0, '未发货');
 
 -- ----------------------------
 -- Table structure for users
@@ -397,16 +415,17 @@ CREATE TABLE `users`  (
   PRIMARY KEY (`userID`) USING BTREE,
   UNIQUE INDEX `userName`(`userName` ASC) USING BTREE,
   UNIQUE INDEX `mail`(`mail` ASC) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 7 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 8 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of users
 -- ----------------------------
 INSERT INTO `users` VALUES (1, '北风', '1jdzWuniG6UMtoa3T6uNLA==', 1, 'https://cdn2.thecatapi.com/images/MjA4MTM0OA.jpg', '18620715714', 'bf1@mail2.sysu.edu.cn', 0, 0);
-INSERT INTO `users` VALUES (2, 'whiteby', '1jdzWuniG6UMtoa3T6uNLA==', 1, 'https://images.dog.ceo/breeds/papillon/n02086910_5023.jpg', '17777777777', 'whi@mail2.sysu.edu.cn', 0, 0);
+INSERT INTO `users` VALUES (2, 'whiteby', '1jdzWuniG6UMtoa3T6uNLA==', 1, 'https://images.dog.ceo/breeds/papillon/n02086910_5023.jpg', '17777777777', 'whiteby@mail2.sysu.edu.cn', 0, 0);
 INSERT INTO `users` VALUES (3, '塔夫', '1jdzWuniG6UMtoa3T6uNLA==', 1, 'https://images.dog.ceo/breeds/spitz-indian/Indian_Spitz.jpg', '11111111111', 'tav@mail2.sysu.edu.cn', 0, 0);
 INSERT INTO `users` VALUES (4, 'boreascup', '1jdzWuniG6UMtoa3T6uNLA==', 1, 'https://s2.loli.net/2024/12/09/1kM2XWOR8uDHqsL.jpg', '18620715784', 'zengrx6@mail2.sysu.edu.cn', 0, 0);
 INSERT INTO `users` VALUES (5, '麦麦', '1jdzWuniG6UMtoa3T6uNLA==', 1, 'https://s2.loli.net/2024/12/14/zEB5r6GwXCWxaeM.png', '12345678900', 'mcd@mail2.sysu.edu.cn', 1, 0);
 INSERT INTO `users` VALUES (6, '小猿搜题', '1jdzWuniG6UMtoa3T6uNLA==', 1, 'https://s2.loli.net/2024/12/18/F9ICLVRUz5NPGoc.png', '12345678900', 'test@mail2.sysu.edu.cn', 0, 0);
+INSERT INTO `users` VALUES (7, 'whi', '1jdzWuniG6UMtoa3T6uNLA==', 1, 'https://s2.loli.net/2024/12/22/j79YTpSrU1ZWmeJ.jpg', '12345678990', 'whi@mail2.sysu.edu.cn', 0, 0);
 
 SET FOREIGN_KEY_CHECKS = 1;

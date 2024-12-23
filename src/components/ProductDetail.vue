@@ -273,7 +273,9 @@ const confirmDeleteProduct = async (id) => {
   border-radius: 8px;
   padding: 10px;
   margin-left: 50px;
-  object-fit: cover;
+  // object-fit: cover;
+  // 保持图片比例，不拉伸
+  object-fit: contain;
 }
 
 .product-price {

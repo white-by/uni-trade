@@ -147,8 +147,8 @@ async function onFileChange(event) {
       } else {
         console.error('头像上传失败:', result.message)
       }
-    } catch {
-      // console.error('头像上传出错:', error)
+    } catch (error) {
+      console.error('头像上传出错:', error)
     }
   }
 }

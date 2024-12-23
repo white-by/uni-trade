@@ -93,8 +93,26 @@ const checkNewAnnouncement = () => {
   hasNewAnnouncement.value = storedStatus === 'true'
 }
 
+// 从本地存储加载公告并排序
+const loadAnnouncements = () => {
+  const storedAnnouncements = localStorage.getItem('announcements')
+
+  // 如果本地没有存储公告数据，则初始化为一个空数组
+  if (!storedAnnouncements) {
+    announcements.value = []
+    localStorage.setItem('announcements', JSON.stringify(announcements.value)) // 初始化本地存储
+  } else {
+    // 从本地存储中加载公告并进行排序
+    announcements.value = JSON.parse(storedAnnouncements)
+
+    // 对存储的公告按时间倒序排序
+    announcements.value.sort((a, b) => new Date(b.date) - new Date(a.date))
+  }
+}
+
 onMounted(() => {
   checkNewAnnouncement() // 页面加载时恢复公告和红点状态
+  loadAnnouncements() // 加载本地存储的公告
 
   // 连接到 SSE 服务端
   eventSource = new EventSource('http://127.0.0.1:5001/announcements/sse')
@@ -104,20 +122,31 @@ onMounted(() => {
     try {
       // 提取 data 部分
       const rawData = event.data.trim().slice(1) // 去掉前面的 'data: ' 部分
-
-      // 按空格拆分字符串
       const parts = rawData.split(' ')
 
-      if (parts.length >= 4) {
-        // 提取公告数据
-        const dateParts = parts.slice(3).join(' ')
-        const date = dateParts.split(' ')[0] // 获取日期部分
+      if (parts.length > 4) {
+        // 提取日期时间部分，注意时区信息（+0000 UTC）会去除
+        const dateParts = parts.slice(3, 6).join(' ') // 获取 '2024-12-23 13:40:15'
+
+        // 格式化日期和时间
+        const [date, time] = dateParts.split(' ') // 拆分成日期和时间部分
+
+        // 合并日期和时间部分，创建一个 Date 对象
+        const dateTimeStr = `${date}T${time}Z` // 将字符串转化为 ISO 8601 格式的时间
+        const dateObj = new Date(dateTimeStr) // 转化为 Date 对象
+
+        // 加上 8 小时
+        // dateObj.setHours(dateObj.getHours() + 8); // 增加 8 小时
+
+        // 格式化日期和时间
+        const adjustedDate = dateObj.toLocaleDateString() // 获取 YYYY-MM-DD 格式的日期
+        const adjustedTime = dateObj.toLocaleTimeString() // 获取 HH:MM:SS 格式的时间
 
         const newAnnouncement = {
           id: parts[0], // 公告 ID
           title: parts[1], // 公告标题
           content: parts[2], // 公告内容
-          date: date // 公告日期
+          date: `${adjustedDate} ${adjustedTime}` // 完整的日期和时间
         }
 
         // 检查公告 ID 是否已经存在
@@ -125,7 +154,18 @@ onMounted(() => {
         const isNew = !existingAnnouncements.some((item) => item.id === newAnnouncement.id)
 
         if (isNew) {
-          announcements.value.push(newAnnouncement) // 如果是新公告，添加到公告列表的前面
+          // 将新公告添加到最前面
+          announcements.value.unshift(newAnnouncement) // 如果是新公告，添加到公告列表的前面
+
+          // 保证公告列表最多只有 3 条
+          if (announcements.value.length > 3) {
+            announcements.value = announcements.value.slice(0, 3) // 保留前 3 条公告
+          }
+
+          // 排序公告列表，确保顺序倒序
+          announcements.value.sort((a, b) => new Date(b.date) - new Date(a.date)) // 按时间倒序排序
+
+          // 更新本地存储
           localStorage.setItem('announcements', JSON.stringify(announcements.value)) // 更新本地存储
 
           // 设置红点显示

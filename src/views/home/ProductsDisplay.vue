@@ -124,15 +124,22 @@ watch(
   >
     <el-row :gutter="20" class="product-row">
       <el-col :span="4" v-for="product in productsList" :key="product.id">
-        <el-card shadow="hover" class="product-card">
-          <RouterLink :to="`/detail/${product.id}`">
+        <div class="product-card">
+          <RouterLink :to="`/detail/${product.id}`" class="product-link">
             <img :src="getFirstImageURL(product.picture)" class="product-image" />
             <div class="product-info">
               <h3 class="product-title" :title="product.name">{{ product.name }}</h3>
               <p class="product-price">￥{{ product.price }}</p>
+              <div class="seller-info">
+                <div class="seller-left">
+                  <img src="https://cdn2.thecatapi.com/images/MjA4MTM0OA.jpg" alt="卖家头像" class="seller-avatar" />
+                  <span class="seller-name">卖家名字</span>
+                </div>
+                <img src="/src/assets/images/包邮.png" alt="包邮" class="free-shipping-icon" />
+              </div>
             </div>
           </RouterLink>
-        </el-card>
+        </div>
       </el-col>
     </el-row>
     <el-backtop :right="50" :bottom="80" :target="'.product-container'" />
@@ -148,6 +155,7 @@ watch(
 .product-container {
   padding-left: 60px;
   padding-right: 60px;
+  padding-top: 20px;
   /* height: 820px; */
   /* height: 100%; */
   overflow-y: auto;
@@ -156,35 +164,75 @@ watch(
 }
 
 .product-card {
-  text-align: center;
-  padding: 10px;
-  margin-top: 20px;
-  margin-bottom: 20px;
-  margin-left: 10px;
-  margin-right: 10px;
+  margin: 20px;
+  border: 1px solid #e0e0e0; /* 添加边框 */
+  background-color: white;
+  border-radius: 8px; /* 圆角 */
+  overflow: hidden; /* 防止内容溢出边框 */
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1); /* 阴影效果 */
+  transition: transform 0.3s, box-shadow 0.3s; /* 悬停时的动画效果 */
+}
+
+.product-card:hover {
+  transform: translateY(-5px); /* 悬停时轻微上移 */
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2); /* 增加阴影 */
 }
 
 .product-image {
   width: 100%;
-  height: 150px;
+  height: 200px;
   object-fit: cover;
+  display: block;
 }
 
 .product-info {
-  margin-top: 10px;
+  padding: 12px;
 }
 
 .product-title {
-  font-size: 16px;
+  font-size: 18px;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  margin: 5px 0;
+  margin: 0 0 8px;
 }
 
 .product-price {
   font-size: 18px;
   color: #f56c6c;
+}
+
+.seller-info {
+  display: flex;
+  justify-content: space-between; /* 左右对齐 */
+  align-items: center; /* 垂直居中 */
+  margin-top: 8px; /* 与价格的间距 */
+}
+
+.seller-left {
+  display: flex;
+  align-items: center; /* 垂直居中 */
+}
+
+.seller-avatar {
+  width: 24px; /* 头像大小 */
+  height: 24px;
+  border-radius: 50%; /* 圆形头像 */
+  margin-right: 8px; /* 头像和卖家姓名之间的间距 */
+}
+
+.seller-name {
+  font-size: 14px; /* 卖家姓名字体大小 */
+  color: #606266; /* 默认颜色 */
+  max-width: 80px; /* 限制姓名长度 */
+  white-space: nowrap; /* 单行显示 */
+  overflow: hidden; /* 超出隐藏 */
+  text-overflow: ellipsis; /* 超出显示省略号 */
+}
+
+.free-shipping-icon {
+  width: 40px; /* 包邮图片宽度 */
+  height: auto; /* 保持比例 */
 }
 
 .no-product-container {

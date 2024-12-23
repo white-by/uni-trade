@@ -4,7 +4,7 @@
     <el-button type="primary" @click="openDialog" round size="large">{{ label }}</el-button>
 
     <!-- 弹出表单对话框 -->
-    <el-dialog title="发布闲置" v-model="dialogVisible" width="50%" align-center center @close="resetForm">
+    <el-dialog title="编辑物品" v-model="dialogVisible" width="50%" align-center center @close="resetForm">
       <el-form ref="formRef" :model="form" :rules="rules" label-width="120px" class="custom-form">
         <!-- 物品标题 -->
         <el-form-item label="物品标题" prop="title">
@@ -319,6 +319,7 @@ const addrRules = {
   tel: [{ required: true, message: '请输入联系电话', trigger: 'blur' }]
 }
 
+// 新增地址表单引用
 const addAddressFormRef = ref(null)
 // 提交表单
 const submitAddressForm = () => {
@@ -461,27 +462,41 @@ function openDialog() {
 
 // 提交表单并触发更新事件
 const submitForm = async () => {
-  const data = {
-    id: form.id,
-    title: form.title,
-    price: form.price,
-    category: form.category,
-    description: form.description,
-    imageUrl: form.imageUrl,
-    shippingCost: form.shippingCost,
-    userName: form.userName,
-    addrID: form.addrID,
-    deliveryMethod: form.deliveryMethod
-  }
+  // 触发表单验证
+  formRef.value.validate(async (valid) => {
+    if (!valid) {
+      console.log('表单验证失败')
+      return // 验证失败，阻止继续执行
+    }
 
-  // console.log('更改后的数据：', data)
+    const data = {
+      id: form.id,
+      title: form.title,
+      price: form.price,
+      category: form.category,
+      description: form.description,
+      imageUrl: form.imageUrl,
+      shippingCost: form.shippingCost,
+      userName: form.userName,
+      addrID: form.addrID,
+      deliveryMethod: form.deliveryMethod
+    }
 
-  const res = await editPublishedProductsAPI(data)
-  if (res.data.code === 1) {
-    ElMessage.success('编辑成功')
-    emit('update:item', form) // 将更新的数据传递给父组件
-    closeDialog() // 关闭对话框
-  } else ElMessage.error('编辑失败')
+    // 执行提交逻辑
+    try {
+      const res = await editPublishedProductsAPI(data)
+      if (res.data.code === 1) {
+        ElMessage.success('编辑成功')
+        emit('update:item', form)
+        closeDialog() // 关闭对话框
+      } else {
+        ElMessage.error('编辑失败')
+      }
+    } catch (error) {
+      console.error('请求失败', error)
+      ElMessage.error('请求失败')
+    }
+  })
 }
 
 // 关闭对话框
@@ -495,6 +510,7 @@ function resetForm() {
   imageList.value = originalData.imageUrl ? originalData.imageUrl.split(',').map((url) => ({ url })) : []
 }
 
+// 运费输入框是否禁用
 const isShippingDisabled = ref(form.deliveryMethod == '邮寄' ? false : true)
 // 监听配送方式变化，禁用运费输入框
 watch(
@@ -509,6 +525,8 @@ watch(
   }
 )
 
+// 表单引用
+const formRef = ref(null)
 // 表单验证规则
 const rules = {
   title: [{ required: true, message: '请输入物品标题', trigger: 'blur' }],
@@ -531,6 +549,23 @@ const rules = {
         }
       },
       trigger: 'blur'
+    }
+  ],
+  imageUrl: [
+    {
+      required: true,
+      message: '请上传图片或等待上传完成',
+      trigger: 'blur'
+    },
+    {
+      validator: (rule, value, callback) => {
+        if (!value || value === '') {
+          callback(new Error('请上传图片或等待上传完成'))
+        } else {
+          callback() // 校验通过
+        }
+      },
+      trigger: 'blur' // 使用 blur 触发自定义验证
     }
   ]
 }

@@ -135,7 +135,7 @@ watch(
         </el-card>
       </el-col>
     </el-row>
-    <el-backtop :right="50" :bottom="50" :target="'.product-container'" />
+    <el-backtop :right="50" :bottom="80" :target="'.product-container'" />
   </div>
 
   <!-- 没有商品时显示 -->
@@ -148,9 +148,11 @@ watch(
 .product-container {
   padding-left: 60px;
   padding-right: 60px;
-  height: 700px;
+  /* height: 820px; */
+  /* height: 100%; */
   overflow-y: auto;
   min-height: 600px;
+  height: calc(100vh - 125px);
 }
 
 .product-card {

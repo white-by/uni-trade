@@ -2,7 +2,7 @@
   <div style="display: flex; gap: 30px; padding: 50px">
     <!-- 左侧商品展示卡片 -->
     <div style="width: 50%">
-      <el-carousel :interval="5000" height="550px" indicator-position="outside">
+      <el-carousel :interval="5000" height="600px" indicator-position="outside">
         <el-carousel-item v-for="(image, index) in imageList" :key="index">
           <img class="product-image" :src="image" alt="商品图片" />
         </el-carousel-item>
@@ -269,13 +269,13 @@ const confirmDeleteProduct = async (id) => {
 
 .product-image {
   width: 700px;
-  height: 700px;
+  height: 600px;
   border-radius: 8px;
   padding: 10px;
-  margin-left: 50px;
-  // object-fit: cover;
+  margin-left: 80px;
+  object-fit: cover;
   // 保持图片比例，不拉伸
-  object-fit: contain;
+  //object-fit: contain;
 }
 
 .product-price {

@@ -37,7 +37,7 @@
             :on-remove="handleRemove"
             :on-success="onUploadSuccess"
           >
-            <div class="el-upload__text"><em>上传图片</em></div>
+            <el-icon><Plus /></el-icon>
             <template #tip>
               <div class="el-upload__tip">请上传大小不超过 2MB 的 JPG / PNG 格式图片，最多 5 张</div>
             </template>
@@ -202,6 +202,7 @@ import { postProductAPI } from '@/api/products'
 import { getAddressListAPI, addAddressAPI, setDefaultAddressAPI } from '@/api/address'
 import { ElMessage } from 'element-plus'
 import { useRouter } from 'vue-router'
+import { Plus } from '@element-plus/icons-vue'
 
 onMounted(() => {
   getAddressList()

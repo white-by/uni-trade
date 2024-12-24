@@ -5,7 +5,7 @@
       <div class="container">
         <dl>
           <dt>客户服务</dt>
-          <dd><i class="iconfont icon-kefu1"></i> 人机客服</dd>
+          <dd><i class="iconfont icon-kefu1"></i> 智能客服</dd>
           <dd><i class="iconfont icon-kefu2"></i> 在线客服</dd>
         </dl>
         <dl>

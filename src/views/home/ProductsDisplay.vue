@@ -132,10 +132,14 @@ watch(
               <p class="product-price">￥{{ product.price }}</p>
               <div class="seller-info">
                 <div class="seller-left">
-                  <img src="https://cdn2.thecatapi.com/images/MjA4MTM0OA.jpg" alt="卖家头像" class="seller-avatar" />
-                  <span class="seller-name">卖家名字</span>
+                  <img :src="product.sellerPic" alt="卖家头像" class="seller-avatar" />
+                  <span class="seller-name">{{ product.sellerName }}</span>
                 </div>
-                <img src="/src/assets/images/包邮.png" alt="包邮" class="free-shipping-icon" />
+                <div class="seller-right">
+                  <p v-if="product.deliveryMethod === 0">无需快递</p>
+                  <p v-else-if="product.deliveryMethod === 1">自提</p>
+                  <p v-else>邮寄</p>
+                </div>
               </div>
             </div>
           </RouterLink>
@@ -194,24 +198,29 @@ watch(
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  margin: 0 0 8px;
+  margin: 0 0 5px;
 }
 
 .product-price {
-  font-size: 18px;
+  font-size: 22px;
   color: #f56c6c;
+  font-weight: 700;
 }
 
 .seller-info {
   display: flex;
   justify-content: space-between; /* 左右对齐 */
   align-items: center; /* 垂直居中 */
-  margin-top: 8px; /* 与价格的间距 */
+  margin-top: 13px; /* 与价格的间距 */
 }
 
 .seller-left {
   display: flex;
   align-items: center; /* 垂直居中 */
+}
+
+.seller-right {
+  color: #888a8e;
 }
 
 .seller-avatar {

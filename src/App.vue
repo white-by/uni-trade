@@ -1,9 +1,16 @@
 <script setup name="App">
 import { RouterView } from 'vue-router'
+import { ElConfigProvider } from 'element-plus'
+import zhCn from 'element-plus/es/locale/lang/zh-cn'
+
+// 定义 locale 数据
+const locale = zhCn
 </script>
 
 <template>
-  <RouterView></RouterView>
+  <el-config-provider :locale="locale">
+    <RouterView></RouterView>
+  </el-config-provider>
 </template>
 
 <style scoped lang="scss">

@@ -83,7 +83,20 @@ onMounted(() => {
       <el-table-column prop="price" label="价格" align="center"></el-table-column>
       <el-table-column prop="category" label="分类" align="center"></el-table-column>
       <el-table-column prop="userName" label="发布者" align="center"></el-table-column>
-      <el-table-column prop="description" label="物品描述" align="center"></el-table-column>
+
+      <!-- 查看详情 -->
+      <el-table-column label="更多" align="center">
+        <template #default="scope">
+          <el-popover effect="light" trigger="hover" placement="top" width="auto">
+            <template #default>
+              <div>{{ scope.row.description }}</div>
+            </template>
+            <template #reference>
+              <el-button link type="primary" size="small"> 查看详情 </el-button>
+            </template>
+          </el-popover>
+        </template>
+      </el-table-column>
 
       <el-table-column label="图片" align="center">
         <template #default="{ row }">

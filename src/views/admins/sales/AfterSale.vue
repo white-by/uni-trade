@@ -63,7 +63,7 @@ const handleAction = (row, action) => {
       <div style="display: flex; justify-content: flex-end">
         <el-input
           v-model="queryForm.searchQuery"
-          placeholder="请输入订单ID进行搜索"
+          placeholder="请输入订单号进行搜索"
           @keyup.enter="getRefundList"
           style="width: 250px"
         >

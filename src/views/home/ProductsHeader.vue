@@ -1,27 +1,6 @@
-<script setup>
-import PostProduct from '@/components/PostProduct.vue'
-import SelectProduct from '@/components/SelectProduct.vue'
-import { useCategoryStore } from '@/store/sortCategory'
-import { onMounted, ref } from 'vue'
-
-const categoryStore = useCategoryStore()
-const selectedCategoryID = ref(categoryStore.categoryID)
-
-// 点击分类
-const handleCategoryClick = (categoryID) => {
-  categoryStore.setCategoryID(categoryID)
-  // console.log('点击了分类：', categoryID)
-  selectedCategoryID.value = categoryID
-}
-
-onMounted(() => {
-  console.log('selectedCategoryID:', selectedCategoryID.value)
-})
-</script>
-
 <template>
   <header class="app-header">
-    <div class="container">
+    <div class="category-container">
       <ul class="app-header-nav">
         <el-button
           type="primary"
@@ -44,45 +23,69 @@ onMounted(() => {
           {{ category.categoryName }}
         </el-button>
       </ul>
-      <div class="function-button-container">
-        <SelectProduct />
-        <PostProduct />
-      </div>
+    </div>
+    <div class="function-button-container">
+      <SelectProduct />
+      <PostProduct />
     </div>
   </header>
 </template>
 
+<script setup>
+import PostProduct from '@/components/PostProduct.vue'
+import SelectProduct from '@/components/SelectProduct.vue'
+import { useCategoryStore } from '@/store/sortCategory'
+import { ref, onMounted } from 'vue'
+
+const categoryStore = useCategoryStore()
+const selectedCategoryID = ref(categoryStore.categoryID)
+
+// 点击分类
+const handleCategoryClick = (categoryID) => {
+  categoryStore.setCategoryID(categoryID)
+  selectedCategoryID.value = categoryID
+}
+
+onMounted(() => {
+  console.log('selectedCategoryID:', selectedCategoryID.value)
+})
+</script>
+
 <style scoped lang="scss">
 .app-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
   background: rgba(255, 255, 255, 0.8);
-  padding-top: 10px; /* 调整整个按钮组与上边界的距离 */
-  height: 60px;
+  padding: 10px 20px;
+  position: relative; /* 确保相对定位 */
+}
 
-  .container {
-    display: flex;
-    align-items: center;
-    justify-content: space-between; /* 左右两侧内容分别对齐 */
-    width: 100%; /* 容器宽度占满 */
-    padding: 0 50px; /* 增加一些内边距，避免内容紧贴两侧 */
-  }
+.category-container {
+  flex: 1; /* 左侧占据剩余空间 */
+  overflow-x: auto; /* 横向滚动 */
+  white-space: nowrap; /* 防止按钮换行 */
+}
 
-  .app-header-nav {
-    display: flex;
-    align-items: center; /* 垂直居中对齐 */
-    gap: 20px; /* 按钮之间的间距 */
-    border-radius: 10px;
-  }
+.app-header-nav {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
 
-  .app-header-nav .el-button.active {
-    background-color: $comColor; /* 选中时的背景颜色 */
-    color: white; /* 选中时的文字颜色 */
-    border-color: $comColor;
-  }
+.app-header-nav .el-button.active {
+  background-color: $comColor;
+  color: white;
+  border-color: $comColor;
+}
 
-  .function-button-container {
-    margin-left: auto;
-    display: flex;
-    gap: 10px;
-  }
+.function-button-container {
+  position: sticky; /* 固定在页面右侧 */
+  margin-left: 40px;
+  margin-right: 10px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  z-index: 10; /* 确保位于滚动分类按钮之上 */
 }
 </style>

@@ -2,7 +2,7 @@ import { createRouter, createWebHistory } from 'vue-router'
 import LoginAdmin from '@/views/login/LoginAdmin.vue'
 import LayoutPage from '@/views/home/ProductsPage.vue'
 import LoginUser from '@/views/login/LoginUser.vue'
-import TestPage from '@/views/test/TestPage.vue'
+// import TestPage from '@/views/test/TestPage.vue'
 import PersonalPage from '@/views/users/infomation/PersonalPage.vue'
 import RegisterUser from '@/views/login/RegisterUser.vue'
 import Detail from '@/views/detail/DetailPage.vue'
@@ -28,6 +28,7 @@ import ProductsInfo from '@/views/admins/sales/ProductsInfo.vue'
 import PayPage from '@/views/buy/PayPage.vue'
 import CheckOut from '@/views/buy/CheckOut.vue'
 import PayBack from '@/views/buy/PayBack.vue'
+import NotFoundPage from '@/views/error/NotFoundPage.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -71,10 +72,10 @@ const router = createRouter({
       path: '/detail/:id',
       component: Detail
     },
-    {
-      path: '/test',
-      component: TestPage
-    },
+    // {
+    //   path: '/test',
+    //   component: TestPage
+    // },
     {
       path: '/user',
       component: PersonalPage
@@ -111,7 +112,7 @@ const router = createRouter({
       path: '/checkout',
       component: CheckOut
     },
-    // admin
+    // 管理员系统路由
     {
       path: '/admin',
       component: AdminManagement,
@@ -154,6 +155,12 @@ const router = createRouter({
           component: AdminProfiles
         }
       ]
+    },
+    // 添加 catch-all 路由，处理未匹配的路由
+    {
+      path: '/:pathMatch(.*)*', // 捕获所有未匹配的路由
+      name: '404',
+      component: NotFoundPage
     }
   ]
 })

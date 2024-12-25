@@ -62,7 +62,7 @@ onMounted(() => {
         </p>
         <div class="btn">
           <!-- <el-button type="primary" style="margin-right: 20px">查看订单</el-button> -->
-          <el-button type="primary" @click="toHome">进入首页</el-button>
+          <el-button type="primary" @click="toHome" size="large">进入首页</el-button>
         </div>
         <p class="alert">
           <span class="iconfont icon-tip"></span>

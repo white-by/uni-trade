@@ -11,7 +11,7 @@
  Target Server Version : 80039
  File Encoding         : 65001
 
- Date: 25/12/2024 11:29:08
+ Date: 25/12/2024 19:35:14
 */
 
 SET NAMES utf8mb4;
@@ -54,6 +54,7 @@ INSERT INTO `address` VALUES (22, 9, '北京市', '市辖区', '东城区', 'c20
 INSERT INTO `address` VALUES (23, 4, '广东省', '广州市', '海珠区', '中山大学南校园', '15372847263', '想冬眠', 1);
 INSERT INTO `address` VALUES (24, 4, '广东省', '珠海市', '香洲区', '中山大学珠海校区蝾螈6号架空层', '3333333333', '果子狸', 0);
 INSERT INTO `address` VALUES (25, 4, '广东省', '广州市', '白云区', '岭南新世界', '17284728392', '悦悦', 0);
+INSERT INTO `address` VALUES (26, 11, '广东省', '广州市', '番禺区', '小谷围街道中山大学东校区', '18258513031', '陈', 1);
 
 -- ----------------------------
 -- Table structure for admins
@@ -168,6 +169,7 @@ INSERT INTO `collection` VALUES (8, 3, '2024-12-12 10:59:06');
 INSERT INTO `collection` VALUES (9, 1, '2024-12-13 05:52:48');
 INSERT INTO `collection` VALUES (25, 2, '2024-12-22 05:38:17');
 INSERT INTO `collection` VALUES (40, 4, '2024-12-23 07:14:22');
+INSERT INTO `collection` VALUES (71, 4, '2024-12-25 04:52:53');
 
 -- ----------------------------
 -- Table structure for comment
@@ -279,16 +281,18 @@ INSERT INTO `goods` VALUES (56, '外来入侵物种', 4, 1.00, 8, '睡了一觉�
 INSERT INTO `goods` VALUES (57, '白色海豹', 4, 999999.00, 5, '出厂11年，比较旧', 0, 'https://s2.loli.net/2024/12/22/gobvNTRD1Hh2yZL.jpg,https://s2.loli.net/2024/12/22/IuEp3YrWtAcRj4q.jpg,https://s2.loli.net/2024/12/22/lJk7Uf9rbBHLgFA.jpg,https://s2.loli.net/2024/12/22/KePtnhHZbwUqjVB.jpg', '2024-12-22 15:15:18', '2', 99999, 23, 14);
 INSERT INTO `goods` VALUES (58, '只此青绿冰箱贴', 1, 49.00, 6, '除了展孟款都可出，49r/1，可邮寄，可大湾区剧院面交。原袋被我扔了。可送物料/纪念票', 0, 'https://s2.loli.net/2024/12/22/gPlJ6sfITDn3Sv5.jpg,https://s2.loli.net/2024/12/22/jDHw2AJbPBQa5lW.jpg', '2024-12-22 15:23:45', '2', 8, 1, 5);
 INSERT INTO `goods` VALUES (59, '可爱水杯', 1, 10.00, 1, '全新未使用', 0, 'https://s2.loli.net/2024/12/25/nh35sFO7DfvwHBz.jpg', '2024-12-25 02:42:31', '2', 4, 3, 2);
-INSERT INTO `goods` VALUES (60, '三分之一杯manner淡黄油拿铁', 2, 33.00, 8, '喝了提神醒脑，三点都睡不着', 0, 'https://s2.loli.net/2024/12/25/VoKxWtBJ1Z3j6e7.jpg', '2024-12-25 02:57:06', '1', 0, 1, 3);
+INSERT INTO `goods` VALUES (60, '三分之一杯manner淡黄油拿铁', 10, 33.00, 8, '喝了提神醒脑，三点都睡不着', 0, 'https://s2.loli.net/2024/12/25/VoKxWtBJ1Z3j6e7.jpg', '2024-12-25 02:57:06', '1', 0, 1, 4);
 INSERT INTO `goods` VALUES (61, '惠普电脑', 9, 3000.00, 2, '老年态惠普电脑一台，摸鱼专用，工作不好用', 0, 'https://s2.loli.net/2024/12/25/RgBzwDJMCYdHTXW.jpg', '2024-12-25 02:59:52', '1', 0, 1, 3);
 INSERT INTO `goods` VALUES (62, '华为移动WiFi', 3, 0.01, 2, '搬家出闲置，买回来不到2个月', 0, 'https://s2.loli.net/2024/12/25/mEtBWagwLXZhOuV.jpg', '2024-12-25 03:02:13', '2', 0, 1, 1);
-INSERT INTO `goods` VALUES (63, '歌剧魅影唐璜金属章', 4, 21.00, 6, '溢价出，介意勿扰\n或者主页选捆达100可出', 0, 'https://s2.loli.net/2024/12/25/W8IAbGDoEOMkXxR.jpg', '2024-12-25 03:10:43', '2', 4, 1, 3);
-INSERT INTO `goods` VALUES (64, '超大魅影熊一只', 4, 55.00, 6, '超大魅影熊一只，需自提，运费自理', 0, 'https://s2.loli.net/2024/12/25/5F7SPvhT6tYqm8y.jpg', '2024-12-25 03:12:09', '1', 0, 1, 1);
-INSERT INTO `goods` VALUES (65, '黑藜麦猫条', 1, 52.00, 8, '黑藜麦猫条一根，需自主捕捉', 0, 'https://s2.loli.net/2024/12/25/hOINTxt9kaUZCBV.jpg', '2024-12-25 03:14:43', '1', 0, 1, 2);
-INSERT INTO `goods` VALUES (66, '沉睡中的瓷娃娃', 5, 45.00, 8, '需要国家美术馆自提，价格面议', 0, 'https://s2.loli.net/2024/12/25/Kh47sAHDvP3tiLM.jpg', '2024-12-25 03:17:31', '1', 0, 1, 2);
-INSERT INTO `goods` VALUES (67, '面纱', 5, 19.00, 3, '书，自提，邮寄不包邮', 0, 'https://s2.loli.net/2024/12/25/yHO1jQkMTV5usaq.jpg', '2024-12-25 03:19:38', '1', 0, 1, 1);
-INSERT INTO `goods` VALUES (68, '星黛露', 6, 32.00, 6, '无家可归惨遭嫌弃星黛露一只，盼收留', 0, 'https://s2.loli.net/2024/12/25/plxUWLPqvXQZ8I9.jpg', '2024-12-25 03:20:42', '2', 9, 1, 1);
-INSERT INTO `goods` VALUES (69, '修狗一只', 6, 60.00, 8, '可爱修狗一只，微跛，时年9岁，欢迎您给他养老', 0, 'https://s2.loli.net/2024/12/25/nthdyZ742QLBGgq.jpg', '2024-12-25 03:24:25', '1', 0, 1, 1);
+INSERT INTO `goods` VALUES (63, '歌剧魅影唐璜金属章', 10, 61.00, 6, '溢价出，介意勿扰\n或者主页选捆达100可出', 0, 'https://s2.loli.net/2024/12/25/W8IAbGDoEOMkXxR.jpg', '2024-12-25 03:10:43', '2', 4, 1, 3);
+INSERT INTO `goods` VALUES (64, '超大魅影熊一只', 10, 230.00, 6, '超大魅影熊一只，需自提，运费自理', 0, 'https://s2.loli.net/2024/12/25/5F7SPvhT6tYqm8y.jpg', '2024-12-25 03:12:09', '1', 0, 1, 2);
+INSERT INTO `goods` VALUES (65, '黑藜麦猫条', 7, 52.00, 8, '黑藜麦猫条一根，需自主捕捉', 0, 'https://s2.loli.net/2024/12/25/hOINTxt9kaUZCBV.jpg', '2024-12-25 03:14:43', '1', 0, 1, 2);
+INSERT INTO `goods` VALUES (66, '沉睡中的瓷娃娃', 10, 45.00, 8, '需要国家美术馆自提，价格面议', 0, 'https://s2.loli.net/2024/12/25/Kh47sAHDvP3tiLM.jpg', '2024-12-25 03:17:31', '1', 0, 1, 3);
+INSERT INTO `goods` VALUES (67, '面纱', 5, 19.00, 3, '书，自提，邮寄不包邮', 0, 'https://s2.loli.net/2024/12/25/yHO1jQkMTV5usaq.jpg', '2024-12-25 03:19:38', '1', 0, 1, 3);
+INSERT INTO `goods` VALUES (68, '星黛露', 6, 32.00, 6, '无家可归惨遭嫌弃星黛露一只，盼收留', 0, 'https://s2.loli.net/2024/12/25/plxUWLPqvXQZ8I9.jpg', '2024-12-25 03:20:42', '2', 9, 1, 2);
+INSERT INTO `goods` VALUES (69, '修狗一只', 10, 60.00, 8, '可爱修狗一只，微跛，时年9岁，欢迎您给他养老', 0, 'https://s2.loli.net/2024/12/25/nthdyZ742QLBGgq.jpg', '2024-12-25 03:24:25', '1', 0, 1, 3);
+INSERT INTO `goods` VALUES (71, '企鹅肉', 11, 129.00, 1, 'pingu精神出走企鹅肉一份，95新', 0, 'https://s2.loli.net/2024/12/25/ONLyUl2uVJGBxsZ.jpg', '2024-12-25 04:51:54', '2', 8, 26, 5);
+INSERT INTO `goods` VALUES (72, '平安夜圣诞节春节情人节劳动节儿童节七夕代发祝福', 11, 8.88, 7, '平安夜圣诞节春节情人节劳动节儿童节七夕代发祝福', 0, 'https://s2.loli.net/2024/12/25/CLEvi2jnqhcJrM6.jpg', '2024-12-25 04:56:45', '0', 0, NULL, 2);
 
 -- ----------------------------
 -- Table structure for refund_complaint
@@ -461,5 +465,7 @@ INSERT INTO `users` VALUES (6, '小猿', '1jdzWuniG6UMtoa3T6uNLA==', 1, 'https:/
 INSERT INTO `users` VALUES (7, 'whi', '1jdzWuniG6UMtoa3T6uNLA==', 1, 'https://s2.loli.net/2024/12/22/j79YTpSrU1ZWmeJ.jpg', '12345678990', 'whi@mail2.sysu.edu.cn', 0, 0);
 INSERT INTO `users` VALUES (8, 'aaa女装批发', '1jdzWuniG6UMtoa3T6uNLA==', 2, 'https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png', '12345678990', 'woman@mail.scut.edu.cn', 0, 0);
 INSERT INTO `users` VALUES (9, '4090', '1jdzWuniG6UMtoa3T6uNLA==', 2, 'https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png', '12345678990', '4090@mail.scut.edu.cn', 0, 0);
+INSERT INTO `users` VALUES (10, '臣见', '1jdzWuniG6UMtoa3T6uNLA==', 1, 'https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png', '17382746382', 'chenjian@mail2.sysu.edu.cn', 0, 0);
+INSERT INTO `users` VALUES (11, '椰子水', '1jdzWuniG6UMtoa3T6uNLA==', 1, 'https://s2.loli.net/2024/12/25/kXfUoLMHyEbQxwu.jpg', '18258513031', 'chenshx56@mail2.sysu.edu.cn', 1, 0);
 
 SET FOREIGN_KEY_CHECKS = 1;

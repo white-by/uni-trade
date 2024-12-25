@@ -11,6 +11,7 @@
         >
           全部
         </el-button>
+
         <el-button
           v-for="category in categoryStore.categoryList.data"
           :key="category.categoryID"
@@ -24,6 +25,8 @@
         </el-button>
       </ul>
     </div>
+
+    <!-- 筛选按钮和发布闲置 -->
     <div class="function-button-container">
       <SelectProduct />
       <PostProduct />
@@ -35,9 +38,11 @@
 import PostProduct from '@/components/PostProduct.vue'
 import SelectProduct from '@/components/SelectProduct.vue'
 import { useCategoryStore } from '@/store/sortCategory'
-import { ref, onMounted } from 'vue'
+import { ref } from 'vue'
 
+// 分类状态
 const categoryStore = useCategoryStore()
+// 当前选中的分类ID
 const selectedCategoryID = ref(categoryStore.categoryID)
 
 // 点击分类
@@ -46,9 +51,9 @@ const handleCategoryClick = (categoryID) => {
   selectedCategoryID.value = categoryID
 }
 
-onMounted(() => {
-  console.log('selectedCategoryID:', selectedCategoryID.value)
-})
+// onMounted(() => {
+//   console.log('selectedCategoryID:', selectedCategoryID.value)
+// })
 </script>
 
 <style scoped lang="scss">

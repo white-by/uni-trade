@@ -7,14 +7,14 @@ import { useUserStore } from '@/store/userStore'
 import useThrottle from '@/hooks/useThrottle.js'
 import { useSearchStore } from '@/store/searchStore'
 // import { useSelectStore } from '@/store/selectStore'
-import { useCategoryStore } from '@/store/sortCategory'
+// import { useCategoryStore } from '@/store/sortCategory'
 
 const userStore = useUserStore()
 const userName = ref(userStore.userInfo.userName)
 
 const searchStore = useSearchStore()
 // const selectStore = useSelectStore()
-const categoryStore = useCategoryStore()
+// const categoryStore = useCategoryStore()
 const searchInput = ref('')
 
 const router = useRouter()
@@ -26,7 +26,7 @@ const toHome = () => {
   searchStore.searchQuery = ''
   searchInput.value = ''
   // selectStore.selectData = ''
-  console.log('categoryID:', categoryStore.categoryID)
+  // console.log('categoryID:', categoryStore.categoryID)
   // categoryStore.categoryID = 0
 }
 

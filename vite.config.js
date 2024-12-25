@@ -35,6 +35,7 @@ export default defineConfig({
     }
   },
   server: {
+    host: '0.0.0.0',
     port: 5173, // 本地开发服务器端口
     proxy: {
       '/fanBlog': {

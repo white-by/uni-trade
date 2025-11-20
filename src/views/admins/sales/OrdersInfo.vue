@@ -102,13 +102,13 @@ onMounted(() => {
               <div>卖家ID: {{ scope.row.sellerID }}</div>
               <div>买家ID: {{ scope.row.buyerID }}</div>
               <div>下单时间: {{ formatTime(scope.row.orderTime) }}</div>
-              <div v-if="scope.row.payTime != '0001-01-01T00:00:00Z'">
+              <div v-if="scope.row.payTime != null && scope.row.payTime != '0001-01-01T00:00:00Z'">
                 支付时间: {{ formatTime(scope.row.payTime) }}
               </div>
-              <div v-if="scope.row.shippingTime != '0001-01-01T00:00:00Z'">
+              <div v-if="scope.row.shippingTime != null && scope.row.shippingTime != '0001-01-01T00:00:00Z'">
                 发货时间: {{ formatTime(scope.row.shippingTime) }}
               </div>
-              <div v-if="scope.row.turnoverTime != '0001-01-01T00:00:00Z'">
+              <div v-if="scope.row.turnoverTime != null && scope.row.turnoverTime != '0001-01-01T00:00:00Z'">
                 成交时间: {{ formatTime(scope.row.turnoverTime) }}
               </div>
             </template>

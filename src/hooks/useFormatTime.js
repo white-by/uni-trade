@@ -6,16 +6,22 @@
 
 export default function useFormatTime() {
   function formatTime(isoString) {
-    // 创建日期对象，并强制将其解析
-    const date = new Date(isoString)
+    if (!isoString) return ''
 
-    // 不用将时间转换为中国标准时间
-    date.setHours(date.getHours() + 8)
+    try {
+      const date = new Date(isoString)
 
-    // 格式化为 yyyy-MM-dd HH:mm:ss 格式
-    const formattedDate = date.toISOString().replace('T', ' ').slice(0, 19)
+      // 检查日期是否有效
+      if (isNaN(date.getTime())) {
+        return ''
+      }
 
-    return formattedDate
+      // 直接格式化，不调整时区（因为数据已经包含时区信息）
+      return date.toISOString().replace('T', ' ').slice(0, 19)
+    } catch (error) {
+      console.error('格式化时间出错:', error)
+      return ''
+    }
   }
 
   return { formatTime }

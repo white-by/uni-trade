@@ -17,6 +17,23 @@ const total = ref(0)
 
 const refundList = ref([])
 
+// 状态格式化函数
+const formatStatus = (status) => {
+  // 如果已经是中文，直接返回
+  if (typeof status === 'string' && (status === '未处理' || status === '同意退货' || status === '拒绝退货')) {
+    return status
+  }
+
+  // 数字状态码转换
+  const statusMap = {
+    0: '未处理',
+    1: '同意退货',
+    2: '拒绝退货'
+  }
+
+  return statusMap[status] || '未知状态'
+}
+
 // 获取退款列表
 const getRefundList = async () => {
   const res = await getRefundListApi(queryForm.value)
@@ -37,18 +54,20 @@ const handlePageChange = (pageNum) => {
 
 // 操作退款列表
 const handleAction = (row, action) => {
-  const message = action === '同意退货' ? '确定同意退货吗？' : '确定拒绝退货吗？'
+  const message = action === '1' ? '确定同意退货吗？' : '确定拒绝退货吗？'
   ElMessageBox.confirm(message, '提示', {
     confirmButtonText: '确定',
     cancelButtonText: '取消',
     type: 'warning'
   }).then(async () => {
     const tradeID = row.tradeID
-    action = action == '1' ? '同意退货' : '拒绝退货'
-    row.status = action
-    const res = await operateRefundListApi({ tradeID, action })
+    const actionText = action === '1' ? '同意退货' : '拒绝退货'
+    row.status = action // 保持数字状态，显示时会自动格式化
+    const res = await operateRefundListApi({ tradeID, action: actionText })
     if (res.data.code === 1) {
       ElMessage.success('操作成功！')
+      // 重新获取列表确保数据同步
+      getRefundList()
     }
   })
 }
@@ -85,7 +104,7 @@ const handleAction = (row, action) => {
         <template #default="scope">
           <el-popover effect="light" trigger="hover" placement="top" width="auto">
             <template #default>
-              {{ scope.row.sellerReason }}
+              {{ scope.row.sellerReason || '无' }}
             </template>
             <template #reference>
               <el-button link type="primary" size="small">查看</el-button>
@@ -100,7 +119,7 @@ const handleAction = (row, action) => {
         <template #default="scope">
           <el-popover effect="light" trigger="hover" placement="top" width="auto">
             <template #default>
-              {{ scope.row.buyerReason }}
+              {{ scope.row.buyerReason || '无' }}
             </template>
             <template #reference>
               <el-button link type="primary" size="small">查看</el-button>
@@ -136,12 +155,12 @@ const handleAction = (row, action) => {
       </el-table-column>
 
       <el-table-column prop="status" label="订单状态" align="center">
-        <template #default="{ row }">{{ row.status }}</template>
+        <template #default="{ row }">{{ formatStatus(row.status) }}</template>
       </el-table-column>
 
       <el-table-column label="操作" align="center" width="230">
         <template #default="{ row }">
-          <el-row type="flex" justify="center" :gutter="10" v-if="row.status == '未处理'">
+          <el-row type="flex" justify="center" :gutter="10" v-if="formatStatus(row.status) === '未处理'">
             <el-button type="primary" @click="handleAction(row, '1')">同意退货</el-button>
             <el-button type="danger" @click="handleAction(row, '2')">拒绝退货</el-button>
           </el-row>
